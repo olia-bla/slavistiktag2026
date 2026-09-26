@@ -1,0 +1,20 @@
+{
+  "name": "slavistiktag2026",
+  "version": "1.0.0",
+  "description": "Themen-Kompass: Data-Mining-Ansicht zum Programm des 15. Deutschen Slavistiktags 2026 (Jena)",
+  "main": "index.html",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests/mining.test.mjs && node tests/logic.test.mjs && node tests/realdata.test.mjs && node tests/rooms.test.mjs && node tests/shell.test.mjs && node tests/smoke.test.mjs && node tests/layout.test.mjs"
+  },
+  "keywords": [],
+  "author": "Olia Blacher",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "playwright": "^1.63.0"
+  }
+}

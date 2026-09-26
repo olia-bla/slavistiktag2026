@@ -1,0 +1,57 @@
+name: Programm-Update prüfen
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: program-update
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Programm aus ConfTool laden, validieren und vergleichen
+        id: check
+        run: |
+          set -euo pipefail
+          if ! python tools/fetch_conftool.py -o /tmp/program.json --codes data/program.json --changes /tmp/changes.json; then
+            echo "::error::ConfTool nicht erreichbar oder Validierung fehlgeschlagen – Programm-Update übersprungen, alte Daten bleiben online."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          CHANGED=$(python - <<'EOF'
+          import json, sys
+          sys.path.insert(0, "tools")
+          import fetch_conftool as f
+          old = json.load(open("data/program.json", encoding="utf-8"))
+          new = json.load(open("/tmp/program.json", encoding="utf-8"))
+          print("true" if f.canonical(old) != f.canonical(new) else "false")
+          EOF
+          )
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "Programm geändert: $CHANGED"
+
+      - name: Übernehmen, committen und pushen (löst Pages-Neubau aus)
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          cp /tmp/program.json data/program.json
+          if [ -s /tmp/changes.json ]; then cp /tmp/changes.json data/changes.json; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/program.json
+          if [ -f data/changes.json ]; then git add data/changes.json; fi
+          git commit -m "Programm-Update: ConfTool-Stand $(date +%F) ($(date +%H:%M UTC))"
+          git push

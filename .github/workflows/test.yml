@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Layout-Suite braucht echte Chromium-Binaries → nur auf Linux (CI hat
+        # dort bereits alles vorinstalliert). Windows läuft lokal im Alltag.
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Playwright-Chromium installieren
+        run: npx playwright install --with-deps chromium
+
+      - name: Tests (7 Suiten)
+        run: npm run test
+
+      - name: Konfig validieren
+        run: |
+          python3 - <<'EOF'
+          import json
+          for f in ("manifest.json", "package.json"):
+              json.load(open(f, encoding="utf-8"))
+          prog = json.load(open("data/program.json", encoding="utf-8"))
+          assert prog["meta"]["stats"]["sessions"] > 200, "Programm unvollständig"
+          print("manifest/package/program.json OK")
+          EOF

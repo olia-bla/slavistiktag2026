@@ -1,0 +1,19 @@
+{
+  "name": "Slavistiktag 2026 – Programm & Themen",
+  "short_name": "SlavTag 26",
+  "id": "/slavistiktag2026/",
+  "description": "Inoffizielle App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten, ICS – plus Themen-Kompass (Data Mining)",
+  "start_url": "./index.html#/heute",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1220",
+  "theme_color": "#101426",
+  "lang": "de",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
