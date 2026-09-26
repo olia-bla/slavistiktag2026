@@ -77,7 +77,9 @@ t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
   assert.equal(document.querySelector("#app .hero h1").textContent, "15. Deutscher Slavistiktag 2026");
   assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
   assert.equal(document.querySelector(".topbar .brand-copy"), null);
-  assert.equal(document.querySelector("#back-button").hidden, true);
+  assert.equal(document.querySelector("#back-button").disabled, true);
+  assert.equal(document.querySelector("#forward-button").disabled, true);
+  assert.ok(document.querySelector(".history-bar #back-button"));
 });
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
@@ -93,7 +95,8 @@ await waitFor(() => document.querySelector("#app .filter-bar"));
 t("Programm: Filterleiste + Grid gerendert", () => {
   assert.ok(document.querySelector("#app .filter-bar"));
   assert.ok(document.querySelector("#app .grid"));
-  assert.equal(document.querySelector("#back-button").hidden, false);
+  assert.equal(document.querySelector("#back-button").disabled, false);
+  assert.equal(document.querySelector("#forward-button").disabled, true);
 });
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);

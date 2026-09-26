@@ -15,15 +15,22 @@ import { renderChanges } from "./views/changes.js";
 const app = document.getElementById("app");
 const nav = document.getElementById("main-nav");
 const backBtn = document.getElementById("back-button");
+const forwardBtn = document.getElementById("forward-button");
 const themeBtn = document.getElementById("theme-toggle");
 const footerStand = document.getElementById("footer-stand");
-const routeHistory = [location.hash || "#/heute"];
+const HOME_HASH = "#/heute";
+const initialHash = location.hash || HOME_HASH;
+const routeHistory = initialHash === HOME_HASH ? [HOME_HASH] : [HOME_HASH, initialHash];
+let routeHistoryIndex = routeHistory.length - 1;
 
 function applyTheme(theme, persist = false) {
   const next = theme === "dark" ? "dark" : "light";
   document.documentElement.setAttribute("data-theme", next);
   if (themeBtn) {
-    themeBtn.textContent = next === "dark" ? "☀" : "☾";
+    const icon = themeBtn.querySelector(".theme-icon");
+    const label = themeBtn.querySelector(".theme-label");
+    if (icon) icon.textContent = next === "dark" ? "☀" : "☾";
+    if (label) label.textContent = next === "dark" ? "Hell" : "Dunkel";
     themeBtn.setAttribute("aria-label", next === "dark" ? "Hellmodus aktivieren" : "Dunkelmodus aktivieren");
   }
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#1b222a" : "#002f5d");
@@ -79,7 +86,8 @@ function parseHash() {
 
 function renderNav() {
   const { route } = parseHash();
-  if (backBtn) backBtn.hidden = route === "/heute";
+  if (backBtn) backBtn.disabled = routeHistoryIndex <= 0;
+  if (forwardBtn) forwardBtn.disabled = routeHistoryIndex >= routeHistory.length - 1;
   const link = (href, label, badge, forceActive) => {
     const active = forceActive ?? ("#" + route) === href;
     return h("a", { class: `nav-link ${active ? "active" : ""}`, href }, label, badge || null);
@@ -149,21 +157,26 @@ export function boot() {
   renderNav();
   window.addEventListener("hashchange", () => {
     const current = location.hash || "#/heute";
-    const previous = routeHistory.at(-2);
-    if (routeHistory.length > 1 && current === previous) routeHistory.pop();
-    else if (current !== routeHistory.at(-1)) routeHistory.push(current);
-    render();
-  });
-  backBtn?.addEventListener("click", () => {
-    if (routeHistory.length > 1) {
-      routeHistory.pop();
-      history.back();
-      return;
+    if (current === routeHistory[routeHistoryIndex - 1]) {
+      routeHistoryIndex--;
+    } else if (current === routeHistory[routeHistoryIndex + 1]) {
+      routeHistoryIndex++;
+    } else if (current !== routeHistory[routeHistoryIndex]) {
+      routeHistory.splice(routeHistoryIndex + 1);
+      routeHistory.push(current);
+      routeHistoryIndex = routeHistory.length - 1;
     }
-    routeHistory.splice(0, routeHistory.length, "#/heute");
-    history.replaceState(null, "", "#/heute");
     render();
   });
+  const navigateHistory = (delta) => {
+    const nextIndex = routeHistoryIndex + delta;
+    if (nextIndex < 0 || nextIndex >= routeHistory.length) return;
+    routeHistoryIndex = nextIndex;
+    history.replaceState(null, "", routeHistory[routeHistoryIndex]);
+    render();
+  };
+  backBtn?.addEventListener("click", () => navigateHistory(-1));
+  forwardBtn?.addEventListener("click", () => navigateHistory(1));
   if ("serviceWorker" in navigator) {
     // Ein aktivierter Service Worker kann bereits geöffnete JS-/CSS-Dateien nicht
     // im laufenden Dokument austauschen. Sobald eine neue Version übernimmt,

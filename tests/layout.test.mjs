@@ -53,7 +53,7 @@ async function overflowIssues(page) {
       }
       return false;
     };
-    const selectors = ".card, .cluster-card, .cluster-item, .topics-intro, .topbar, .cluster-list";
+    const selectors = ".card, .cluster-card, .cluster-item, .topics-intro, .topbar, .history-bar, .cluster-list";
     for (const el of document.querySelectorAll(selectors)) {
       const r = el.getBoundingClientRect();
       if (r.width > 0 && r.right > window.innerWidth + 1 && !inScrollableX(el)) {
@@ -91,6 +91,27 @@ for (const vp of VIEWPORTS) {
   await t(`${vp.name}: Dashboard ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
   });
+  await t(`${vp.name}: Logo links oben, Navigation unten`, async () => {
+    const ui = await page.evaluate(() => {
+      const logo = document.querySelector(".brand-logo").getBoundingClientRect();
+      const bar = document.querySelector(".history-bar").getBoundingClientRect();
+      const icon = document.querySelector(".theme-icon").getBoundingClientRect();
+      const label = document.querySelector(".theme-label").getBoundingClientRect();
+      return {
+        logoLeft: logo.left,
+        barBottom: bar.bottom,
+        height: innerHeight,
+        backDisabled: document.querySelector("#back-button").disabled,
+        forwardDisabled: document.querySelector("#forward-button").disabled,
+        themeIconBeforeLabel: icon.left < label.left,
+      };
+    });
+    assert.ok(Math.abs(ui.barBottom - ui.height) <= 1);
+    assert.equal(ui.backDisabled, true);
+    assert.equal(ui.forwardDisabled, true);
+    assert.equal(ui.themeIconBeforeLabel, true);
+    if (vp.width <= 760) assert.ok(ui.logoLeft <= 16, `Logo beginnt erst bei ${ui.logoLeft}px`);
+  });
   await t(`${vp.name}: keine JS-Fehler`, () => assert.deepEqual(errors, []));
   await t(`${vp.name}: alle Menüpunkte vollständig sichtbar`, async () => {
     const menu = await page.evaluate(() => {
@@ -108,7 +129,7 @@ for (const vp of VIEWPORTS) {
   });
 
   // Themen-Kompass
-  await page.goto(BASE + "#/themen");
+  await page.evaluate(() => { location.hash = "#/themen"; });
   await page.waitForSelector("#app .cluster-card");
   await page.waitForTimeout(250);
   await t(`${vp.name}: Themen-Kompass ohne Überlauf`, async () => {
@@ -117,7 +138,7 @@ for (const vp of VIEWPORTS) {
 
   // Cluster-Detail
   const tagId = await page.getAttribute("#app .cluster-card", "data-tag");
-  await page.goto(`${BASE}#/themen/${tagId}`);
+  await page.evaluate((id) => { location.hash = `#/themen/${id}`; }, tagId);
   await page.waitForSelector("#app .cluster-item");
   await page.waitForTimeout(250);
   await t(`${vp.name}: Cluster-Detail ohne Überlauf`, async () => {
@@ -125,7 +146,7 @@ for (const vp of VIEWPORTS) {
   });
 
   // Programm
-  await page.goto(BASE + "#/programm");
+  await page.evaluate(() => { location.hash = "#/programm"; });
   await page.waitForSelector("#app .results");
   await page.waitForTimeout(250);
 
@@ -141,13 +162,22 @@ for (const vp of VIEWPORTS) {
   await t(`${vp.name}: App-Zurücktaste führt zur vorherigen Ansicht`, async () => {
     const back = page.locator("#back-button");
     assert.equal(await back.isVisible(), true);
+    assert.equal(await back.isEnabled(), true);
     await back.click();
     await page.waitForSelector("#app .view-cluster");
     assert.match(await page.evaluate(() => location.hash), /^#\/themen\//);
   });
+  await t(`${vp.name}: App-Weitertaste kehrt zur nächsten Ansicht zurück`, async () => {
+    const forward = page.locator("#forward-button");
+    assert.equal(await forward.isVisible(), true);
+    assert.equal(await forward.isEnabled(), true);
+    await forward.click();
+    await page.waitForSelector("#app .view-program");
+    assert.equal(await page.evaluate(() => location.hash), "#/programm");
+  });
 
   // Info
-  await page.goto(BASE + "#/info");
+  await page.evaluate(() => { location.hash = "#/info"; });
   await page.waitForSelector("#app .view-info");
   await page.waitForTimeout(200);
   await t(`${vp.name}: Info ohne Überlauf`, async () => {
@@ -155,7 +185,7 @@ for (const vp of VIEWPORTS) {
   });
 
   // Gedämpfter Dunkelmodus mit Umschaltung auf das helle Corporate Design
-  await page.goto(BASE + "#/themen");
+  await page.evaluate(() => { location.hash = "#/themen"; });
   await t(`${vp.name}: Dark-Mode-Schalter sichtbar`, async () => {
     assert.equal(await page.locator("#theme-toggle").isVisible(), true);
   });
@@ -163,24 +193,44 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
     const colors = await page.evaluate(() => {
       const s = getComputedStyle(document.documentElement);
-      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), ink: s.getPropertyValue("--ink").trim() };
+      return {
+        scheme: s.colorScheme,
+        bg: s.getPropertyValue("--bg").trim(),
+        ink: s.getPropertyValue("--ink").trim(),
+        logoFilter: getComputedStyle(document.querySelector(".brand-logo")).filter,
+      };
     });
-    assert.deepEqual(colors, { scheme: "dark", bg: "#151a20", ink: "#e2e6e8" });
+    assert.equal(colors.scheme, "dark");
+    assert.equal(colors.bg, "#151a20");
+    assert.equal(colors.ink, "#e2e6e8");
+    assert.match(colors.logoFilter, /invert\(1\)/);
   });
   await page.locator("#theme-toggle").click();
   await t(`${vp.name}: Umschaltung in Hellmodus`, async () => {
     const colors = await page.evaluate(() => {
       const s = getComputedStyle(document.documentElement);
-      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), saved: localStorage.getItem("slavtag26.theme") };
+      return {
+        scheme: s.colorScheme,
+        bg: s.getPropertyValue("--bg").trim(),
+        blue: s.getPropertyValue("--accent").trim(),
+        violet: s.getPropertyValue("--faculty").trim(),
+        saved: localStorage.getItem("slavtag26.theme"),
+      };
     });
-    assert.deepEqual(colors, { scheme: "light", bg: "#f1f2f3", saved: "light" });
+    assert.deepEqual(colors, {
+      scheme: "light",
+      bg: "#f1f2f3",
+      blue: "#002f5d",
+      violet: "#8b1878",
+      saved: "light",
+    });
     assert.deepEqual(await overflowIssues(page), []);
   });
 
   await ctx.close();
 }
 
-// Direkt geöffnete Unterseite: Zurück darf die installierte App nicht verlassen.
+// Direkt geöffnete Unterseite: Zurück bleibt in der App, Weiter führt wieder zurück.
 {
   const page = await browser.newPage();
   await page.goto(BASE + "#/programm");
@@ -189,7 +239,14 @@ for (const vp of VIEWPORTS) {
   await page.waitForSelector("#app .view-dashboard");
   await t("App-Zurücktaste: direkter Einstieg fällt auf Startseite zurück", async () => {
     assert.equal(await page.evaluate(() => location.hash), "#/heute");
-    assert.equal(await page.locator("#back-button").isVisible(), false);
+    assert.equal(await page.locator("#back-button").isVisible(), true);
+    assert.equal(await page.locator("#back-button").isDisabled(), true);
+    assert.equal(await page.locator("#forward-button").isEnabled(), true);
+  });
+  await page.locator("#forward-button").click();
+  await page.waitForSelector("#app .view-program");
+  await t("App-Weitertaste: direkte Unterseite wieder erreichbar", async () => {
+    assert.equal(await page.evaluate(() => location.hash), "#/programm");
   });
   await page.close();
 }

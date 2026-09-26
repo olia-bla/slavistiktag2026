@@ -9,16 +9,16 @@
   --card2: #eceff1;
   --ink: #34393d;
   --ink-dim: #626b72;
-  --heading: #173a5e;
-  --accent: #365b78;
-  --accent2: #765a70;
-  --button: #3f607b;
-  --button-hover: #6f566b;
+  --heading: #002f5d;
+  --accent: #002f5d;
+  --accent2: #8b1878;
+  --button: #002f5d;
+  --button-hover: #8b1878;
   --button-ink: #ffffff;
-  --gold: #9b895d;
-  --lightblue: #7894ad;
-  --faculty: #815878;
-  --warn: #a18b59;
+  --gold: #ae9a63;
+  --lightblue: #648bc7;
+  --faculty: #8b1878;
+  --warn: #ae9a63;
   --did: #7894ad;
   --sw: #9a86b3;
   --lkw: #b5824b;
@@ -64,10 +64,14 @@ html[data-theme="dark"] {
   --toast-ink: #20272e;
 }
 
+/* Das farbige SVG bleibt unverändert; auf dunklem Grund erscheint es weiß. */
+html[data-theme="dark"] .brand-logo { filter: brightness(0) invert(1); }
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
   font-family: Roboto, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
   background: linear-gradient(180deg, color-mix(in srgb, var(--bg2) 45%, var(--bg)), var(--bg) 28rem);
   color: var(--ink);
@@ -107,18 +111,44 @@ a:hover { text-decoration: underline; }
 .nav-link:hover { color: var(--heading); text-decoration: none; background: var(--card2); }
 .nav-link.active { color: var(--button-ink); background: var(--button); font-weight: 600; }
 .fav-count { margin-left: 0.3rem; }
-.back-button,
 .theme-toggle {
-  display: grid; place-items: center; flex: none;
-  width: 2.35rem; height: 2.35rem; padding: 0;
-  border: 1px solid var(--line-strong); border-radius: 50%;
+  display: inline-flex; align-items: center; gap: 0.45rem; flex: none;
+  min-width: 6.1rem; height: 2.4rem; padding: 0.2rem 0.7rem 0.2rem 0.2rem;
+  border: 1px solid var(--line-strong); border-radius: 999px;
   background: var(--card2); color: var(--heading);
-  font-size: 1.1rem; line-height: 1; cursor: pointer;
+  font: inherit; font-size: 0.82rem; font-weight: 600; line-height: 1; cursor: pointer;
 }
-.back-button { font-size: 1.3rem; }
-.back-button[hidden] { display: none; }
-.back-button:hover,
 .theme-toggle:hover { background: color-mix(in srgb, var(--accent) 18%, var(--card2)); }
+.theme-icon {
+  display: grid; place-items: center; flex: none;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: var(--card); color: var(--heading); font-size: 1.15rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------- App-Verlauf wie im Browser ---------- */
+.history-bar {
+  position: fixed; right: 0; bottom: 0; left: 0; z-index: 80;
+  padding: 0.35rem max(0.7rem, calc((100vw - 1240px) / 2)) calc(0.35rem + env(safe-area-inset-bottom));
+  background: var(--topbar-bg);
+  border-top: 1px solid var(--line-strong);
+  backdrop-filter: blur(10px);
+}
+.history-bar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1240px; margin: 0 auto;
+}
+.history-button {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  min-width: 6.5rem; min-height: 2.6rem; padding: 0.35rem 0.65rem;
+  border: 0; border-radius: 6px; background: transparent;
+  color: var(--accent); font: inherit; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer;
+}
+.history-button:last-child { justify-content: flex-end; }
+.history-button:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.history-button:disabled { color: var(--ink-dim); opacity: 0.38; cursor: default; }
+.history-arrow { font-size: 1.45rem; line-height: 1; }
 
 /* ---------- Layout ---------- */
 .app-main { max-width: 1240px; margin: 0 auto; padding: 1rem; }
@@ -471,9 +501,8 @@ select {
 @media (max-width: 760px) {
   .app-main { padding: 0.7rem; }
   .topbar { padding: 0.5rem 0.7rem; gap: 0.5rem; }
-  .brand { width: 100%; padding: 0 2.8rem; }
+  .brand { width: 100%; padding: 0 7rem 0 0; }
   .brand-logo { width: 84px; height: 42px; }
-  .back-button { position: absolute; top: 0.65rem; left: 0.7rem; }
   .theme-toggle { position: absolute; top: 0.65rem; right: 0.7rem; }
   .welcome-wall { display: none; }
   .main-nav {
@@ -501,7 +530,7 @@ select {
 /* ---------- Druck ---------- */
 /* Tagesprogramm druckbar: Chrome/Bildschirm-Zierde raus, Karten schwarz auf weiß */
 @media print {
-  .main-nav, .welcome-wall, .toast, .drawer-backdrop,
+  .main-nav, .history-bar, .welcome-wall, .toast, .drawer-backdrop,
   .drawer, .fav, .view-toggle, .day-tabs, .filter-bar, .grid-head
   { display: none !important; }
   body, .app-main { background: #fff; color: #000; }
