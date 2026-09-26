@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- Maskable-Variante: vollflächiger Hintergrund (Maske rundet selbst),
-       alle Inhalte innerhalb der konservativen Safe-Zone (Kreis r≈205 um 256,256). -->
-  <rect x="0" y="0" width="512" height="512" fill="#0f1220"/>
-  <text x="256" y="256" font-family="Arial, sans-serif" font-size="200" font-weight="bold" fill="#eef0ff" text-anchor="middle" dominant-baseline="central">Сл</text>
-  <circle cx="372" cy="372" r="40" fill="#46e0c0"/>
+  <!-- Maskable-Variante: Hausblau vollflächig, Motiv innerhalb der Safe-Zone. -->
+  <rect x="0" y="0" width="512" height="512" fill="#002f5d"/>
+  <rect x="58" y="58" width="396" height="396" rx="54" fill="#ffffff"/>
+  <path d="M375 170V107H107V405H375V342" fill="none" stroke="#8b1878" stroke-width="22"/>
+  <text x="242" y="240" font-family="Arial, sans-serif" font-size="148" font-weight="700" fill="#002f5d" text-anchor="middle">15.</text>
+  <text x="242" y="330" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#002f5d" text-anchor="middle">2026</text>
 </svg>

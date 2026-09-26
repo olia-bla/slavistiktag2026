@@ -21,21 +21,20 @@ const r = await page.evaluate(async (b64) => {
   const hex = (p) => "#" + p.map(v => v.toString(16).padStart(2, "0")).join("");
   // Eckpixel: müssen Full-Bleed-Hintergrund sein (Maske rundet dort)
   const corners = { tl: hex(px(2, 2)), tr: hex(px(509, 2)), bl: hex(px(2, 509)), br: hex(px(509, 509)) };
-  // Zentrale 410er-Box abtasten: helle Text-Pixel vorhanden?
-  let lightPixels = 0;
+  // Zentrale Safe-Zone abtasten: weiße Fläche und violettes Motiv vorhanden?
+  let lightPixels = 0, purplePixels = 0;
   for (let y = 51; y < 461; y += 10) for (let x = 51; x < 461; x += 10) {
     const p = px(x, y);
     if (p[0] > 200 && p[1] > 200 && p[2] > 200) lightPixels++;
+    if (p[0] > 90 && p[0] > p[1] * 1.5 && p[2] > p[1] * 1.3) purplePixels++;
   }
-  // Türkis-Kreis an seiner Position?
-  const teal = px(372, 372);
-  return { corners, lightPixels, tealAt372: hex(teal) };
+  return { corners, lightPixels, purplePixels };
 }, b64);
 await browser.close();
 
-const bg = "#0f1220";
+const bg = "#002f5d";
 const okCorners = Object.values(r.corners).every(v => v === bg);
 console.log("Eckpixel = Hintergrund (full bleed):", okCorners ? "OK" : "FEHLER " + JSON.stringify(r.corners));
 console.log("Helle Text-Pixel in Safe-Zone-Box:", r.lightPixels > 20 ? `OK (${r.lightPixels})` : `ZU WENIG (${r.lightPixels})`);
-console.log("Türkis-Pixel bei (372,372):", r.tealAt372 === "#46e0c0" ? "OK" : "FEHLER " + r.tealAt372);
-if (!okCorners || r.lightPixels <= 20 || r.tealAt372 !== "#46e0c0") process.exit(1);
+console.log("Violette Motivpixel in Safe-Zone-Box:", r.purplePixels > 10 ? `OK (${r.purplePixels})` : `ZU WENIG (${r.purplePixels})`);
+if (!okCorners || r.lightPixels <= 20 || r.purplePixels <= 10) process.exit(1);

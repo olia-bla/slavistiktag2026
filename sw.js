@@ -1,12 +1,12 @@
 // service worker: Shell stale-while-revalidate (aktualisiert sich selbst,
 // kein VERSION-Bump nötig), Daten network-first mit Cache-Fallback
-const CACHE = "slavtag26-companion-v3";
+const CACHE = "slavtag26-companion-v4";
 const SHELL = [
   "./", "index.html", "css/style.css",
   "js/app.js", "js/util.js", "js/data.js", "js/mining.js", "js/lexicon.js",
   "js/search.js", "js/favorites.js", "js/ics.js", "js/now.js", "js/rooms.js",
   "js/views/dashboard.js", "js/views/program.js", "js/views/mine.js", "js/views/info.js", "js/views/drawer.js", "js/views/topics.js", "js/views/speakers.js", "js/views/changes.js",
-  "manifest.json", "icons/icon.svg", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "icons/slavistiktag-2026.png",
+  "manifest.json", "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-192.png", "icons/icon-maskable-512.png", "icons/slavistiktag-2026.png",
 ];
 
 self.addEventListener("install", (e) => {
