@@ -9,6 +9,13 @@ export function renderInfo(model) {
     h("h1", { text: "Orientierung" }),
     h("p", { class: "meta", text: `${c.conference.place} · ${c.conference.start.slice(8)}.${c.conference.start.slice(5, 7)}. – ${c.conference.end.slice(8)}.${c.conference.end.slice(5, 7)}.2026` })));
 
+  wrap.append(h("section", { class: "card downloads-card" },
+    h("h2", { text: "Downloads" }),
+    h("div", { class: "btn-row" },
+      h("a", { class: "btn download-link", href: c.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }),
+      h("a", { class: "btn download-link", href: c.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }),
+      h("a", { class: "btn download-link", href: c.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }))));
+
   // Orte
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Wohin gehe ich? – Die Orte" }),
@@ -18,10 +25,7 @@ export function renderInfo(model) {
         h("h3", { text: v.name }),
         v.note ? h("p", { class: "meta", text: v.note }) : null,
         v.url_maps ? h("a", { class: "btn small ghost", href: v.url_maps, target: "_blank", rel: "noopener", text: "Karte öffnen" }) : null))),
-    h("div", { class: "chip-row" },
-      c.links.city_map_pdf ? h("a", { class: "btn", href: c.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }) : null,
-      c.links.lageplan_pdf ? h("a", { class: "btn", href: c.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }) : h("span", { class: "pill", text: "Lageplan folgt" }),
-      h("a", { class: "btn ghost", href: c.links.downloads_page, target: "_blank", rel: "noopener", text: "Downloads der Uni" }))));
+    h("p", {}, h("a", { class: "btn ghost", href: c.links.downloads_page, target: "_blank", rel: "noopener", text: "Alle Downloads der Universität ↗" }))));
 
   // Podien
   wrap.append(h("section", { class: "card" },

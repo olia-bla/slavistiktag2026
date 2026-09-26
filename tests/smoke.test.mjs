@@ -314,6 +314,12 @@ t("Info: Orte, Podien, Poster, Mining-Methode, Urheber", () => {
   assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
   assert.ok(document.body.textContent.includes("Olia Blacher"));
 });
+t("Info: drei offizielle PDF-Downloads als Buttons", () => {
+  const links = [...document.querySelectorAll("#app .downloads-card .download-link")];
+  assert.equal(links.length, 3);
+  assert.deepEqual(links.map((a) => a.textContent), ["Stadtplan (PDF)", "Lageplan (PDF)", "Tagungsprogramm (PDF)"]);
+  assert.ok(links.every((a) => a.href.endsWith(".pdf")));
+});
 
 // Deep-Link: Filter in URL
 dom.window.location.hash = "#/programm?day=2026-10-03&room=SR%20206";

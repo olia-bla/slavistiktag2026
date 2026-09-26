@@ -40,12 +40,17 @@ export function renderDashboard(model, ctx) {
       h("h2", { text: "Highlights" }),
       highlightList,
       h("p", {}, h("a", { class: "btn ghost", href: "#/info", text: "Kultur- und Rahmenprogramm →" }))),
+    h("section", { class: "card downloads-card" },
+      h("h2", { text: "Downloads" }),
+      h("div", { class: "btn-row" },
+        h("a", { class: "btn download-link", href: model.content.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }),
+        h("a", { class: "btn download-link", href: model.content.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }),
+        h("a", { class: "btn download-link", href: model.content.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }))),
     h("section", { class: "card" },
       h("h2", { text: "Schnellzugriff" }),
       h("div", { class: "chip-row" },
         h("a", { class: "btn", href: "#/programm", text: "Programm durchsuchen" }),
-        h("a", { class: "btn", href: "#/mein", text: "Mein Programm" }),
-        h("a", { class: "btn ghost", href: model.content.links.program_pdf, target: "_blank", rel: "noopener", text: "Programm-PDF" }))));
+        h("a", { class: "btn", href: "#/mein", text: "Mein Programm" }))));
 }
 
 function nowBody(model, now, ctx) {
