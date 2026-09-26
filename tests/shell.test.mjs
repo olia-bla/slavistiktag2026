@@ -7,6 +7,7 @@ import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sw = await readFile(join(ROOT, "sw.js"), "utf-8");
+const appJs = await readFile(join(ROOT, "js/app.js"), "utf-8");
 const shellMatch = sw.match(/const SHELL = \[([\s\S]*?)\]/);
 assert.ok(shellMatch, "SHELL-Array in sw.js nicht gefunden");
 const shell = [...shellMatch[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
@@ -69,6 +70,16 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
   // sind Install-Ressourcen → müssen drin sein.
   assert.ok(shell.includes("manifest.json"));
   assert.ok(shell.includes("icons/slavistiktag-icon.svg"));
+});
+
+// 5. Updates werden ohne Benutzereingriff gesucht und nach Aktivierung geladen.
+t("App übernimmt neue Versionen automatisch", () => {
+  assert.match(sw, /self\.skipWaiting\(\)/);
+  assert.match(sw, /self\.clients\.claim\(\)/);
+  assert.match(appJs, /updateViaCache:\s*"none"/);
+  assert.match(appJs, /controllerchange/);
+  assert.match(appJs, /reg\.update\(\)/);
+  assert.match(appJs, /location\.reload\(\)/);
 });
 
 await Promise.allSettled(pending);

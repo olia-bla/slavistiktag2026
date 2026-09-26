@@ -124,23 +124,37 @@ export function boot() {
   renderNav();
   window.addEventListener("hashchange", render);
   if ("serviceWorker" in navigator) {
+    // Ein aktivierter Service Worker kann bereits geöffnete JS-/CSS-Dateien nicht
+    // im laufenden Dokument austauschen. Sobald eine neue Version übernimmt,
+    // laden wir daher genau einmal automatisch neu. Bei der Erstinstallation
+    // bleibt die Seite ruhig, weil es noch keinen vorherigen Controller gab.
+    let reloadingForUpdate = false;
+    let hadController = Boolean(navigator.serviceWorker.controller);
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadController) {
+        hadController = true;
+        return;
+      }
+      if (reloadingForUpdate) return;
+      reloadingForUpdate = true;
+      toast("Neue Version wird automatisch geladen …", { duration: 2000 });
+      setTimeout(() => location.reload(), 500);
+    });
+
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").then((reg) => {
-        // Update-Toast: wenn ein neuer Worker installiert und bereits ein
-        // Worker aktiv ist (echtes Update, nicht Erst-Installation), Hinweis
-        // mit Reload-Aktion zeigen. Erst-Install bleibt still.
-        reg.addEventListener("updatefound", () => {
-          const nw = reg.installing;
-          if (!nw) return;
-          nw.addEventListener("statechange", () => {
-            if (nw.state === "installed" && navigator.serviceWorker.controller) {
-              toast("Neue Version verfügbar – neu laden?", {
-                action: { label: "Neu laden", onclick: () => location.reload() },
-                duration: 12000,
-              });
-            }
-          });
+      navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then((reg) => {
+        const checkForUpdate = () => reg.update().catch(() => { /* offline */ });
+
+        // Direkt prüfen, danach während längerer Nutzung alle fünf Minuten.
+        checkForUpdate();
+        setInterval(checkForUpdate, 5 * 60_000);
+
+        // Nach Rückkehr aus einer anderen App bzw. nach neuer Netzverbindung
+        // sofort prüfen, statt auf das nächste Intervall zu warten.
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") checkForUpdate();
         });
+        window.addEventListener("online", checkForUpdate);
       }).catch(() => { /* offline optional */ });
     });
   }

@@ -51,7 +51,17 @@ export function renderInfo(model) {
       c.accompanying.map((a) => h("li", {},
         h("strong", { text: `${a.day ? dateLabel(a.day) : ""}${a.start ? ` · ${timeRange(a.start, a.end)}` : ""}` }),
         ` – ${a.title}`,
-        a.note ? h("span", { class: "meta", text: ` (${a.note})` }) : null)))));
+        a.note ? h("span", { class: "meta", text: ` (${a.note})` }) : null))),
+    h("div", { class: "btn-row" },
+      h("a", { class: "btn small ghost", href: c.links.culture_page, target: "_blank", rel: "noopener", text: "Offizielles Rahmenprogramm ↗" }),
+      h("a", { class: "btn small ghost", href: c.links.concert_program_pdf, target: "_blank", rel: "noopener", text: "Konzertprogramm (PDF)" })),
+    h("h3", { text: "Freizeitmöglichkeiten in Jena und Umgebung" }),
+    h("p", { class: "meta", text: "Individuell und selbstorganisiert" }),
+    h("ul", { class: "mini-list leisure-list" },
+      (c.leisure || []).map((item) => h("li", {},
+        h("strong", { text: item.title }),
+        ` – ${item.text} `,
+        item.url ? h("a", { href: item.url, target: "_blank", rel: "noopener", text: "Informationen ↗" }) : null)))));
 
   // Poster
   wrap.append(h("section", { class: "card" },
@@ -122,7 +132,7 @@ export function renderInfo(model) {
     h("h2", { text: "Farben & Favoriten" }),
     h("p", { text:
       "Farben: Der linke Rand jeder Karte markiert den Veranstaltungsbereich – " +
-      "lila Sprachwissenschaft (SW), orange Literatur- und Kulturwissenschaft (LKW), " +
+      "lavendel Sprachwissenschaft (SW), orange Literatur- und Kulturwissenschaft (LKW), " +
       "hellblau Fachdidaktik (DID) und grün sonstige Veranstaltungen wie Poster- oder " +
       "Buchpräsentationen. Die drei Disziplinfarben stehen auch an den Filtern. " +
       "Favoriten: Über den Stern auf jeder Karte stellst du dein persönliches " +

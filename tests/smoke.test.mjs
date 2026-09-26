@@ -73,6 +73,10 @@ t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
   assert.ok(logo.getAttribute("alt").includes("Friedrich-Schiller-Universität Jena"));
   assert.equal(document.querySelector("#app .event-logo"), null);
 });
+t("Header zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
+  assert.equal(document.querySelector(".brand-title").textContent, "15. Deutscher Slavistiktag 2026");
+  assert.equal(document.querySelector(".brand-meta").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
+});
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
   assert.equal(labels.length, 6);
@@ -321,6 +325,16 @@ t("Info: Orte, Podien, Poster, Mining-Methode, Urheber", () => {
   assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
   assert.ok(document.body.textContent.includes("Olia Blacher"));
   assert.ok(document.body.textContent.includes("Dank an Prof. Dr. Achim Rabus"));
+});
+t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
+  const text = document.querySelector("#app .view-info").textContent;
+  assert.ok(text.includes("Ensemble Mrija"));
+  assert.ok(text.includes("Politische Gefangene in Belarus"));
+  assert.ok(text.includes("Jena und Wandern"));
+  assert.ok(text.includes("Weimar und Gedenkstätte Buchenwald"));
+  assert.ok(text.includes("Erfurt"));
+  assert.ok(document.querySelector('a[href*="103477/kultur-und-rahmenprogramm"]'));
+  assert.ok(document.querySelector('a[href*="konzertprogramm.pdf"]'));
 });
 t("Info: drei offizielle PDF-Downloads als Buttons", () => {
   const links = [...document.querySelectorAll("#app .downloads-card .download-link")];

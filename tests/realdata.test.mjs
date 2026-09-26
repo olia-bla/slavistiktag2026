@@ -39,8 +39,9 @@ t("Model: Räume mit Venue", () => {
     if (s.room && s.room.startsWith("SR")) assert.equal(s.venue, "CZS3");
   }
 });
-t("Model: Events = 8 PDF + 7 Rahmen + 4 Sonder + (Podien dedupe)", () => {
+t("Model: Events inklusive 8 Einträgen im Rahmenprogramm", () => {
   assert.ok(m.events.length >= 15, `nur ${m.events.length} Events`);
+  assert.equal(m.events.filter((e) => e.type === "rahmen").length, 8);
   const podiums = m.events.filter((e) => e.type === "podium");
   assert.equal(podiums.length, 4, `${podiums.length} Podien`);
 });

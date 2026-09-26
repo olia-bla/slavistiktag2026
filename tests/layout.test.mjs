@@ -174,7 +174,7 @@ for (const vp of VIEWPORTS) {
       };
     });
     assert.deepEqual(colors, {
-      sw: "#8b1878",
+      sw: "#9b7fc4",
       lkw: "#dc9800",
       did: "#648bc7",
       other: "#569e31",

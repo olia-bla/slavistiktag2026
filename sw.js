@@ -1,6 +1,6 @@
-// service worker: Shell stale-while-revalidate (aktualisiert sich selbst,
-// kein VERSION-Bump nötig), Daten network-first mit Cache-Fallback
-const CACHE = "slavtag26-companion-v10";
+// Service Worker: Shell stale-while-revalidate, Daten network-first mit
+// Cache-Fallback. Der CACHE-Bump aktiviert die automatische App-Aktualisierung.
+const CACHE = "slavtag26-companion-v11";
 const SHELL = [
   "./", "index.html", "css/style.css",
   "js/app.js", "js/util.js", "js/data.js", "js/mining.js", "js/lexicon.js",
