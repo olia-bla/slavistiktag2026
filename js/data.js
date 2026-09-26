@@ -8,6 +8,28 @@ import { TAG_BY_ID } from "./lexicon.js";
 const tokenSet = (s) =>
   new Set(normalize(s).split(/[^a-zäöüа-яё0-9]+/).filter((w) => w.length > 3));
 
+// Fachfarben gemäß offiziellem Tagungsprogramm vom 25.09.2026. Die dort
+// gemeinsam aufgeführten SW-/DID-Panels sind in der Quelldatei nur als
+// "SW+DID" markiert; im PDF sind diese beiden Panels jedoch eindeutig blau.
+const DIDACTIC_PANEL_TITLES = new Set([
+  "Fremdsprachendidaktik slavischer Sprachen",
+  "Didaktik der Herkunftssprachen",
+]);
+
+export function panelDiscipline(panel, sourceTrack = "") {
+  const codeDiscipline = panel?.code?.match(/^SEK_(LKW|SW|DID)(?:_|$)/)?.[1];
+  if (codeDiscipline) return codeDiscipline;
+  if (panel && DIDACTIC_PANEL_TITLES.has(panel.title)) return "DID";
+
+  const parts = (panel?.track || sourceTrack || "").split("+").filter(Boolean);
+  if (parts.includes("LKW")) return "LKW";
+  // Die übrigen lila Panels im gemeinsamen SW-/DID-Programmteil gehören
+  // laut PDF zur Sprachwissenschaft.
+  if (parts.includes("SW")) return "SW";
+  if (parts.includes("DID")) return "DID";
+  return parts[0] || null;
+}
+
 function titleSimilar(a, b) {
   const A = tokenSet(a);
   const B = tokenSet(b);
@@ -59,13 +81,19 @@ export function buildModel(program, content) {
 
   const sessions = (program.sessions || []).map((s) => {
     const panel = panels[s.panel_id] || null;
+    const discipline = panelDiscipline(panel, s.track);
+    const normalizedTrack = s.type === "talk" && panel && ["LKW", "SW", "DID"].includes(discipline)
+      ? discipline
+      : s.track;
     const out = {
       ...s,
+      source_track: s.track,
+      track: normalizedTrack,
       venue: roomVenue(s.room),
       panel_code: panel ? panel.code : null,
       panel_title: panel ? panel.title : null,
       chair: panel ? panel.chair : null,
-      discipline: panel?.code ? panel.code.split("_")[1] : ((s.track || "").split("+")[0] || null),
+      discipline,
     };
     out._search = makeSearchText(out, out.panel_title);
     // Suchtext ohne Chair-Feld: für die „Nur Vorträge"-Suche (Checkbox im Filter),

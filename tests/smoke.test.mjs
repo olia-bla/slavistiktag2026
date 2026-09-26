@@ -102,6 +102,13 @@ t("Programm: Filterleiste + Grid gerendert", () => {
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
+t("Programm: Panels tragen die PDF-Fachfarben", () => {
+  const cards = [...document.querySelectorAll("#app .session-card")];
+  const panelCards = (title) => cards.filter((card) => card.textContent.includes(title));
+  assert.ok(panelCards("Fremdsprachendidaktik slavischer Sprachen").some((card) => card.classList.contains("track-did")));
+  assert.ok(panelCards("Sprache und Krieg").some((card) => card.classList.contains("track-sw")));
+  assert.ok(panelCards("Changing Aesthetic Paradigms").some((card) => card.classList.contains("track-lkw")));
+});
 t("Programm-Raster enthält keine leere Foyer-Spalte", () => {
   const heads = [...document.querySelectorAll("#app .grid-head")].map((el) => el.textContent.trim());
   assert.ok(!heads.includes("Foyer CZS 3"));

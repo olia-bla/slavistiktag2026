@@ -61,6 +61,24 @@ t("Filter: alle LKW am Samstag", () => {
   const hits = filterSessions(m.sessions, { day: "2026-10-03", tracks: ["LKW"] });
   assert.ok(hits.length >= 10);
 });
+t("Fachfarben: SEK-Codes überschreiben fehlerhafte Quell-Tracks", () => {
+  for (const discipline of ["LKW", "SW", "DID"]) {
+    const hits = m.sessions.filter((s) => s.panel_code?.startsWith(`SEK_${discipline}_`));
+    assert.ok(hits.length > 0, `${discipline}: keine Sektion`);
+    assert.equal(hits.every((s) => s.discipline === discipline && s.track === discipline), true);
+  }
+});
+t("Fachfarben: eingereichte Panels wie im offiziellen PDF", () => {
+  const byTitle = (title) => m.sessions.filter((s) => s.panel_title === title);
+  const did = [
+    ...byTitle("Fremdsprachendidaktik slavischer Sprachen"),
+    ...byTitle("Didaktik der Herkunftssprachen"),
+  ];
+  assert.ok(did.length > 0);
+  assert.equal(did.every((s) => s.discipline === "DID" && s.track === "DID"), true);
+  assert.equal(byTitle("Sprache und Krieg").every((s) => s.discipline === "SW" && s.track === "SW"), true);
+  assert.equal(byTitle("Migration in Film: Theory, History, and Academic Practics").every((s) => s.discipline === "LKW" && s.track === "LKW"), true);
+});
 t("now: Sa 03.10. mittags → Podium läuft", () => {
   const info = nowInfo(m, new Date("2026-10-03T11:35:00"));
   assert.equal(info.status, "session");

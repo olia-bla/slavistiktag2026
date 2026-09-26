@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { normalize, matchesQuery, filterSessions, formatOf } from "../js/search.js";
 import { icsFor } from "../js/ics.js";
 import { nowInfo } from "../js/now.js";
-import { buildModel, naturalRooms } from "../js/data.js";
+import { buildModel, naturalRooms, panelDiscipline } from "../js/data.js";
 import { minutes, dateLabel, isoDay } from "../js/util.js";
 import fs from "node:fs";
 
@@ -36,6 +36,17 @@ t("normalize: Cyrillica konsistent (Query matcht Text)", () => {
   assert.equal(normalize("Київ"), normalize("київ"));
   assert.equal(matchesQuery(normalize("Der Connector в том числе"), "в том числе"), true);
   assert.equal(normalize("Daten київ").includes("к"), true);
+});
+t("Fachzuordnung: Sektionen folgen dem SEK-Code", () => {
+  assert.equal(panelDiscipline({ code: "SEK_LKW_09", track: "SW+DID" }), "LKW");
+  assert.equal(panelDiscipline({ code: "SEK_SW_17", track: "LKW" }), "SW");
+  assert.equal(panelDiscipline({ code: "SEK_DID_02", track: "X" }), "DID");
+});
+t("Fachzuordnung: Panels folgen den Farben des offiziellen PDFs", () => {
+  assert.equal(panelDiscipline({ code: null, title: "Fremdsprachendidaktik slavischer Sprachen", track: "SW+DID" }), "DID");
+  assert.equal(panelDiscipline({ code: null, title: "Didaktik der Herkunftssprachen", track: "SW+DID" }), "DID");
+  assert.equal(panelDiscipline({ code: null, title: "Sprache und Krieg", track: "SW+DID" }), "SW");
+  assert.equal(panelDiscipline({ code: null, title: "Migration in Film", track: "LKW" }), "LKW");
 });
 t("matchesQuery UND-Verknüpfung", () => {
   assert.equal(matchesQuery("polnisch herkunft russisch", "polnisch russisch"), true);
