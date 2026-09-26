@@ -571,6 +571,27 @@ t("Beide Eröffnungs-Einträge erscheinen ohne Häkchen wieder", () => {
   assert.ok(titles.includes("Buffet mit musikalischer Begleitung im Foyer"));
 });
 
+// Podiumskarten tragen die ausführlichen Informationen nicht mehr auf der
+// Info-Seite, sondern öffnen sie direkt dort, wo das Podium im Programm steht.
+dom.window.location.hash = "#/programm?day=2026-10-01";
+await waitFor(() => document.querySelector("#app .event-card.type-podium"));
+const podiumCard = document.querySelector("#app .event-card.type-podium");
+t("Podium im Programm: Hinweis auf Beschreibung und Beteiligte", () => {
+  assert.ok(podiumCard.textContent.includes("Antippen für Beschreibung und Beteiligte"));
+});
+podiumCard.click();
+await waitFor(() => document.querySelector(".drawer .event-description"));
+t("Podium-Drawer: vollständige Beschreibung und Beteiligte", () => {
+  const drawer = document.querySelector(".drawer");
+  assert.equal(drawer.querySelector(".event-description h3")?.textContent, "Beschreibung");
+  assert.equal(drawer.querySelector(".event-people h3")?.textContent, "Beteiligte");
+  assert.ok(drawer.textContent.includes("Krise der Philologien"));
+  assert.ok(drawer.textContent.includes("Annelie Bachmaier"));
+  assert.ok(drawer.textContent.includes("Kornelia Freitag"));
+});
+document.querySelector(".drawer-backdrop").click();
+await waitFor(() => !document.querySelector(".drawer"));
+
 // Feature 4: Sprecher-Index
 dom.window.location.hash = "#/sprecher";
 await waitFor(() => document.querySelector("#app .view-speakers"));
@@ -655,7 +676,7 @@ await waitFor(() => !document.querySelector(".drawer"));
 // Info mit Mining-Abschnitt
 dom.window.location.hash = "#/info";
 await waitFor(() => document.querySelector("#app .view-info"));
-t("Info: Orte, Podien, Poster, Mining-Methode, Urheber", () => {
+t("Info: Orte, Poster, Mining-Methode, Urheber", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
   assert.ok(document.querySelector("#app .view-info").textContent.includes("HS 2"));
   assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
@@ -685,11 +706,11 @@ t("Info: Eröffnung steht auch unter Sonderformate", () => {
   assert.ok(heading.closest("section").textContent.includes("Russische Schockwellen"));
   assert.equal(heading.closest("section").textContent.includes("Helden unserer Zeit?"), false);
 });
-t("Info: vier offizielle PDF-Downloads als Buttons", () => {
-  const links = [...document.querySelectorAll("#app .downloads-card .download-link")];
-  assert.equal(links.length, 4);
-  assert.deepEqual(links.map((a) => a.textContent), ["Stadtplan (PDF)", "Lageplan (PDF)", "Tagungsprogramm (PDF)", "Book of Abstracts (PDF)"]);
-  assert.ok(links.every((a) => a.href.endsWith(".pdf")));
+t("Info: keine doppelten Downloads und keine Podienliste", () => {
+  assert.equal(document.querySelector("#app .downloads-card"), null);
+  const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
+  assert.equal(headings.includes("Downloads"), false);
+  assert.equal(headings.includes("Podiumsdiskussionen"), false);
 });
 
 // Deep-Link: Filter in URL

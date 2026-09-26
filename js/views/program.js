@@ -488,6 +488,12 @@ export function eventCard(model, ctx, e) {
     class: `card event-card ${formats.map((format) => `type-${format}`).join(" ")} ${e.track ? `track-${e.track.toLowerCase()}` : ""} ${isNow ? "is-now" : ""}`,
     "data-id": e.id || "",
     onclick: e.id ? () => ctx.openEvent(e.id) : null,
+    onkeydown: e.id ? (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        ctx.openEvent(e.id);
+      }
+    } : null,
     tabindex: e.id ? "0" : null,
     role: e.id ? "button" : null,
   },
@@ -497,5 +503,8 @@ export function eventCard(model, ctx, e) {
       typeLabels.map((label) => h("span", { class: "pill", text: label }))),
     h("div", { class: "card-title", text: e.title }),
     e.room ? roomLink(e.room) : null,
-    e.note ? h("div", { class: "card-panel", text: e.note }) : null);
+    e.note ? h("div", { class: "card-panel", text: e.note }) : null,
+    formats.includes("podium")
+      ? h("div", { class: "card-panel", text: "Antippen für Beschreibung und Beteiligte" })
+      : null);
 }

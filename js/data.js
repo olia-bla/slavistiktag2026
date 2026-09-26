@@ -174,7 +174,7 @@ export function buildModel(program, content) {
   };
   for (const p of content.podiums || []) {
     dropSimilar(p);
-    events.push({ ...p, type: "podium", source: "curated" });
+    events.push({ ...p, id: `ev-${evIdx++}`, type: "podium", source: "curated" });
   }
   for (const e of content.special || []) {
     dropSimilar(e);

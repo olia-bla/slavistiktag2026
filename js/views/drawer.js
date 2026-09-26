@@ -178,8 +178,16 @@ function eventBody(e, close) {
     h("h2", { text: e.title }),
     e.room ? h("p", { class: "meta" }, roomLink(e.room), " ", roomWhere(e.room)) : null,
     e.room ? roomFloorStrip(e.room) : null,
-    e.body ? h("p", { class: "body", text: e.body }) : null,
-    e.people ? h("p", { class: "meta", text: e.people }) : null,
+    e.body
+      ? h("section", { class: "event-description" },
+          h("h3", { text: "Beschreibung" }),
+          h("p", { class: "body", text: e.body }))
+      : null,
+    e.people
+      ? h("section", { class: "event-people" },
+          h("h3", { text: "Beteiligte" }),
+          h("p", { class: "meta", text: e.people }))
+      : null,
     e.grussworte?.length
       ? h("section", {},
           h("h3", { text: "Grußworte" }),

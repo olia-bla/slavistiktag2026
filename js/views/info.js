@@ -17,14 +17,6 @@ export function renderInfo(model) {
     h("h1", { text: "Orientierung" }),
     h("p", { class: "meta", text: `${c.conference.place} · ${c.conference.start.slice(8)}.${c.conference.start.slice(5, 7)}. – ${c.conference.end.slice(8)}.${c.conference.end.slice(5, 7)}.2026` })));
 
-  wrap.append(h("section", { class: "card downloads-card" },
-    h("h2", { text: "Downloads" }),
-    h("div", { class: "btn-row" },
-      h("a", { class: "btn download-link", href: c.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }),
-      h("a", { class: "btn download-link", href: c.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }),
-      h("a", { class: "btn download-link", href: c.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }),
-      h("a", { class: "btn download-link", href: c.links.abstracts_pdf, target: "_blank", rel: "noopener", text: "Book of Abstracts (PDF)" }))));
-
   // Orte
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Wohin gehe ich? – Die Orte" }),
@@ -35,15 +27,6 @@ export function renderInfo(model) {
         v.note ? h("p", { class: "meta", text: v.note }) : null,
         v.url_maps ? h("a", { class: "btn small ghost", href: v.url_maps, target: "_blank", rel: "noopener", text: "Karte öffnen" }) : null))),
     h("p", {}, h("a", { class: "btn ghost", href: c.links.downloads_page, target: "_blank", rel: "noopener", text: "Alle Downloads der Universität ↗" }))));
-
-  // Podien
-  wrap.append(h("section", { class: "card" },
-    h("h2", { text: "Podiumsdiskussionen" }),
-    c.podiums.map((p) => h("article", { class: "podium" },
-      h("h3", { text: p.title }),
-      h("p", { class: "meta", text: `${dateLabel(p.day)} · ${timeRange(p.start, p.end)} · ${p.room || ""}` }),
-      h("p", { class: "body", text: p.body }),
-      p.people ? h("p", { class: "meta", text: p.people }) : null))));
 
   // Sonderformate
   wrap.append(h("section", { class: "card" },
