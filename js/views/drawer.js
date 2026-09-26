@@ -127,7 +127,7 @@ function sessionBody(ctx, s, close) {
     closeBtn(close),
     h("p", { class: "kicker", text: `${dateLabel(s.day)} · ${timeRange(s.start, s.end)}` }),
     h("h2", { text: s.title },
-      s._lang && s._lang !== "de" ? h("span", { class: "pill lang", text: s._lang.toUpperCase(), title: `Titelsprache (Heuristik): ${s._lang}` }) : null),
+      s._lang && s._lang !== "de" ? h("span", { class: "pill lang", text: s._lang.toUpperCase(), title: `Vortragssprache: ${s._lang.toUpperCase()}` }) : null),
     speakerLineEl(s),
     h("p", { class: "meta" },
       roomLink(s.room), " ",

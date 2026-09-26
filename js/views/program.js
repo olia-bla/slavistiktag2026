@@ -18,18 +18,18 @@ export function isRunningNow(model, x, now = new Date()) {
 }
 
 const TRACK_LABELS = { DID: "Fachdidaktik", SW: "Sprachwissenschaft", LKW: "Literatur-/Kulturwiss." };
-// Sprach-Badge (Heuristik aus mining.detectLanguage, s. Info-Ansicht):
+// Badge für die Vortragssprache (ConfTool-Angabe vor Abstract-/Titelprüfung):
 // nur nicht-deutsche Vorträge werden markiert; „de" bleibt unbezeichnet.
 const LANG_BADGES = {
-  ru: { label: "RU", title: "Vortragstitel auf Russisch (Heuristik)" },
-  uk: { label: "UK", title: "Vortragstitel auf Ukrainisch (Heuristik)" },
-  pl: { label: "PL", title: "Vortragstitel auf Polnisch (Heuristik)" },
-  en: { label: "EN", title: "Vortragstitel auf Englisch (Heuristik)" },
-  cs: { label: "CS", title: "Vortragstitel auf Tschechisch (Heuristik)" },
+  ru: { label: "RU", title: "Russisch" },
+  uk: { label: "UK", title: "Ukrainisch" },
+  pl: { label: "PL", title: "Polnisch" },
+  en: { label: "EN", title: "Englisch" },
+  cs: { label: "CS", title: "Tschechisch" },
 };
 function langBadge(lang) {
   const b = LANG_BADGES[lang];
-  return b ? h("span", { class: "pill lang", text: b.label, title: b.title }) : null;
+  return b ? h("span", { class: "pill lang", text: b.label, title: `Vortragssprache: ${b.title}` }) : null;
 }
 const FORMAT_LABELS = {
   pause: "Pausen", podium: "Podiumsdiskussionen", special: "Sonderformate", rahmen: "Rahmenprogramm",
@@ -226,7 +226,8 @@ export function renderResults(model, ctx, state, results) {
     .filter((session) => !state.hiddenFormats.includes(formatOf(session)));
   const events = (state.day ? (model.eventByDay[state.day] || []) : model.events)
     .filter((event) => filterEvent(event, state));
-  const count = sessions.filter((s) => s.type === "talk").length + events.length;
+  // Jede tatsächlich gerenderte Karte mitzählen – einschließlich Pausen.
+  const count = sessions.length + events.length;
   const allDays = state.day ? [state.day] : model.days;
 
   // Hinweis, wenn die Tag-Suche leer ist, andere Tage aber Treffer hätten
@@ -288,8 +289,10 @@ export function renderResults(model, ctx, state, results) {
 
 function filterEvent(e, state) {
   // Rahmen-/Sonderveranstaltungen besitzen keine SW/LKW/DID-Zuordnung und
-  // dürfen deshalb bei einem Fach- oder Panel-Filter nicht stehenbleiben.
-  if (state.panel || state.tracks?.length) return false;
+  // dürfen deshalb bei einem Fach- oder Panel-Filter nicht stehenbleiben. Die
+  // aus dem PDF korrigierte Panel-Karte besitzt dagegen eine Fachzuordnung.
+  if (state.panel) return false;
+  if (state.tracks?.length && (!e.track || !state.tracks.includes(e.track))) return false;
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
@@ -337,29 +340,18 @@ function gridView(model, ctx, state, day, sessions, events) {
   const byStart = {};
   for (const s of sessions) (byStart[s.start] ||= []).push(s);
 
-  // Zeilen: Slots + Einschieber (Pausen/Events zwischen Slots)
-  const rowItems = [];
-  let lastEnd = null;
+  // Zeilen: Vortragsslots und vollbreite Pausen/Events chronologisch mischen.
+  // Zuvor wurde die letzte Uhrzeit fälschlich mit Math.max("11:00", ...)
+  // berechnet. Das ergibt NaN und schob sämtliche Pausen ans Tagesende.
   // Nur bereits gefilterte Pausen verwenden; sonst tauchen sie trotz aktivem
   // Fach-, Such- oder Formatfilter wieder im Raster auf.
   const extras = [...sessions.filter((s) => s.type === "break"), ...events]
     .filter((x) => x.start)
     .sort((a, b) => minutes(a.start) - minutes(b.start));
-
-  for (const start of starts) {
-    for (const ex of extras) {
-      if (lastEnd && minutes(ex.start) >= minutes(lastEnd) && minutes(ex.start) < minutes(start)) {
-        rowItems.push({ kind: "full", item: ex });
-      }
-    }
-    rowItems.push({ kind: "slot", start });
-    lastEnd = Math.max(...(byStart[start] || [{ end: start }]).map((s) => s.end));
-  }
-  // Tage ohne Vortrags-Slots (z. B. Eröffnungstag 30.09.) haben kein lastEnd –
-  // ohne den Null-Fall würden deren Event-Karten im Grid gar nicht erscheinen.
-  for (const ex of extras) {
-    if (!lastEnd || minutes(ex.start) >= minutes(lastEnd)) rowItems.push({ kind: "full", item: ex });
-  }
+  const rowItems = [
+    ...starts.map((start) => ({ kind: "slot", start, sortTime: start, sortOrder: 1 })),
+    ...extras.map((item) => ({ kind: "full", item, sortTime: item.start, sortOrder: 0 })),
+  ].sort((a, b) => minutes(a.sortTime) - minutes(b.sortTime) || a.sortOrder - b.sortOrder);
 
   for (const row of rowItems) {
     if (row.kind === "full") {
@@ -368,8 +360,10 @@ function gridView(model, ctx, state, day, sessions, events) {
     }
     g.append(h("div", { class: "grid-time", text: row.start }));
     for (const room of rooms) {
-      const s = (byStart[row.start] || []).find((x) => x.room === room);
-      g.append(s ? sessionCard(model, ctx, s, state) : h("div", { class: "grid-empty" }));
+      const roomSessions = (byStart[row.start] || []).filter((x) => x.room === room);
+      g.append(roomSessions.length
+        ? h("div", { class: "grid-cell" }, roomSessions.map((s) => sessionCard(model, ctx, s, state)))
+        : h("div", { class: "grid-empty" }));
     }
   }
   grid.append(g);
@@ -462,7 +456,8 @@ export function sessionCard(model, ctx, s, state) {
     h("div", { class: "card-title", html: titleHtml || undefined, text: titleHtml ? undefined : s.title }),
     s.speakers?.length ? h("div", { class: "card-speakers", text: s.speakers.join(", ") }) : null,
     abstractSnippet ? h("div", { class: "card-snippet", html: abstractSnippet }) : null,
-    // Sprach-Hinweis (Heuristik, s. Info): nur wenn NICHT deutsch — die
+    // Vortragssprache (ConfTool-Angabe vor Abstract-/Titelprüfung): nur wenn
+    // NICHT deutsch — die
     // Mehrheit der Vorträge ist deutsch, ein Badge für alle wäre Rauschen.
     langBadge(s._lang),
     s.panel_code ? h("span", { class: "pill code", text: s.panel_code }) : null,
@@ -475,12 +470,12 @@ export function sessionCard(model, ctx, s, state) {
 export function eventCard(model, ctx, e) {
   const formats = e.formats?.length ? [...new Set(e.formats)] : [e.type];
   const typeLabels = formats
-    .map((format) => ({ podium: "Podiumsdiskussion", special: "Sonderformat", rahmen: "Rahmenprogramm", break: "Pause" })[format])
+    .map((format) => ({ podium: "Podiumsdiskussion", special: "Sonderformat", panel: "Panel", rahmen: "Rahmenprogramm", break: "Pause" })[format])
     .filter(Boolean);
   const now = ctx.now instanceof Date ? ctx.now : new Date();
   const isNow = isRunningNow(model, e, now);
   return h("article", {
-    class: `card event-card ${formats.map((format) => `type-${format}`).join(" ")} ${isNow ? "is-now" : ""}`,
+    class: `card event-card ${formats.map((format) => `type-${format}`).join(" ")} ${e.track ? `track-${e.track.toLowerCase()}` : ""} ${isNow ? "is-now" : ""}`,
     "data-id": e.id || "",
     onclick: e.id ? () => ctx.openEvent(e.id) : null,
     tabindex: e.id ? "0" : null,

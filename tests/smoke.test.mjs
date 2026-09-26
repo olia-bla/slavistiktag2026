@@ -141,6 +141,22 @@ t("Programm: Panels tragen die PDF-Fachfarben", () => {
   assert.ok(panelCards("Sprache und Krieg").some((card) => card.classList.contains("track-sw")));
   assert.ok(panelCards("Changing Aesthetic Paradigms").some((card) => card.classList.contains("track-lkw")));
 });
+t("Programm-Raster: Pausen stehen chronologisch zwischen den Vortragsblöcken", () => {
+  const children = [...document.querySelector("#app .grid").children];
+  const indexOfTime = (time) => children.findIndex((el) => el.classList.contains("grid-time") && el.textContent === time);
+  const indexOfPause = (title) => children.findIndex((el) =>
+    el.classList.contains("grid-full") && el.querySelector(".event-card.type-break")?.textContent.includes(title));
+  assert.ok(indexOfPause("Kaffeepause am Vormittag") > indexOfTime("10:30"));
+  assert.ok(indexOfPause("Kaffeepause am Vormittag") < indexOfTime("11:30"));
+  assert.ok(indexOfPause("Mittagspause") > indexOfTime("12:30"));
+  assert.ok(indexOfPause("Mittagspause") < indexOfTime("14:00"));
+});
+t("Programm: Trefferzahl zählt sichtbare Pausen mit", () => {
+  const visibleCards = document.querySelectorAll("#app .session-card, #app .event-card").length;
+  const reported = Number.parseInt(document.querySelector("#app .results-head > span").textContent, 10);
+  assert.equal(reported, visibleCards);
+  assert.ok(document.querySelectorAll("#app .event-card.type-break").length > 0);
+});
 t("Programmfilter: Fachdidaktik blendet fachfremde Vorträge und Events aus", async () => {
   const did = document.querySelector('input[value="DID"]');
   did.click();
@@ -164,6 +180,35 @@ t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ei
 });
 dom.window.location.hash = "#/programm?day=all";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
+t("Programm: Vortrag von Nadiya Kiss ist als Ukrainisch markiert", () => {
+  const card = [...document.querySelectorAll(".session-card")]
+    .find((el) => el.textContent.includes("Nadiya Kiss"));
+  assert.ok(card, "Vortrag von Nadiya Kiss fehlt");
+  assert.equal(card.querySelector(".pill.lang")?.textContent, "UK");
+  assert.equal(card.querySelector(".pill.lang")?.title, "Vortragssprache: Ukrainisch");
+});
+t("Programm: PDF-Zuordnung enthält vier Podien, fünf besondere Veranstaltungen und den Festvortrag", () => {
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+  assert.equal(document.querySelectorAll(".event-card.type-special:not(.type-rahmen)").length, 6);
+  const helden = [...document.querySelectorAll(".event-card.type-panel")]
+    .find((card) => card.textContent.includes("Helden unserer Zeit?"));
+  assert.ok(helden, "LKW-Panel ‚Helden unserer Zeit?‘ fehlt");
+  assert.ok(helden.classList.contains("track-lkw"));
+  assert.equal(helden.textContent.includes("Sonderformat"), false);
+});
+document.querySelector('input[value="podium"]').click();
+await sleep(400);
+t("Programmfilter: Podiums-Häkchen blendet nur die vier Podien aus", () => {
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 0);
+  assert.equal(document.querySelectorAll(".event-card.type-special:not(.type-rahmen)").length, 6);
+  assert.ok([...document.querySelectorAll(".event-card.type-panel")]
+    .some((card) => card.textContent.includes("Helden unserer Zeit?")));
+});
+document.querySelector('input[value="podium"]').click();
+await sleep(400);
+t("Programmfilter: Podiums-Häkchen blendet genau vier Podien wieder ein", () => {
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+});
 const categoryValues = ["podium", "special", "rahmen", "pause"];
 const categoryCount = () => document.querySelectorAll(
   ".event-card.type-podium, .event-card.type-special, .event-card.type-rahmen, .event-card.type-break, .session-card.track-x").length;
@@ -300,7 +345,7 @@ t("Drawer: Teilen-Button vorhanden", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
-// Eröffnungs-Event (Rahmenprogramm 30.09.): Karte im Programm-Grid klicken ->
+// Eröffnungs-Event (Sonderformat 30.09.): Karte im Programm-Grid klicken ->
 // Drawer mit Grußworten; Raum ist (noch) nicht bekanntgegeben und wird ehrlich
 // als solcher gekennzeichnet statt erfunden.
 dom.window.location.hash = "#/programm?day=2026-09-30";
@@ -312,10 +357,11 @@ t("Eröffnungs-Event: Karte klickbar (data-id + onclick)", () => {
   assert.ok(eroffCard.getAttribute("data-id"), "Event-Karte ohne data-id");
   assert.ok(eroffCard.getAttribute("role") === "button", "Event-Karte nicht als button");
 });
-t("Eröffnungs-Event: Rahmenprogramm und Sonderformat", () => {
+t("Eröffnungs-Event: ausschließlich Sonderformat", () => {
   const badges = [...eroffCard.querySelectorAll(".pill")].map((el) => el.textContent);
-  assert.ok(badges.includes("Rahmenprogramm"));
   assert.ok(badges.includes("Sonderformat"));
+  assert.equal(badges.includes("Rahmenprogramm"), false);
+  assert.ok(eroffCard.textContent.includes("18:00–20:00"));
 });
 eroffCard.click();
 await waitFor(() => document.querySelector(".drawer h2")?.textContent.includes("Eröffnung des Slavistiktages"));
@@ -334,23 +380,38 @@ t("Eröffnungs-Drawer: fehlender Raum ehrlich gekennzeichnet", () => {
 });
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
+const musicCard = [...document.querySelectorAll("#app .event-card")]
+  .find((c) => c.querySelector(".card-title")?.textContent === "Musikalische Begleitung mit Buffet im Foyer");
+t("Musikalische Begleitung: 20 Uhr im Foyer und ausschließlich Rahmenprogramm", () => {
+  assert.ok(musicCard, "Musikalische Begleitung fehlt");
+  const badges = [...musicCard.querySelectorAll(".pill")].map((el) => el.textContent);
+  assert.ok(badges.includes("Rahmenprogramm"));
+  assert.equal(badges.includes("Sonderformat"), false);
+  assert.ok(musicCard.textContent.includes("20:00"));
+  assert.ok(musicCard.textContent.includes("Foyer CZS 3"));
+});
 document.querySelector('input[value="special"]').click();
 await sleep(400);
-t("Eröffnung bleibt über Rahmenprogramm sichtbar, wenn Sonderformate ausgeblendet sind", () => {
-  assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
-    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
+t("Sonderformat-Filter blendet nur die Eröffnung aus", () => {
+  const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
+  assert.equal(titles.some((title) => title.includes("Eröffnung des Slavistiktages")), false);
+  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
+});
+document.querySelector('input[value="special"]').click();
+await sleep(400);
+document.querySelector('input[value="rahmen"]').click();
+await sleep(400);
+t("Rahmenprogramm-Filter blendet nur die musikalische Begleitung aus", () => {
+  const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
+  assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
+  assert.equal(titles.includes("Musikalische Begleitung mit Buffet im Foyer"), false);
 });
 document.querySelector('input[value="rahmen"]').click();
 await sleep(400);
-t("Eröffnung wird erst ausgeblendet, wenn beide Kategorien deaktiviert sind", () => {
-  assert.equal([...document.querySelectorAll("#app .event-card .card-title")]
-    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")), false);
-});
-document.querySelector('input[value="special"]').click();
-await sleep(400);
-t("Eröffnung erscheint wieder über den aktivierten Sonderformat-Schalter", () => {
-  assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
-    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
+t("Beide Eröffnungs-Einträge erscheinen nach Reaktivierung wieder", () => {
+  const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
+  assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
+  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
 });
 
 // Feature 4: Sprecher-Index
@@ -439,6 +500,7 @@ dom.window.location.hash = "#/info";
 await waitFor(() => document.querySelector("#app .view-info"));
 t("Info: Orte, Podien, Poster, Mining-Methode, Urheber", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
+  assert.ok(document.querySelector("#app .view-info").textContent.includes("HS 2"));
   assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
   assert.ok(document.body.textContent.includes("Olia Blacher"));
   assert.ok(document.body.textContent.includes("Dank an Prof. Dr. Achim Rabus"));
@@ -461,7 +523,10 @@ t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
 t("Info: Eröffnung steht auch unter Sonderformate", () => {
   const heading = [...document.querySelectorAll("#app .view-info h2")]
     .find((el) => el.textContent === "Sonderformate");
+  assert.equal(heading.closest("section").querySelectorAll("article.podium").length, 6);
   assert.ok(heading.closest("section").textContent.includes("Eröffnung des Slavistiktages"));
+  assert.ok(heading.closest("section").textContent.includes("Russische Schockwellen"));
+  assert.equal(heading.closest("section").textContent.includes("Helden unserer Zeit?"), false);
 });
 t("Info: vier offizielle PDF-Downloads als Buttons", () => {
   const links = [...document.querySelectorAll("#app .downloads-card .download-link")];

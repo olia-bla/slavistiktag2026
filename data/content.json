@@ -29,7 +29,7 @@
     "CZS3": {
       "name": "Tagungsgebäude Carl-Zeiss-Straße 3",
       "short": "CZS 3",
-      "note": "Hörsäle und Seminarräume im EG, 1. und 2. Obergeschoss",
+      "note": "HS 2, HS 6–8 und Seminarräume im EG, 1. und 2. Obergeschoss",
       "url_maps": "https://www.openstreetmap.org/search?query=Carl-Zeiss-Stra%C3%9Fe%203%2C%20Jena"
     },
     "UHG": {
@@ -69,9 +69,9 @@
   },
   "accompanying": [
     {
-      "day": "2026-09-30", "start": "18:00", "end": null,
-      "title": "Eröffnung des Slavistiktages mit Festvortrag von Dr. Andreas Umland (Kyjiw/Stockholm): „Panrussismus, Eurasismus und Imperialismus als Schlüsselkonzepte zur Erklärung des russischen Überfalls auf die Ukraine“, anschließend Buffet",
-      "formats": ["rahmen", "special"],
+      "day": "2026-09-30", "start": "18:00", "end": "20:00",
+      "title": "Eröffnung des Slavistiktages mit Festvortrag von Dr. Andreas Umland (Kyjiw/Stockholm): „Panrussismus, Eurasismus und Imperialismus als Schlüsselkonzepte zur Erklärung des russischen Überfalls auf die Ukraine“",
+      "formats": ["special"],
       "grussworte": [
         "Univ.-Prof. Dr. Thede Kahl, Direktor des Instituts für Slawistik und Kaukasusstudien, FSU Jena",
         "Prof. Dr. Barbara Sonnenhauser, Vorsitzende des Verbandes der deutschen Slavistik",
@@ -79,7 +79,14 @@
         "Univ.-Prof. Dr. Joachim von Puttkamer, Dekan der Philosophischen Fakultät, FSU Jena",
         "Prof. Dr. Steffen Teichert, Staatssekretär TMBWK"
       ],
-      "note": "Musikalische Begleitung: Berndt Klinke (Saxophon) und Marco DeVries (Gitarre) · Raum noch nicht bekanntgegeben (Stand Programm-PDF 18.08.2026)"
+      "note": "Raum noch nicht bekanntgegeben (Stand Programm-PDF 18.08.2026)"
+    },
+    {
+      "day": "2026-09-30", "start": "20:00", "end": null,
+      "title": "Musikalische Begleitung mit Buffet im Foyer",
+      "room": "Foyer CZS 3",
+      "formats": ["rahmen"],
+      "note": "Berndt Klinke (Saxophon) und Marco DeVries (Gitarre)"
     },
     { "day": "2026-10-01", "start": "18:00", "end": "19:30", "title": "Führung „Jena – der Ort der deutschen Romantik“", "note": "Es gibt mehrere Gruppen. Bitte beachten Sie die Farbe des Zettels auf der Rückseite Ihres Namensschildes. Treffpunkt bei gutem Wetter draußen vor dem Eingang, bei Regen im Foyer." },
     { "day": "2026-10-01", "start": "18:00", "end": "19:30", "title": "Stadtführung durch Jena", "note": "Es gibt mehrere Gruppen. Bitte beachten Sie die Farbe des Zettels auf der Rückseite Ihres Namensschildes. Treffpunkt bei gutem Wetter draußen vor dem Eingang, bei Regen im Foyer." },
@@ -146,7 +153,7 @@
       "day": "2026-10-02", "start": "16:00", "end": "17:30", "room": "HS 2",
       "title": "Slavistik ohne Russland? – Perspektiven unserer Fächer nach dem Angriff auf die Ukraine",
       "body": "Der russische Angriffskrieg auf die Ukraine hat die Slavistik im deutschsprachigen Raum vor grundlegende Herausforderungen gestellt: Etablierte Kooperationen mit russischen Institutionen sind weitgehend zum Erliegen gekommen, Feldforschung und Datenerhebung vor Ort gestalten sich zunehmend schwierig, und Studierende können für Sprachpraxis und Forschungsaufenthalte nicht nach Russland geschickt werden. Zur Debatte stehen die strukturellen, methodischen und institutionellen Folgen für Lehre, Forschung und Nachwuchsförderung sowie die Frage, wie die Fächer mittelfristig neu aufgestellt werden können.",
-      "people": "Moderation: Prof. Dr. Holt Meyer (Universität Erfurt). Teilnehmer: Dr. Nina Frieß (ZOiS Berlin), Prof. Dr. Ulrich Schmid (Universität St. Gallen), Prof. Dr. Jan Patrick Zeller (Universität Oldenburg), Studierende"
+      "people": "Moderation: Prof. Dr. Holt Meyer (Universität Erfurt). Teilnehmer: Dr. Nina Frieß (ZOiS Berlin), Prof. Dr. Ulrich Schmid (Universität St. Gallen), Prof. Dr. Jan Patrick Zeller (Universität Oldenburg), Emilia Nowak (Studierende, FSU Jena)"
     },
     {
       "day": "2026-10-03", "start": "11:30", "end": "13:00", "room": "HS 2",

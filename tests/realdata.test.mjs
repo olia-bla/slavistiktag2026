@@ -52,13 +52,51 @@ t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
   assert.equal(m.events.filter((e) => e.type === "rahmen").length, 10);
   const podiums = m.events.filter((e) => e.type === "podium");
   assert.equal(podiums.length, 4, `${podiums.length} Podien`);
+  assert.deepEqual(podiums.map((e) => `${e.day}|${e.start}|${e.room}`), [
+    "2026-10-01|16:00|HS 2",
+    "2026-10-02|16:00|HS 8",
+    "2026-10-02|16:00|HS 2",
+    "2026-10-03|11:30|HS 2",
+  ]);
   const ohneRussland = podiums.find((e) => e.title.startsWith("Slavistik ohne Russland?"));
   assert.equal(ohneRussland?.room, "HS 2");
+  assert.ok(ohneRussland?.people.includes("Emilia Nowak"));
+  const specials = m.events.filter((e) => e.type === "special");
+  assert.equal(specials.length, 6, `${specials.length} Sonderformate statt 6`);
+  assert.deepEqual(specials.map((e) => e.title), [
+    "Eröffnung des Slavistiktages mit Festvortrag von Dr. Andreas Umland (Kyjiw/Stockholm): „Panrussismus, Eurasismus und Imperialismus als Schlüsselkonzepte zur Erklärung des russischen Überfalls auf die Ukraine“",
+    "Russia’s War on Ukraine and the Crisis of World Order — Book presentation and roundtable",
+    "Präsentation des Buchs „Russische Schockwellen. Der Krieg in der Ukraine und die Lage in den angrenzenden Regionen\" (Hg. Olaf Leiße)",
+    "Prof. Dr. Liliia Bezugla: „Wenn ich Heimweh sage…“ – Mascha Kaléko auf Ukrainisch",
+    "Helene Jessula Wczesniak: Die Fördermöglichkeiten bei der DFG",
+    "Impulsvortrag von Olaf Hamann (Staatsbibliothek zu Berlin, FID Slawistik): „Alles rechtens – alles bestens? Der Fachinformationsdienst Slawistik im Spannungsfeld zwischen Informationsfreiheit, Sanktionspolitik, Zensur und Propaganda“",
+  ]);
+  const helden = m.events.find((e) => e.title.startsWith("Helden unserer Zeit?"));
+  assert.equal(helden?.type, "panel");
+  assert.equal(helden?.track, "LKW");
+  assert.equal(m.events.some((e) => e.type === "event"), false);
 });
-t("Eröffnung ist Rahmenprogramm und Sonderformat", () => {
+t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () => {
   const opening = m.events.find((e) => e.title.startsWith("Eröffnung des Slavistiktages"));
   assert.ok(opening, "Eröffnung fehlt");
-  assert.deepEqual(opening.formats, ["rahmen", "special"]);
+  assert.equal(opening.type, "special");
+  assert.deepEqual(opening.formats, ["special"]);
+  assert.equal(opening.start, "18:00");
+  assert.equal(opening.end, "20:00");
+  const music = m.events.find((e) => e.title === "Musikalische Begleitung mit Buffet im Foyer");
+  assert.ok(music, "Musikalische Begleitung fehlt");
+  assert.equal(music.type, "rahmen");
+  assert.deepEqual(music.formats, ["rahmen"]);
+  assert.equal(music.start, "20:00");
+  assert.equal(music.room, "Foyer CZS 3");
+});
+t("Vortragssprachen: Nadiya Kiss Ukrainisch, fremdsprachige Zitate nicht fehlklassifiziert", () => {
+  const bySpeaker = (name) => m.sessions.find((s) => s.speakers?.includes(name));
+  assert.equal(bySpeaker("Nadiya Kiss")?._lang, "uk");
+  assert.equal(bySpeaker("Nadiya Kiss")?._langSource, "declared");
+  assert.equal(bySpeaker("Olga Bikkulova")?._lang, "en");
+  assert.equal(bySpeaker("Nadine Menzel")?._lang, "de");
+  assert.equal(bySpeaker("Schamma Schahadat")?._lang, "de");
 });
 t("Suchindex: Ukraine-Vortrag über Query findbar", () => {
   for (const s of m.sessions) s._search = makeSearchText(s, s.panel_title);

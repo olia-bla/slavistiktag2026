@@ -3,10 +3,14 @@ import { h, dateLabel, timeRange } from "../util.js";
 
 export function renderInfo(model) {
   const c = model.content;
-  const specialFormats = [
-    ...(c.special || []),
-    ...(c.accompanying || []).filter((event) => event.formats?.includes("special")),
-  ].sort((a, b) => `${a.day || ""} ${a.start || ""}`.localeCompare(`${b.day || ""} ${b.start || ""}`));
+  // Bereits im Datenmodell gegen ConfTool dedupliziert und anhand des
+  // Programm-PDFs korrigiert: fünf besondere Veranstaltungen plus der
+  // Festvortrag zur Eröffnung als eigenes Sonderformat.
+  const specialFormats = model.events
+    .filter((event) => event.type === "special" || event.formats?.includes("special"))
+    .sort((a, b) => `${a.day || ""} ${a.start || ""}`.localeCompare(`${b.day || ""} ${b.start || ""}`));
+  const accompanying = (c.accompanying || [])
+    .filter((event) => !event.formats?.length || event.formats.includes("rahmen"));
   const wrap = h("div", { class: "view view-info" });
 
   wrap.append(h("header", { class: "hero compact" },
@@ -24,7 +28,7 @@ export function renderInfo(model) {
   // Orte
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Wohin gehe ich? – Die Orte" }),
-    h("p", { class: "meta", text: "Raumnummern sind im gesamten Programm klickbar und öffnen die Karte mit Gebäude-Marker; im Detailfenster zeigt der Etagen-Streifen, welche Tagungsräume sich dieselbe Etage teilen. Gebäude: Vorträge in der Carl-Zeiß-Straße 3 (HS 6–8 und SR 113–127 im 1. OG, SR 206–226 im 2. OG), MMZ 220 im Multimediazentrum (Ernst-Abbe-Platz 8, 2. OG), Aula im Universitätshauptgebäude (Fürstengraben 1)." }),
+    h("p", { class: "meta", text: "Raumnummern sind im gesamten Programm klickbar und öffnen die Karte mit Gebäude-Marker; im Detailfenster zeigt der Etagen-Streifen, welche Tagungsräume sich dieselbe Etage teilen. Gebäude: Veranstaltungen in der Carl-Zeiß-Straße 3 (HS 2; HS 6–8 und SR 113–127 im 1. OG; SR 206–226 im 2. OG), MMZ 220 im Multimediazentrum (Ernst-Abbe-Platz 8, 2. OG), Aula im Universitätshauptgebäude (Fürstengraben 1). Für HS 2 ist in den veröffentlichten Raumdaten keine Etage angegeben." }),
     h("div", { class: "venue-grid" },
       Object.entries(c.venues).map(([key, v]) => h("div", { class: "venue-card" },
         h("h3", { text: v.name }),
@@ -54,7 +58,7 @@ export function renderInfo(model) {
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Kultur- und Rahmenprogramm" }),
     h("ul", { class: "mini-list" },
-      c.accompanying.map((a) => h("li", {},
+      accompanying.map((a) => h("li", {},
         h("strong", { text: `${a.day ? dateLabel(a.day) : ""}${a.start ? ` · ${timeRange(a.start, a.end)}` : ""}` }),
         ` – ${a.title}`,
         a.note ? h("span", { class: "meta", text: ` (${a.note})` }) : null))),
@@ -105,10 +109,10 @@ export function renderInfo(model) {
       "Ein Vortrag kann in mehreren Clustern erscheinen, manche passen in keines. " +
       "Grenzen: Die automatische Zuordnung kann danebenliegen und ist bewusst grob – " +
       "sie ersetzt keine inhaltliche Sichtung. " +
-      "Sprach-Hinweise (RU/UK/PL/EN/CS-Badge an Karte und Titel) beruhen auf einer " +
-      "Funktionswort-Heuristik; Kyrillisch in Titeln ist selten (3 von 315, alles " +
-      "russische Einschübe in de/en-Titeln) und wird über russische Funktionswörter " +
-      "erkannt – Hinweise, keine Klassifikation.";
+      "Die Sprach-Badges zeigen die Vortragssprache: Eine ausdrückliche Angabe im " +
+      "öffentlichen ConfTool-Titel oder Abstract hat Vorrang. Fehlt sie, werden ein " +
+      "deutscher Beitragstitel und anschließend die Sprache des Abstracts ausgewertet; " +
+      "erst danach greift eine vorsichtige Titelheuristik.";
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Themen-Kompass: Methode & Grenzen" }),
     h("p", { text: methodText }),
@@ -156,8 +160,8 @@ export function renderInfo(model) {
       "Die Themen-Zuordnung im Kompass nutzt ein großes Sprachmodell, das " +
       "Vortragstitel den 27 Themenfeldern zuordnet; seine Vorschläge werden " +
       "automatisch gegen die Themenliste validiert, unverständliche Fälle " +
-      "bleiben bewusst ohne Zuordnung. Sprach-Hinweise (RU/UK/PL/EN/CS) sind " +
-      "eine einfache Heuristik. Alles ist mit Sorgfalt, aber ohne Gewähr – " +
+      "bleiben bewusst ohne Zuordnung. Die Vortragssprache folgt ausdrücklichen " +
+      "ConfTool-Angaben und ersatzweise Titel bzw. Abstract. Alles ist mit Sorgfalt, aber ohne Gewähr – " +
       "maßgeblich ist immer das offizielle Programm der Tagung." }),
     h("p", { class: "meta", text: "Mit herzlichem Dank an Prof. Dr. Achim Rabus für die Idee und den ersten Entwurf." })));
 

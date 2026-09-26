@@ -1,7 +1,7 @@
 // Mining-Tests: Logik + echte Daten. node tests/mining.test.mjs
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { tagsFor, detectLanguage, tfidf, clusterSessions, tagStats } from "../js/mining.js";
+import { tagsFor, detectLanguage, detectPresentationLanguage, presentationLanguageInfo, tfidf, clusterSessions, tagStats } from "../js/mining.js";
 import { TAGS } from "../js/lexicon.js";
 
 let n = 0;
@@ -49,6 +49,27 @@ t("Sprache: Diakritika (ab 2 Zeichen)", () => {
 t("Sprache: unbekannt → null", () => {
   assert.equal(detectLanguage("Nominalphrase"), null);
 });
+t("Vortragssprache: ausdrückliche ConfTool-Angabe hat Vorrang", () => {
+  const s = {
+    title: "Motivation to learn Ukrainian (The language of presentation – Ukrainian)",
+    abstract: "This paper examines language learning in Germany.",
+  };
+  assert.deepEqual(presentationLanguageInfo(s), { lang: "uk", source: "declared" });
+});
+t("Vortragssprache: kyrillisches Werkzitat macht deutschen Vortrag nicht russisch", () => {
+  const s = {
+    title: "Schreiben in Krieg und Anthropozän: Цикл лекций als Beispiel engagierter Literatur",
+    abstract: "Der Beitrag untersucht einen literarischen Text und seine Rezeption.",
+  };
+  assert.equal(detectPresentationLanguage(s), "de");
+});
+t("Vortragssprache: englischer Abstract korrigiert mehrdeutigen Kurztitel", () => {
+  const s = {
+    title: "Switch reference in Slavic",
+    abstract: "This paper examines how reference systems work in several Slavic languages.",
+  };
+  assert.equal(detectPresentationLanguage(s), "en");
+});
 
 // ---------- TF-IDF
 t("TF-IDF: charakteristische Begriffe", () => {
@@ -65,7 +86,7 @@ t("TF-IDF: charakteristische Begriffe", () => {
 // ---------- Echte Daten
 const program = JSON.parse(await readFile(new URL("../data/program.json", import.meta.url), "utf-8"));
 const talks = program.sessions.filter((s) => s.type === "talk");
-for (const s of talks) { s._tags = tagsFor(s); s._lang = detectLanguage(s.title); }
+for (const s of talks) { s._tags = tagsFor(s); s._lang = detectPresentationLanguage(s); }
 
 t("Echte Daten: jede Session hat _tags als Array", () => {
   for (const s of talks) assert.ok(Array.isArray(s._tags));

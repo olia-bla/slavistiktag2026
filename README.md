@@ -86,9 +86,10 @@ CI generiert – bitte nicht händisch im PR ändern (Änderungen würden beim
 nächsten Sync überschrieben). Kuratierte Inhalte in `data/content.json` sind
 ausdrücklich PR-würdig.
 
-Der Sprachdetektor ist eine **Heuristik** (Funktionswörter Deutsch/Englisch,
-kyrillische Spezialzeichen für Russisch/Ukrainisch, Diakritika für Polnisch/
-Tschechisch) – Zuordnungen sind Hinweise, keine Klassifikation. Rund 97 % der
-Vorträge lassen sich zuordnen.
+Die Vortragssprache folgt zuerst ausdrücklichen Angaben im öffentlichen
+ConfTool-Titel oder Abstract. Fehlt eine Angabe, werden ein deutscher
+Beitragstitel, danach die Sprache des Abstracts und erst zuletzt eine
+Titelheuristik ausgewertet. So werden fremdsprachige Werkzitate nicht mehr mit
+der tatsächlichen Vortragssprache verwechselt.
 
 Lizenz: MIT (siehe LICENSE). App-Adaption: Olia Blacher. Mit herzlichem Dank an Prof. Dr. Achim Rabus für die Idee und den ersten Entwurf.

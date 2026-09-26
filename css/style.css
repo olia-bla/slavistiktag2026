@@ -422,6 +422,8 @@ select {
 }
 .grid-empty { border: 1px dashed var(--line); border-radius: 10px; min-height: 48px; opacity: 0.4; }
 .grid-full { grid-column: 1 / -1; }
+.grid-cell { display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; }
+.grid-cell .session-card { height: auto; flex: 1 1 auto; }
 
 /* ---------- Karten ---------- */
 .session-card, .event-card {
@@ -454,6 +456,7 @@ select {
 .event-card.type-podium,
 .event-card.type-special,
 .event-card.type-rahmen { border-left-color: var(--other); }
+.event-card.type-panel.track-lkw { border-left-color: var(--lkw); }
 .event-card.type-break {
   background: transparent; border: 1px dashed var(--line-strong); box-shadow: none;
   color: var(--ink-dim); font-size: 0.84rem; cursor: default;

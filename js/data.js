@@ -2,7 +2,7 @@
 // Mining-Pass über die Vorträge. Reine Funktionen sind DOM-frei testbar.
 
 import { normalize, makeSearchText } from "./search.js";
-import { tagsFor, detectLanguage } from "./mining.js";
+import { tagsFor, presentationLanguageInfo } from "./mining.js";
 import { TAG_BY_ID } from "./lexicon.js";
 
 const tokenSet = (s) =>
@@ -14,6 +14,13 @@ const tokenSet = (s) =>
 const DIDACTIC_PANEL_TITLES = new Set([
   "Fremdsprachendidaktik slavischer Sprachen",
   "Didaktik der Herkunftssprachen",
+]);
+
+// Im Programm-PDF (24.09.2026, S. 14–16) ist dieser Eintrag ausdrücklich ein
+// LKW-Panel. Die öffentliche ConfTool-Tabellenansicht liefert den ersten Teil
+// ohne Sitzungslink und damit technisch wie ein Sonderformat aus.
+const PDF_PANEL_EVENTS = new Map([
+  ["Helden unserer Zeit? Die Darstellung von Dissidenz in osteuropäischen Kulturen nach 1989", "LKW"],
 ]);
 
 export function panelDiscipline(panel, sourceTrack = "") {
@@ -100,7 +107,9 @@ export function buildModel(program, content) {
     // damit Chair-Treffer die Personensuche nicht fluten.
     out._searchTalks = makeSearchText({ ...out, chair: null }, out.panel_title);
     out._tags = tagsFor({ title: s.title, speakers: s.speakers });
-    out._lang = detectLanguage(s.title);
+    const presentationLanguage = presentationLanguageInfo(s);
+    out._lang = presentationLanguage.lang;
+    out._langSource = presentationLanguage.source;
     return out;
   });
 
@@ -133,7 +142,15 @@ export function buildModel(program, content) {
   const events = [];
   let evIdx = 0;
   for (const e of program.events || []) {
-    events.push({ ...e, id: `ev-${evIdx++}`, type: e.title.toLowerCase().includes("podium") ? "podium" : "event", source: "pdf" });
+    const panelTrack = PDF_PANEL_EVENTS.get(e.title);
+    events.push({
+      ...e,
+      id: `ev-${evIdx++}`,
+      type: panelTrack ? "panel" : "special",
+      track: panelTrack || null,
+      discipline: panelTrack || null,
+      source: "conftool",
+    });
   }
   const dropSimilar = (p) => {
     const idx = events.findIndex((e) =>
@@ -150,7 +167,9 @@ export function buildModel(program, content) {
   }
   for (const e of content.accompanying || []) {
     dropSimilar(e);
-    events.push({ ...e, id: `ev-${evIdx++}`, type: "rahmen", source: "curated" });
+    const formats = e.formats?.length ? e.formats : ["rahmen"];
+    const type = formats.includes("rahmen") ? "rahmen" : formats[0];
+    events.push({ ...e, formats, id: `ev-${evIdx++}`, type, source: "curated" });
   }
   events.sort((a, b) => (a.day || "").localeCompare(b.day || "") || (a.start || "99").localeCompare(b.start || "99"));
 

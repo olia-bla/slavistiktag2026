@@ -79,6 +79,91 @@ export function detectLanguage(title) {
   return null;
 }
 
+// ---------- Vortragssprache ----------
+// Priorität: ausdrückliche Angabe im öffentlichen ConfTool-Titel/Abstract,
+// danach klar deutscher Titel, danach Sprache des Abstracts. So wird nicht
+// mehr die Sprache eines zitierten Werktitels mit der Vortragssprache
+// verwechselt (z. B. kyrillischer Einschub in einem deutschen Titel).
+const PRESENTATION_MARKER = /(?:language\s+of\s+(?:the\s+)?(?:presentation|talk)|presentation\s+language|vortragssprache|sprache\s+des\s+vortrags|мова\s+(?:виступу|доповіді)|язык\s+(?:выступления|доклада))\s*[-–—:()]?\s*([^\n.;)]{1,60})/iu;
+const PRESENTATION_DIRECT = /(?:presentation|talk|lecture|paper|vortrag|beitrag)\s+(?:will\s+be\s+|is\s+|wird\s+)?(?:presented\s+|held\s+|gegeben\s+|gehalten\s+)?(?:in|auf)\s+(english|german|ukrainian|russian|polish|czech|englisch|deutsch|ukrainisch|russisch|polnisch|tschechisch)/iu;
+
+function languageName(text) {
+  const t = normText(text);
+  if (["de", "en", "ru", "uk", "pl", "cs"].includes(t)) return t;
+  if (/ukrain|україн/.test(t)) return "uk";
+  if (/russian|russisch|русск/.test(t)) return "ru";
+  if (/english|englisch/.test(t)) return "en";
+  if (/german|deutsch/.test(t)) return "de";
+  if (/polish|polnisch|polsk/.test(t)) return "pl";
+  if (/czech|tschechisch|česk/.test(t)) return "cs";
+  return null;
+}
+
+export function explicitPresentationLanguage(session) {
+  const text = [session?.title, session?.abstract].filter(Boolean).join("\n");
+  const marked = text.match(PRESENTATION_MARKER);
+  if (marked) return languageName(marked[1]);
+  const direct = text.match(PRESENTATION_DIRECT);
+  return direct ? languageName(direct[1]) : null;
+}
+
+function latinScores(text) {
+  const words = (text || "").toLowerCase().normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "").split(/[^a-z]+/).filter(Boolean);
+  let de = 0, en = 0, deOnly = 0, enOnly = 0;
+  for (const word of words) {
+    const isDe = DE_FN.includes(word);
+    const isEn = EN_FN.includes(word);
+    if (isDe) de++;
+    if (isEn) en++;
+    if (isDe && !isEn) deOnly++;
+    if (isEn && !isDe) enOnly++;
+  }
+  return { de, en, deOnly, enOnly };
+}
+
+function clearGermanTitle(title) {
+  const { de, en, deOnly, enOnly } = latinScores(title);
+  if (deOnly >= 1 && deOnly >= enOnly) return true;
+  if (de >= 2 && de > en) return true;
+  return /(?:übersetz|unterricht|sprach(?:e|en|lich)|literatur\b|forschung|analyse|vermittlung|erwerb|bewegungsverben|kriegsrhetorik|numerusinformation|dekolonisierung|derussifizierung)/i.test(title || "");
+}
+
+function proseLanguage(text) {
+  if (!text) return null;
+  const { de, en, deOnly, enOnly } = latinScores(text);
+  if (enOnly >= 2 && en > de) return "en";
+  if (deOnly >= 2 && de >= en) return "de";
+
+  // Nur bei überwiegend kyrillischem Fließtext Russisch/Ukrainisch annehmen;
+  // einzelne Beispiele in einem de/en-Abstract zählen nicht als Vortragssprache.
+  const cyr = (text.match(/[а-яёіїєґ]/giu) || []).length;
+  const latin = (text.match(/[a-zäöüß]/giu) || []).length;
+  if (cyr > 80 && cyr > latin * 0.6) return detectLanguage(text);
+  return null;
+}
+
+export function presentationLanguageInfo(session) {
+  const declared = languageName(session?.presentation_language || session?.language || "")
+    || explicitPresentationLanguage(session);
+  if (declared) return { lang: declared, source: "declared" };
+
+  if (clearGermanTitle(session?.title)) return { lang: "de", source: "german-title" };
+
+  const abstractLang = proseLanguage(session?.abstract);
+  if (abstractLang === "en") return { lang: "en", source: "english-abstract" };
+  if (abstractLang === "de") return { lang: "de", source: "german-abstract" };
+
+  const titleLang = detectLanguage(session?.title);
+  if (titleLang) return { lang: titleLang, source: "title" };
+  if (abstractLang) return { lang: abstractLang, source: "abstract" };
+  return { lang: null, source: "unknown" };
+}
+
+export function detectPresentationLanguage(session) {
+  return presentationLanguageInfo(session).lang;
+}
+
 // ---------- TF-IDF ----------
 export function tokenize(title) {
   return normText(title)
