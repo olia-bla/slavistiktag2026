@@ -101,7 +101,6 @@ function filterBar(model, ctx, state) {
     writeHash(model, state);
     ctx.rerenderProgram();
   }, 300);
-  let updateFilterToggle = () => {};
   ctx._programSync = () => { writeHash(model, state); ctx.rerenderProgram(); };
 
   const search = h("input", {
@@ -123,7 +122,6 @@ function filterBar(model, ctx, state) {
       const cb = h("input", { type: "checkbox", value, checked: state[key].includes(value) });
       cb.addEventListener("change", () => {
         state[key] = cb.checked ? [...state[key], value] : state[key].filter((x) => x !== value);
-        updateFilterToggle();
         sync();
       });
       box.append(h("label", { class: "check" }, cb,
@@ -137,7 +135,7 @@ function filterBar(model, ctx, state) {
     const sel = h("select", { "aria-label": label },
       h("option", { value: "", text: label }),
       options.map((o) => h("option", { value: o.value, selected: state[key] === o.value, text: o.text })));
-    sel.addEventListener("change", () => { state[key] = sel.value; updateFilterToggle(); sync(); });
+    sel.addEventListener("change", () => { state[key] = sel.value; sync(); });
     return sel;
   };
 
@@ -156,20 +154,11 @@ function filterBar(model, ctx, state) {
   });
   talksOnlyCb.addEventListener("change", () => {
     state.talksOnly = talksOnlyCb.checked;
-    updateFilterToggle();
     sync();
   });
   const talksOnlyWrap = h("label", { class: `check talks-only ${state.q ? "" : "hidden"}`, title: "Sucht nur in Titel, Personen, Raum, Panels – nicht in der Chair-Zeile" },
     talksOnlyCb, h("span", { text: "Nur Vorträge" }));
 
-  const activeAdvancedFilters = () =>
-    Number(Boolean(state.room)) + Number(Boolean(state.slot)) + Number(Boolean(state.panel)) +
-    state.tracks.length + state.formats.length;
-  const initiallyOpen = activeAdvancedFilters() > 0;
-  const filterToggle = h("button", {
-    class: "filter-toggle", type: "button", "aria-controls": "program-advanced-filters",
-    "aria-expanded": initiallyOpen ? "true" : "false",
-  });
   const advanced = h("div", { id: "program-advanced-filters", class: "filter-advanced" },
     h("div", { class: "filter-row filter-selects" },
       select("Raum", roomOpts, "room"),
@@ -197,22 +186,9 @@ function filterBar(model, ctx, state) {
           ctx.render();
         },
       })));
-  const bar = h("div", { class: `filter-bar ${initiallyOpen ? "filters-open" : ""}` },
+  return h("div", { class: "filter-bar" },
     h("div", { class: "filter-row filter-search-row" }, search, talksOnlyWrap),
-    filterToggle,
     advanced);
-  updateFilterToggle = () => {
-    const count = activeAdvancedFilters();
-    const open = bar.classList.contains("filters-open");
-    filterToggle.textContent = open ? "Filter schließen" : `Filter anzeigen${count ? ` (${count})` : ""}`;
-    filterToggle.setAttribute("aria-expanded", String(open));
-  };
-  filterToggle.addEventListener("click", () => {
-    bar.classList.toggle("filters-open");
-    updateFilterToggle();
-  });
-  updateFilterToggle();
-  return bar;
 }
 
 export function renderResults(model, ctx, state, results) {

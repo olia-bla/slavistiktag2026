@@ -145,17 +145,16 @@ html[data-theme="dark"] .theme-symbol-sun { display: block; }
   backdrop-filter: blur(10px);
 }
 .history-bar-inner {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   max-width: 1240px; margin: 0 auto;
 }
 .history-button {
-  display: inline-flex; align-items: center; gap: 0.45rem;
-  min-width: 6.5rem; min-height: 2.6rem; padding: 0.35rem 0.65rem;
+  display: flex; align-items: center; justify-content: flex-start; gap: 0.45rem;
+  width: 100%; min-height: 2.6rem; padding: 0.35rem 0.65rem;
   border: 0; border-radius: 6px; background: transparent;
   color: var(--accent); font: inherit; font-size: 0.88rem; font-weight: 600;
   cursor: pointer;
 }
-.history-button:last-child { justify-content: flex-end; }
 .history-button:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .history-button:disabled { color: var(--ink-dim); opacity: 0.38; cursor: default; }
 .history-arrow { font-size: 1.45rem; line-height: 1; }
@@ -371,7 +370,6 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
   display: grid; gap: 0.55rem;
 }
 .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; min-width: 0; }
-.filter-toggle { display: none; }
 .filter-advanced { display: contents; }
 .search-input {
   flex: 1 1 200px; min-width: 0; padding: 0.5rem 0.85rem; border-radius: 10px;
@@ -534,14 +532,7 @@ select {
   .filter-bar { position: static; padding: 0.55rem; }
   .filter-search-row { overflow: visible; }
   .filter-search-row .search-input { flex: 1 0 100%; width: 100%; }
-  .filter-toggle {
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; min-height: 2.65rem; padding: 0.45rem 0.8rem;
-    border: 1px solid var(--line-strong); border-radius: 6px;
-    background: var(--card2); color: var(--heading); font: inherit; font-weight: 700;
-  }
-  .filter-advanced { display: none; }
-  .filter-bar.filters-open .filter-advanced { display: grid; gap: 0.55rem; }
+  .filter-advanced { display: grid; gap: 0.45rem; }
   .filter-selects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filter-selects select { width: 100%; max-width: none; }
   .filter-selects select:last-child { grid-column: 1 / -1; }
@@ -550,7 +541,10 @@ select {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
   }
-  .filter-options .check { min-height: 2.55rem; white-space: normal; line-height: 1.15; }
+  .filter-options .check {
+    min-height: 2.3rem; padding: 0.25rem 0.45rem;
+    white-space: normal; line-height: 1.15; font-size: 0.78rem;
+  }
   .filter-options > .btn { width: 100%; justify-content: center; }
   .day-tabs {
     flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.35rem;

@@ -102,7 +102,9 @@ for (const vp of VIEWPORTS) {
         barBottom: bar.bottom,
         height: innerHeight,
         backDisabled: document.querySelector("#back-button").disabled,
-        forwardDisabled: document.querySelector("#forward-button").disabled,
+        backWidth: document.querySelector("#back-button").getBoundingClientRect().width,
+        barWidth: document.querySelector(".history-bar-inner").getBoundingClientRect().width,
+        forwardMissing: document.querySelector("#forward-button") === null,
         themeIconBeforeLabel: icon.left < label.left,
         sunVisible: getComputedStyle(document.querySelector(".theme-symbol-sun")).display !== "none",
         emptyFavoriteCountHidden: getComputedStyle(document.querySelector(".fav-count")).display === "none",
@@ -110,7 +112,8 @@ for (const vp of VIEWPORTS) {
     });
     assert.ok(Math.abs(ui.barBottom - ui.height) <= 1);
     assert.equal(ui.backDisabled, true);
-    assert.equal(ui.forwardDisabled, true);
+    assert.equal(ui.forwardMissing, true);
+    assert.ok(Math.abs(ui.backWidth - ui.barWidth) <= 1, `Zurück nur ${ui.backWidth}px von ${ui.barWidth}px breit`);
     assert.equal(ui.themeIconBeforeLabel, true);
     assert.equal(ui.sunVisible, true);
     assert.equal(ui.emptyFavoriteCountHidden, true);
@@ -165,18 +168,15 @@ for (const vp of VIEWPORTS) {
   });
   await t(`${vp.name}: Filter funktionieren und lassen sich vollständig zurücksetzen`, async () => {
     const compact = vp.width <= 760;
-    const toggle = page.locator(".filter-toggle");
-    if (compact) {
-      assert.equal(await toggle.isVisible(), true);
-      assert.equal(await page.locator("#program-advanced-filters").isVisible(), false);
-      const filterHeight = await page.locator(".filter-bar").evaluate((el) => el.getBoundingClientRect().height);
-      assert.ok(filterHeight <= 120, `mobile Filterleiste ${Math.round(filterHeight)}px hoch`);
-      assert.equal(await page.locator(".view-grid").isVisible(), false);
-      await toggle.click();
-    } else {
-      assert.equal(await toggle.isVisible(), false);
-      assert.equal(await page.locator("#program-advanced-filters").isVisible(), true);
-    }
+    assert.equal(await page.locator(".filter-toggle").count(), 0);
+    assert.equal(await page.locator("#program-advanced-filters").isVisible(), true);
+    if (compact) assert.equal(await page.locator(".view-grid").isVisible(), false);
+    const filterBounds = await page.locator(".filter-bar").evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, right: r.right, viewport: innerWidth };
+    });
+    assert.ok(filterBounds.left >= -1 && filterBounds.right <= filterBounds.viewport + 1,
+      `Filterleiste ragt heraus: ${filterBounds.left}..${filterBounds.right} bei ${filterBounds.viewport}px`);
 
     await page.locator('input[value="DID"]').check();
     await page.waitForTimeout(400);
@@ -195,15 +195,11 @@ for (const vp of VIEWPORTS) {
     const reset = await page.evaluate(() => ({
       checked: [...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked),
       selected: [...document.querySelectorAll(".filter-bar select")].some((select) => select.value),
-      expanded: document.querySelector(".filter-toggle").getAttribute("aria-expanded"),
       advancedVisible: getComputedStyle(document.querySelector(".filter-advanced")).display !== "none",
     }));
     assert.equal(reset.checked, false);
     assert.equal(reset.selected, false);
-    if (compact) {
-      assert.equal(reset.expanded, "false");
-      assert.equal(reset.advancedVisible, false);
-    }
+    assert.equal(reset.advancedVisible, true);
   });
   await t(`${vp.name}: App-Zurücktaste führt zur vorherigen Ansicht`, async () => {
     const back = page.locator("#back-button");
@@ -212,14 +208,6 @@ for (const vp of VIEWPORTS) {
     await back.click();
     await page.waitForSelector("#app .view-cluster");
     assert.match(await page.evaluate(() => location.hash), /^#\/themen\//);
-  });
-  await t(`${vp.name}: App-Weitertaste kehrt zur nächsten Ansicht zurück`, async () => {
-    const forward = page.locator("#forward-button");
-    assert.equal(await forward.isVisible(), true);
-    assert.equal(await forward.isEnabled(), true);
-    await forward.click();
-    await page.waitForSelector("#app .view-program");
-    assert.equal(await page.evaluate(() => location.hash), "#/programm");
   });
 
   // Info
@@ -278,7 +266,7 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
-// Direkt geöffnete Unterseite: Zurück bleibt in der App, Weiter führt wieder zurück.
+// Direkt geöffnete Unterseite: Zurück bleibt in der App und fällt auf Home zurück.
 {
   const page = await browser.newPage();
   await page.goto(BASE + "#/programm");
@@ -289,12 +277,7 @@ for (const vp of VIEWPORTS) {
     assert.equal(await page.evaluate(() => location.hash), "#/heute");
     assert.equal(await page.locator("#back-button").isVisible(), true);
     assert.equal(await page.locator("#back-button").isDisabled(), true);
-    assert.equal(await page.locator("#forward-button").isEnabled(), true);
-  });
-  await page.locator("#forward-button").click();
-  await page.waitForSelector("#app .view-program");
-  await t("App-Weitertaste: direkte Unterseite wieder erreichbar", async () => {
-    assert.equal(await page.evaluate(() => location.hash), "#/programm");
+    assert.equal(await page.locator("#forward-button").count(), 0);
   });
   await page.close();
 }

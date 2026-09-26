@@ -82,7 +82,7 @@ t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
   assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
   assert.equal(document.querySelector(".topbar .brand-copy"), null);
   assert.equal(document.querySelector("#back-button").disabled, true);
-  assert.equal(document.querySelector("#forward-button").disabled, true);
+  assert.equal(document.querySelector("#forward-button"), null);
   assert.ok(document.querySelector(".history-bar #back-button"));
 });
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
@@ -101,7 +101,8 @@ t("Programm: Filterleiste + Grid gerendert", () => {
   assert.ok(document.querySelector("#app .filter-bar"));
   assert.ok(document.querySelector("#app .grid"));
   assert.equal(document.querySelector("#back-button").disabled, false);
-  assert.equal(document.querySelector("#forward-button").disabled, true);
+  assert.ok(document.querySelector("#program-advanced-filters"));
+  assert.equal(document.querySelector(".filter-toggle"), null);
 });
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
@@ -128,7 +129,7 @@ await sleep(100);
 t("Programmfilter: Zurücksetzen leert auch die sichtbaren Bedienelemente", () => {
   assert.equal([...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked), false);
   assert.equal([...document.querySelectorAll(".filter-bar select")].some((select) => select.value), false);
-  assert.equal(document.querySelector(".filter-toggle").getAttribute("aria-expanded"), "false");
+  assert.ok(document.querySelector("#program-advanced-filters"));
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
 t("Programm-Raster enthält keine leere Foyer-Spalte", () => {
