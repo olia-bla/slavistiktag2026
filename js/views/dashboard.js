@@ -13,7 +13,7 @@ function updatedAt(timestamp) {
 
 export function renderDashboard(model, ctx) {
   const c = model.conference;
-  const now = nowInfo(model);
+  const now = nowInfo(model, ctx.now instanceof Date ? ctx.now : new Date());
   const notice = changesNotice(model);
 
   const welcomeWords = model.content.welcome || [];
@@ -116,9 +116,30 @@ function nowBody(model, now, ctx) {
       h("span", { class: "now-meta", text: `${timeRange(x.start, x.end)}${x.room ? " · " + x.room : ""}` }));
   };
 
+  const parallelCard = (items, label, current) => {
+    const first = items[0];
+    return h("div", { class: "now-item" },
+      h("span", { class: "now-label", text: label }),
+      h("a", {
+        class: "now-title",
+        href: `#/programm?day=${first.day}`,
+        text: current
+          ? "Aktuell laufen mehrere Veranstaltungen"
+          : `${items.length} Veranstaltungen beginnen gleichzeitig`,
+      }),
+      h("span", {
+        class: "now-meta",
+        text: current
+          ? `${items.length} Veranstaltungen · verschiedene Räume`
+          : `ab ${first.start} · verschiedene Räume`,
+      }));
+  };
+
   const rows = [];
-  if (now.current) rows.push(card(now.current, "Läuft gerade"));
-  if (now.next) rows.push(card(now.next, "Als Nächstes"));
+  if (now.currentItems.length > 1) rows.push(parallelCard(now.currentItems, "Läuft gerade", true));
+  else if (now.current) rows.push(card(now.current, "Läuft gerade"));
+  if (now.nextItems.length > 1) rows.push(parallelCard(now.nextItems, "Als Nächstes", false));
+  else if (now.next) rows.push(card(now.next, "Als Nächstes"));
   if (!rows.length) rows.push(h("p", { text: "Momentan keine Veranstaltung." }));
   return h("div", {}, rows);
 }

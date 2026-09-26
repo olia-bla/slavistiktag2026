@@ -461,6 +461,34 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
+// Donnerstag während des parallelen Vortragsprogramms: Die Startseite darf
+// keinen zufälligen Einzelvortrag als repräsentativ hervorheben.
+{
+  const ctx = await browser.newContext({
+    viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    timezoneId: "Europe/Berlin",
+  });
+  const page = await ctx.newPage();
+  await page.addInitScript(({ fixedNow }) => {
+    const NativeDate = Date;
+    class FixedDate extends NativeDate {
+      constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+      static now() { return fixedNow; }
+    }
+    window.Date = FixedDate;
+  }, { fixedNow: new Date("2026-10-01T09:15:00+02:00").getTime() });
+  await page.goto(BASE + "#/startseite");
+  await page.waitForSelector("#app .now-card");
+  await t("iPhone Donnerstag: paralleles Programm statt zufälligem Einzelvortrag", async () => {
+    const text = await page.locator(".now-card").textContent();
+    assert.ok(text.includes("Aktuell laufen mehrere Veranstaltungen"));
+    assert.ok(text.includes("verschiedene Räume"));
+    assert.equal(await page.locator('.now-card a[href="#/programm?day=2026-10-01"]').count() >= 1, true);
+    assert.deepEqual(await overflowIssues(page), []);
+  });
+  await ctx.close();
+}
+
 // ---------- Veranstaltungsfarben ----------
 {
   const page = await browser.newPage();

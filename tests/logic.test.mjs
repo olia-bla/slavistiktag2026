@@ -184,6 +184,22 @@ t("now: laufende Session", () => {
   const info2 = nowInfo(model, new Date("2026-10-01T09:10:00"));
   assert.equal(info2.current.id, "m1");
 });
+t("now: parallele Veranstaltungen werden vollständig gruppiert", () => {
+  const parallel = {
+    conference: model.conference,
+    byDay: {
+      "2026-10-01": [
+        S({ id: "a1", start: "09:00", end: "09:30", room: "HS 6" }),
+        S({ id: "a2", start: "09:00", end: "09:30", room: "HS 8" }),
+        S({ id: "b1", start: "09:30", end: "10:00", room: "HS 6" }),
+        S({ id: "b2", start: "09:30", end: "10:00", room: "HS 8" }),
+      ],
+    },
+  };
+  const info = nowInfo(parallel, new Date("2026-10-01T09:15:00"));
+  assert.deepEqual(info.currentItems.map((x) => x.id), ["a1", "a2"]);
+  assert.deepEqual(info.nextItems.map((x) => x.id), ["b1", "b2"]);
+});
 t("now: Pause zwischen Slots", () => {
   const info = nowInfo(model, new Date("2026-10-01T11:05:00"));
   assert.equal(info.status, "break");

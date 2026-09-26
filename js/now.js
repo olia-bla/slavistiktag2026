@@ -16,8 +16,11 @@ export function nowInfo(model, now = new Date()) {
     ...(model.eventByDay?.[day] || []).filter((e) => e.start && e.end),
   ].sort((a, b) => itemStart(a) - itemStart(b));
 
-  const current = items.find((x) => itemStart(x) <= tm && tm < itemEnd(x)) || null;
-  const next = items.find((x) => itemStart(x) > tm) || null;
+  const currentItems = items.filter((x) => itemStart(x) <= tm && tm < itemEnd(x));
+  const current = currentItems[0] || null;
+  const nextStart = items.find((x) => itemStart(x) > tm)?.start || null;
+  const nextItems = nextStart ? items.filter((x) => x.start === nextStart) : [];
+  const next = nextItems[0] || null;
 
   const conf = model.conference;
   const inRange = day >= conf.start && day <= conf.end;
@@ -33,5 +36,5 @@ export function nowInfo(model, now = new Date()) {
     status = "done";
   }
 
-  return { day, time: t, status, current, next, items };
+  return { day, time: t, status, current, next, currentItems, nextItems, items };
 }
