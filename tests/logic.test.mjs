@@ -93,6 +93,9 @@ t("formatOf: SEK-Code → sektion", () => {
 t("formatOf: Vortrag ohne SEK-Code → panel (eingereichtes Panel)", () => {
   assert.equal(formatOf({ type: "talk" }), "panel");
 });
+t("formatOf: X-Veranstaltung ist kein eingereichtes Panel", () => {
+  assert.equal(formatOf({ type: "talk", track: "X", discipline: "X" }), "special");
+});
 t("filter: Format panel → nur code-lose Panels (nicht Sektionen)", () => {
   const hit = filterSessions(sessions, { formats: ["panel"] }).map((s) => s.id);
   assert.deepEqual(hit.sort(), ["b", "d", "x"].sort(), "Talks ohne SEK-Code sind 'panel'");

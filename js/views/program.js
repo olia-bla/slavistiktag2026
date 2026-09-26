@@ -101,6 +101,7 @@ function filterBar(model, ctx, state) {
     writeHash(model, state);
     ctx.rerenderProgram();
   }, 300);
+  let updateFilterToggle = () => {};
   ctx._programSync = () => { writeHash(model, state); ctx.rerenderProgram(); };
 
   const search = h("input", {
@@ -119,9 +120,10 @@ function filterBar(model, ctx, state) {
     const box = h("fieldset", { class: "check-group" },
       h("legend", { text: label }));
     for (const { value, text } of options) {
-      const cb = h("input", { type: "checkbox", checked: state[key].includes(value) });
+      const cb = h("input", { type: "checkbox", value, checked: state[key].includes(value) });
       cb.addEventListener("change", () => {
         state[key] = cb.checked ? [...state[key], value] : state[key].filter((x) => x !== value);
+        updateFilterToggle();
         sync();
       });
       box.append(h("label", { class: "check" }, cb,
@@ -135,7 +137,7 @@ function filterBar(model, ctx, state) {
     const sel = h("select", { "aria-label": label },
       h("option", { value: "", text: label }),
       options.map((o) => h("option", { value: o.value, selected: state[key] === o.value, text: o.text })));
-    sel.addEventListener("change", () => { state[key] = sel.value; sync(); });
+    sel.addEventListener("change", () => { state[key] = sel.value; updateFilterToggle(); sync(); });
     return sel;
   };
 
@@ -154,18 +156,26 @@ function filterBar(model, ctx, state) {
   });
   talksOnlyCb.addEventListener("change", () => {
     state.talksOnly = talksOnlyCb.checked;
+    updateFilterToggle();
     sync();
   });
   const talksOnlyWrap = h("label", { class: `check talks-only ${state.q ? "" : "hidden"}`, title: "Sucht nur in Titel, Personen, Raum, Panels – nicht in der Chair-Zeile" },
     talksOnlyCb, h("span", { text: "Nur Vorträge" }));
 
-  const bar = h("div", { class: "filter-bar" },
-    h("div", { class: "filter-row" }, search,
-      talksOnlyWrap,
+  const activeAdvancedFilters = () =>
+    Number(Boolean(state.room)) + Number(Boolean(state.slot)) + Number(Boolean(state.panel)) +
+    state.tracks.length + state.formats.length;
+  const initiallyOpen = activeAdvancedFilters() > 0;
+  const filterToggle = h("button", {
+    class: "filter-toggle", type: "button", "aria-controls": "program-advanced-filters",
+    "aria-expanded": initiallyOpen ? "true" : "false",
+  });
+  const advanced = h("div", { id: "program-advanced-filters", class: "filter-advanced" },
+    h("div", { class: "filter-row filter-selects" },
       select("Raum", roomOpts, "room"),
       select("Zeit", slotOpts, "slot"),
       select("Panel/Sektion", panelOpts, "panel")),
-    h("div", { class: "filter-row" },
+    h("div", { class: "filter-row filter-options" },
       checks("Disziplin", [
         { value: "DID", text: TRACK_LABELS.DID },
         { value: "SW", text: TRACK_LABELS.SW },
@@ -184,9 +194,24 @@ function filterBar(model, ctx, state) {
         onclick: () => {
           Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], formats: [], talksOnly: false });
           writeHash(model, state);
-          ctx.rerenderProgram();
+          ctx.render();
         },
       })));
+  const bar = h("div", { class: `filter-bar ${initiallyOpen ? "filters-open" : ""}` },
+    h("div", { class: "filter-row filter-search-row" }, search, talksOnlyWrap),
+    filterToggle,
+    advanced);
+  updateFilterToggle = () => {
+    const count = activeAdvancedFilters();
+    const open = bar.classList.contains("filters-open");
+    filterToggle.textContent = open ? "Filter schließen" : `Filter anzeigen${count ? ` (${count})` : ""}`;
+    filterToggle.setAttribute("aria-expanded", String(open));
+  };
+  filterToggle.addEventListener("click", () => {
+    bar.classList.toggle("filters-open");
+    updateFilterToggle();
+  });
+  updateFilterToggle();
   return bar;
 }
 
@@ -266,6 +291,9 @@ export function renderResults(model, ctx, state, results) {
 }
 
 function filterEvent(e, state) {
+  // Rahmen-/Sonderveranstaltungen besitzen keine SW/LKW/DID-Zuordnung und
+  // dürfen deshalb bei einem Fach- oder Panel-Filter nicht stehenbleiben.
+  if (state.panel || state.tracks?.length) return false;
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
@@ -280,7 +308,7 @@ function normalizeText(s) {
 }
 
 function gridBtn(ctx, mode) {
-  const b = h("button", { class: `btn small ${ctx.viewMode === mode ? "" : "ghost"}`, text: mode === "grid" ? "Raster" : "Liste" });
+  const b = h("button", { class: `btn small view-${mode} ${ctx.viewMode === mode ? "" : "ghost"}`, text: mode === "grid" ? "Raster" : "Liste" });
   b.addEventListener("click", () => { ctx.setViewMode(mode); });
   return b;
 }
@@ -310,7 +338,9 @@ function gridView(model, ctx, state, day, sessions, events) {
   // Zeilen: Slots + Einschieber (Pausen/Events zwischen Slots)
   const rowItems = [];
   let lastEnd = null;
-  const extras = [...(model.byDay[day] || []).filter((s) => s.type === "break"), ...events]
+  // Nur bereits gefilterte Pausen verwenden; sonst tauchen sie trotz aktivem
+  // Fach-, Such- oder Formatfilter wieder im Raster auf.
+  const extras = [...sessions.filter((s) => s.type === "break"), ...events]
     .filter((x) => x.start)
     .sort((a, b) => minutes(a.start) - minutes(b.start));
 

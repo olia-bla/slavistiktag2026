@@ -163,6 +163,48 @@ for (const vp of VIEWPORTS) {
     const heads = await page.locator("#app .grid-head").allTextContents();
     assert.equal(heads.map((s) => s.trim()).includes("Foyer CZS 3"), false);
   });
+  await t(`${vp.name}: Filter funktionieren und lassen sich vollständig zurücksetzen`, async () => {
+    const compact = vp.width <= 760;
+    const toggle = page.locator(".filter-toggle");
+    if (compact) {
+      assert.equal(await toggle.isVisible(), true);
+      assert.equal(await page.locator("#program-advanced-filters").isVisible(), false);
+      const filterHeight = await page.locator(".filter-bar").evaluate((el) => el.getBoundingClientRect().height);
+      assert.ok(filterHeight <= 120, `mobile Filterleiste ${Math.round(filterHeight)}px hoch`);
+      assert.equal(await page.locator(".view-grid").isVisible(), false);
+      await toggle.click();
+    } else {
+      assert.equal(await toggle.isVisible(), false);
+      assert.equal(await page.locator("#program-advanced-filters").isVisible(), true);
+    }
+
+    await page.locator('input[value="DID"]').check();
+    await page.waitForTimeout(400);
+    const filtered = await page.evaluate(() => ({
+      cards: document.querySelectorAll(".session-card").length,
+      wrongCards: [...document.querySelectorAll(".session-card")]
+        .filter((card) => !card.classList.contains("track-did")).length,
+      events: document.querySelectorAll(".event-card").length,
+    }));
+    assert.ok(filtered.cards > 0);
+    assert.equal(filtered.wrongCards, 0);
+    assert.equal(filtered.events, 0);
+
+    await page.locator(".filter-options > .btn").click();
+    await page.waitForSelector('input[value="DID"]', { state: "attached" });
+    const reset = await page.evaluate(() => ({
+      checked: [...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked),
+      selected: [...document.querySelectorAll(".filter-bar select")].some((select) => select.value),
+      expanded: document.querySelector(".filter-toggle").getAttribute("aria-expanded"),
+      advancedVisible: getComputedStyle(document.querySelector(".filter-advanced")).display !== "none",
+    }));
+    assert.equal(reset.checked, false);
+    assert.equal(reset.selected, false);
+    if (compact) {
+      assert.equal(reset.expanded, "false");
+      assert.equal(reset.advancedVisible, false);
+    }
+  });
   await t(`${vp.name}: App-Zurücktaste führt zur vorherigen Ansicht`, async () => {
     const back = page.locator("#back-button");
     assert.equal(await back.isVisible(), true);

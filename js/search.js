@@ -63,6 +63,7 @@ export function filterSessions(sessions, state) {
 export function formatOf(s) {
   if (s.type === "break") return "pause";
   if (s.type === "talk") {
+    if (s.discipline === "X" || s.track === "X") return "special";
     // Jeder Vortrag gehört im Programm-PDF zu einem Block "Sektionen und Panels":
     // SEK_-Code → Thematische Sektion, sonst → eingereichtes Panel (PDF-Kopfzeile "Panel").
     return (s.panel_code ? "sektion" : "panel");

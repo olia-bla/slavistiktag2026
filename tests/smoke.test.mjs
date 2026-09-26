@@ -113,6 +113,24 @@ t("Programm: Panels tragen die PDF-Fachfarben", () => {
   assert.ok(panelCards("Sprache und Krieg").some((card) => card.classList.contains("track-sw")));
   assert.ok(panelCards("Changing Aesthetic Paradigms").some((card) => card.classList.contains("track-lkw")));
 });
+t("Programmfilter: Fachdidaktik blendet fachfremde Vorträge und Events aus", async () => {
+  const did = document.querySelector('input[value="DID"]');
+  did.click();
+  await sleep(400);
+  const cards = [...document.querySelectorAll("#app .session-card")];
+  assert.ok(cards.length > 0);
+  assert.equal(cards.every((card) => card.classList.contains("track-did")), true);
+  assert.equal(document.querySelectorAll("#app .event-card").length, 0);
+});
+await sleep(450);
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
+t("Programmfilter: Zurücksetzen leert auch die sichtbaren Bedienelemente", () => {
+  assert.equal([...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked), false);
+  assert.equal([...document.querySelectorAll(".filter-bar select")].some((select) => select.value), false);
+  assert.equal(document.querySelector(".filter-toggle").getAttribute("aria-expanded"), "false");
+  assert.ok(document.querySelectorAll("#app .session-card").length > 10);
+});
 t("Programm-Raster enthält keine leere Foyer-Spalte", () => {
   const heads = [...document.querySelectorAll("#app .grid-head")].map((el) => el.textContent.trim());
   assert.ok(!heads.includes("Foyer CZS 3"));

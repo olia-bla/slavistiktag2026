@@ -371,6 +371,8 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
   display: grid; gap: 0.55rem;
 }
 .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; min-width: 0; }
+.filter-toggle { display: none; }
+.filter-advanced { display: contents; }
 .search-input {
   flex: 1 1 200px; min-width: 0; padding: 0.5rem 0.85rem; border-radius: 10px;
   background: var(--bg); border: 1px solid var(--line); color: var(--ink);
@@ -529,10 +531,33 @@ select {
     line-height: 1.15;
   }
   /* Filterleiste scrollt normal mit (kein Sticky-Konflikt mit zweizeiliger Topbar) */
-  .filter-bar { position: static; }
-  .filter-bar .filter-row:first-child { flex-wrap: wrap; overflow: visible; padding-bottom: 2px; }
-  .filter-bar .filter-row:first-child .search-input { flex: 1 0 100%; width: 100%; }
-  .filter-bar .filter-row:first-child select { flex: 1 1 calc(33.333% - 0.5rem); width: auto; min-width: 6.5em; max-width: none; }
+  .filter-bar { position: static; padding: 0.55rem; }
+  .filter-search-row { overflow: visible; }
+  .filter-search-row .search-input { flex: 1 0 100%; width: 100%; }
+  .filter-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; min-height: 2.65rem; padding: 0.45rem 0.8rem;
+    border: 1px solid var(--line-strong); border-radius: 6px;
+    background: var(--card2); color: var(--heading); font: inherit; font-weight: 700;
+  }
+  .filter-advanced { display: none; }
+  .filter-bar.filters-open .filter-advanced { display: grid; gap: 0.55rem; }
+  .filter-selects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filter-selects select { width: 100%; max-width: none; }
+  .filter-selects select:last-child { grid-column: 1 / -1; }
+  .filter-options { align-items: stretch; }
+  .filter-options .check-group {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .filter-options .check { min-height: 2.55rem; white-space: normal; line-height: 1.15; }
+  .filter-options > .btn { width: 100%; justify-content: center; }
+  .day-tabs {
+    flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.35rem;
+    scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+  }
+  .day-tabs .chip { flex: 0 0 auto; }
+  .view-grid { display: none; }
   .hero h1 { font-size: 1.5rem; }
   .drawer { width: 100vw; border-left: 0; }
 }

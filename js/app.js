@@ -22,6 +22,8 @@ const HOME_HASH = "#/heute";
 const initialHash = location.hash || HOME_HASH;
 const routeHistory = initialHash === HOME_HASH ? [HOME_HASH] : [HOME_HASH, initialHash];
 let routeHistoryIndex = routeHistory.length - 1;
+const compactProgram = window.matchMedia && window.matchMedia("(max-width: 760px)").matches;
+const savedViewMode = localStorage.getItem("slavtag26.view");
 
 function applyTheme(theme, persist = false) {
   const next = theme === "dark" ? "dark" : "light";
@@ -47,15 +49,14 @@ applyTheme(document.documentElement.getAttribute("data-theme") || "light");
 
 const ctx = {
   model: null,
-  viewMode: localStorage.getItem("slavtag26.view") ||
-    (window.matchMedia && window.matchMedia("(max-width: 760px)").matches ? "list" : "grid"),
+  viewMode: compactProgram ? "list" : (savedViewMode || "grid"),
   programState: null,
   openSession: (id) => openDrawer(ctx, id),
   openEvent: (id) => openDrawer(ctx, id),
   byId: {},
   setViewMode(mode) {
-    ctx.viewMode = mode;
-    localStorage.setItem("slavtag26.view", mode);
+    ctx.viewMode = compactProgram ? "list" : mode;
+    localStorage.setItem("slavtag26.view", ctx.viewMode);
     ctx.rerenderProgram();
   },
   rerenderProgram() {
