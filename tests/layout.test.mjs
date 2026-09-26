@@ -91,6 +91,26 @@ for (const vp of VIEWPORTS) {
   await t(`${vp.name}: Dashboard ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
   });
+  await t(`${vp.name}: Begrüßungen bilden zwei gleich große Zeilen`, async () => {
+    const welcome = await page.evaluate(() => {
+      const wall = document.querySelector(".welcome-wall");
+      const rows = [...wall.querySelectorAll(".welcome-row")];
+      return {
+        rows: rows.length,
+        counts: rows.map((row) => row.querySelectorAll(".welcome-word").length),
+        words: wall.querySelectorAll(".welcome-word").length,
+        german: wall.textContent.includes("Herzlich willkommen in Jena!"),
+        displayed: getComputedStyle(wall).display !== "none",
+        rowTops: rows.map((row) => Math.round(row.getBoundingClientRect().top)),
+      };
+    });
+    assert.equal(welcome.rows, 2);
+    assert.deepEqual(welcome.counts, [7, 7]);
+    assert.equal(welcome.words, 14);
+    assert.equal(welcome.german, true);
+    assert.equal(welcome.displayed, vp.width > 760);
+    if (vp.width > 760) assert.notEqual(welcome.rowTops[0], welcome.rowTops[1]);
+  });
   await t(`${vp.name}: Logo links oben, Navigation unten`, async () => {
     const ui = await page.evaluate(() => {
       const logo = document.querySelector(".brand-logo").getBoundingClientRect();
@@ -178,6 +198,25 @@ for (const vp of VIEWPORTS) {
     assert.ok(filterBounds.left >= -1 && filterBounds.right <= filterBounds.viewport + 1,
       `Filterleiste ragt heraus: ${filterBounds.left}..${filterBounds.right} bei ${filterBounds.viewport}px`);
 
+    const visibilityValues = ["podium", "special", "rahmen", "pause"];
+    const visibility = await page.evaluate((values) => ({
+      allChecked: values.every((value) => document.querySelector(`input[value="${value}"]`)?.checked),
+      panelMissing: document.querySelector('input[value="panel"]') === null,
+      sectionMissing: document.querySelector('input[value="sektion"]') === null,
+    }), visibilityValues);
+    assert.equal(visibility.allChecked, true);
+    assert.equal(visibility.panelMissing, true);
+    assert.equal(visibility.sectionMissing, true);
+
+    const pausesBefore = await page.locator(".event-card.type-break").count();
+    assert.ok(pausesBefore > 0, "keine sichtbare Pause zum Testen");
+    await page.locator('input[value="pause"]').uncheck();
+    await page.waitForTimeout(400);
+    assert.equal(await page.locator(".event-card.type-break").count(), 0);
+    await page.locator('input[value="pause"]').check();
+    await page.waitForTimeout(400);
+    assert.ok(await page.locator(".event-card.type-break").count() > 0);
+
     await page.locator('input[value="DID"]').check();
     await page.waitForTimeout(400);
     const filtered = await page.evaluate(() => ({
@@ -193,11 +232,15 @@ for (const vp of VIEWPORTS) {
     await page.locator(".filter-options > .btn").click();
     await page.waitForSelector('input[value="DID"]', { state: "attached" });
     const reset = await page.evaluate(() => ({
-      checked: [...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked),
+      disciplineChecked: ["DID", "SW", "LKW"]
+        .some((value) => document.querySelector(`input[value="${value}"]`)?.checked),
+      allVisible: ["podium", "special", "rahmen", "pause"]
+        .every((value) => document.querySelector(`input[value="${value}"]`)?.checked),
       selected: [...document.querySelectorAll(".filter-bar select")].some((select) => select.value),
       advancedVisible: getComputedStyle(document.querySelector(".filter-advanced")).display !== "none",
     }));
-    assert.equal(reset.checked, false);
+    assert.equal(reset.disciplineChecked, false);
+    assert.equal(reset.allVisible, true);
     assert.equal(reset.selected, false);
     assert.equal(reset.advancedVisible, true);
   });

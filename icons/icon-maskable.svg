@@ -1,8 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- Maskable-Variante: Hausblau vollflächig, Motiv innerhalb der Safe-Zone. -->
+  <!-- Maskable-Variante: Hausblau vollflächig, das neue Motiv innerhalb der Safe-Zone. -->
   <rect x="0" y="0" width="512" height="512" fill="#002f5d"/>
   <rect x="58" y="58" width="396" height="396" rx="54" fill="#ffffff"/>
-  <path d="M375 170V107H107V405H375V342" fill="none" stroke="#8b1878" stroke-width="22"/>
-  <text x="242" y="241" font-family="Arial, sans-serif" font-size="62" font-weight="700" fill="#002f5d" text-anchor="middle">SlavTag</text>
-  <text x="242" y="326" font-family="Arial, sans-serif" font-size="70" font-weight="700" fill="#002f5d" text-anchor="middle">2026</text>
+  <svg x="58" y="58" width="396" height="396" viewBox="0 0 512 512">
+    <path d="M 417.08298,140.06668 V 64.355121 H 66.917024 V 447.64488 H 417.08298 v -75.71156"
+      fill="none" stroke="#8b1878" stroke-width="28.3918"/>
+    <text x="311.17264" y="225.85818" font-family="Arial, sans-serif" font-size="97.5132px"
+      font-weight="700" fill="#002f5d" text-anchor="middle"
+      transform="scale(0.97723043,1.0233001)">SlavTag</text>
+    <text x="381.61279" y="334.97815" font-family="Arial, sans-serif" font-size="93.2753px"
+      font-weight="700" fill="#002f5d" text-anchor="middle">2026</text>
+  </svg>
 </svg>

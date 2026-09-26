@@ -31,8 +31,15 @@ export function renderDashboard(model, ctx) {
       h("a", { href: `#/info`, text: e.title }),
     )));
 
+  const welcomeWords = model.content.welcome || [];
+  const wordsPerRow = Math.ceil(welcomeWords.length / 2);
   const welcome = h("div", { class: "welcome-wall", "aria-hidden": "true" },
-    model.content.welcome.map((w, i) => h("span", { class: "welcome-word", style: `animation-delay:${i * 0.35}s`, text: w })));
+    [welcomeWords.slice(0, wordsPerRow), welcomeWords.slice(wordsPerRow)].map((row, rowIndex) =>
+      h("div", { class: "welcome-row" },
+        row.map((word, columnIndex) => {
+          const index = rowIndex * wordsPerRow + columnIndex;
+          return h("span", { class: "welcome-word", style: `animation-delay:${index * 0.35}s`, text: word });
+        }))));
 
   return h("div", { class: "view view-dashboard" },
     welcome,

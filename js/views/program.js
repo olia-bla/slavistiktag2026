@@ -1,6 +1,6 @@
 // views/program.js – Programm: Filterleiste, Grid- und Listenansicht
 import { h, dateLabel, timeRange, debounce, minutes } from "../util.js";
-import { filterSessions, highlight, snippet } from "../search.js";
+import { filterSessions, formatOf, highlight, snippet } from "../search.js";
 import { favs } from "../favorites.js";
 import { roomLink } from "../rooms.js";
 import { stripTitles } from "./speakers.js";
@@ -32,9 +32,9 @@ function langBadge(lang) {
   return b ? h("span", { class: "pill lang", text: b.label, title: b.title }) : null;
 }
 const FORMAT_LABELS = {
-  panel: "Eingereichte Panels", sektion: "Thematische Sektionen",
   pause: "Pausen", podium: "Podiumsdiskussionen", special: "Sonderformate", rahmen: "Rahmenprogramm",
 };
+const OPTIONAL_FORMATS = ["podium", "special", "rahmen", "pause"];
 
 export function renderProgram(model, ctx, params) {
   const state = readState(model, params);
@@ -52,6 +52,8 @@ export function renderProgram(model, ctx, params) {
 function readState(model, params) {
   const q = params.get("q") || "";
   const dayParam = params.get("day");
+  const legacyFormats = params.getAll("format").filter((format) => OPTIONAL_FORMATS.includes(format));
+  const hiddenFormats = params.getAll("hide").filter((format) => OPTIONAL_FORMATS.includes(format));
   const browseDefault = model.days.includes(todayIso()) && inConf(model)
     ? todayIso()
     : model.days.find((d) => d !== model.conference.start) || model.days[0];
@@ -64,7 +66,12 @@ function readState(model, params) {
     slot: params.get("slot") || "",
     panel: params.get("panel") || "",
     tracks: params.getAll("track"),
-    formats: params.getAll("format"),
+    // Diese vier Kategorien sind standardmäßig sichtbar. Ein entferntes
+    // Häkchen wird als Ausschluss in der URL gespeichert. Alte ?format=-Links
+    // bleiben als reine Auswahl weiterhin verständlich.
+    hiddenFormats: hiddenFormats.length || !legacyFormats.length
+      ? hiddenFormats
+      : OPTIONAL_FORMATS.filter((format) => !legacyFormats.includes(format)),
     // „Nur Vorträge": Chair-Treffer bei Personensuche ausblenden (Checkbox)
     talksOnly: params.get("talks") === "1",
   };
@@ -90,7 +97,7 @@ function writeHash(model, state) {
   if (state.slot) p.set("slot", state.slot);
   if (state.panel) p.set("panel", state.panel);
   for (const t of state.tracks) p.append("track", t);
-  for (const f of state.formats) p.append("format", f);
+  for (const f of state.hiddenFormats) p.append("hide", f);
   if (state.talksOnly) p.set("talks", "1");
   const hash = `#/programm${p.toString() ? "?" + p.toString() : ""}`;
   if (location.hash !== hash) history.replaceState(null, "", hash);
@@ -127,6 +134,25 @@ function filterBar(model, ctx, state) {
       box.append(h("label", { class: "check" }, cb,
         dotClass ? h("span", { class: `legend-dot ${dotClass(value)}`, "aria-hidden": "true" }) : null,
         h("span", { text })));
+    }
+    return box;
+  };
+
+  const visibilityChecks = (label, options) => {
+    const box = h("fieldset", { class: "check-group visibility-filters" },
+      h("legend", { text: label }));
+    for (const { value, text } of options) {
+      const cb = h("input", {
+        type: "checkbox", value, checked: !state.hiddenFormats.includes(value),
+        "aria-label": `${text} anzeigen`,
+      });
+      cb.addEventListener("change", () => {
+        state.hiddenFormats = cb.checked
+          ? state.hiddenFormats.filter((format) => format !== value)
+          : [...new Set([...state.hiddenFormats, value])];
+        sync();
+      });
+      box.append(h("label", { class: "check" }, cb, h("span", { text })));
     }
     return box;
   };
@@ -170,18 +196,16 @@ function filterBar(model, ctx, state) {
         { value: "SW", text: TRACK_LABELS.SW },
         { value: "LKW", text: TRACK_LABELS.LKW },
       ], "tracks", (v) => `dot-${v.toLowerCase()}`),
-      checks("Format", [
-        { value: "panel", text: FORMAT_LABELS.panel },
-        { value: "sektion", text: FORMAT_LABELS.sektion },
+      visibilityChecks("Anzeigen", [
         { value: "podium", text: FORMAT_LABELS.podium },
         { value: "special", text: FORMAT_LABELS.special },
         { value: "rahmen", text: FORMAT_LABELS.rahmen },
         { value: "pause", text: FORMAT_LABELS.pause },
-      ], "formats"),
+      ]),
       h("button", {
         class: "btn ghost", text: "Filter zurücksetzen",
         onclick: () => {
-          Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], formats: [], talksOnly: false });
+          Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], hiddenFormats: [], talksOnly: false });
           writeHash(model, state);
           ctx.render();
         },
@@ -198,15 +222,10 @@ export function renderResults(model, ctx, state, results) {
   if (talksOnlyEl) talksOnlyEl.classList.toggle("hidden", !state.q);
   results.textContent = "";
 
-  const wantEvents = state.formats.length === 0 || state.formats.some((f) => ["podium", "special", "rahmen"].includes(f));
-  const wantTalks = state.formats.length === 0 || state.formats.some((f) => ["panel", "sektion", "pause"].includes(f));
-
-  let sessions = filterSessions(model.sessions, { ...state, formats: state.formats.filter((f) => ["panel", "sektion", "pause"].includes(f)) });
-  let events = wantEvents
-    ? (state.day ? (model.eventByDay[state.day] || []) : model.events).filter((e) => filterEvent(e, state))
-    : [];
-
-  if (!wantTalks) sessions = [];
+  const sessions = filterSessions(model.sessions, state)
+    .filter((session) => !state.hiddenFormats.includes(formatOf(session)));
+  const events = (state.day ? (model.eventByDay[state.day] || []) : model.events)
+    .filter((event) => filterEvent(event, state));
   const count = sessions.filter((s) => s.type === "talk").length + events.length;
   const allDays = state.day ? [state.day] : model.days;
 
@@ -215,9 +234,10 @@ export function renderResults(model, ctx, state, results) {
   if (!count && state.day && state.q) {
     const globalState = { ...state, day: "" };
     const globalHits =
-      filterSessions(model.sessions, { ...globalState, formats: state.formats.filter((f) => ["panel", "sektion", "pause"].includes(f)) })
+      filterSessions(model.sessions, globalState)
+        .filter((session) => !state.hiddenFormats.includes(formatOf(session)))
         .filter((s) => s.type === "talk").length +
-      (wantEvents ? model.events.filter((e) => filterEvent(e, globalState)).length : 0);
+      model.events.filter((e) => filterEvent(e, globalState)).length;
     if (globalHits > 0) {
       hint = h("button", {
         class: "btn ghost",
@@ -274,7 +294,7 @@ function filterEvent(e, state) {
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
   const formats = e.formats?.length ? e.formats : [e.type];
-  if (state.formats.length && !state.formats.some((format) => formats.includes(format))) return false;
+  if (formats.every((format) => state.hiddenFormats.includes(format))) return false;
   return true;
 }
 function matchesLoose(text, q) {

@@ -70,6 +70,13 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   assert.equal(update.includes("Programmstand"), false);
   assert.equal(document.querySelector(".site-footer").textContent.includes("Mitmachen auf GitHub"), false);
 });
+t("Startseite: 14 Begrüßungen gleichmäßig auf zwei Zeilen verteilt", () => {
+  const rows = [...document.querySelectorAll("#app .welcome-row")];
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((row) => row.querySelectorAll(".welcome-word").length), [7, 7]);
+  assert.equal(document.querySelectorAll("#app .welcome-word").length, 14);
+  assert.ok(document.querySelector("#app .welcome-wall").textContent.includes("Herzlich willkommen in Jena!"));
+});
 t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
   const logo = document.querySelector(".topbar .brand-logo");
   assert.ok(logo);
@@ -104,6 +111,14 @@ t("Programm: Filterleiste + Grid gerendert", () => {
   assert.ok(document.querySelector("#program-advanced-filters"));
   assert.equal(document.querySelector(".filter-toggle"), null);
 });
+t("Programmfilter: vier Sichtbarkeitsschalter sind aktiv, Panel- und Sektionsfilter fehlen", () => {
+  const visible = ["podium", "special", "rahmen", "pause"];
+  assert.equal(visible.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
+  assert.equal(document.querySelector('input[value="panel"]'), null);
+  assert.equal(document.querySelector('input[value="sektion"]'), null);
+  assert.equal(document.querySelector(".filter-bar").textContent.includes("Eingereichte Panels"), false);
+  assert.equal(document.querySelector(".filter-bar").textContent.includes("Thematische Sektionen"), false);
+});
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
@@ -126,12 +141,37 @@ t("Programmfilter: Fachdidaktik blendet fachfremde Vorträge und Events aus", as
 await sleep(450);
 document.querySelector(".filter-options .btn").click();
 await sleep(100);
-t("Programmfilter: Zurücksetzen leert auch die sichtbaren Bedienelemente", () => {
-  assert.equal([...document.querySelectorAll(".filter-bar input[type=checkbox]")].some((input) => input.checked), false);
+t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ein", () => {
+  const disciplines = ["DID", "SW", "LKW"];
+  const visible = ["podium", "special", "rahmen", "pause"];
+  assert.equal(disciplines.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
+  assert.equal(visible.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
   assert.equal([...document.querySelectorAll(".filter-bar select")].some((select) => select.value), false);
   assert.ok(document.querySelector("#program-advanced-filters"));
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
+dom.window.location.hash = "#/programm?day=all";
+await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
+const categoryValues = ["podium", "special", "rahmen", "pause"];
+const categoryCount = () => document.querySelectorAll(
+  ".event-card.type-podium, .event-card.type-special, .event-card.type-rahmen, .event-card.type-break, .session-card.track-x").length;
+t("Programmfilter: alle optionalen Kategorien sind zunächst sichtbar", () => {
+  assert.ok(categoryCount() > 0);
+});
+for (const value of categoryValues) document.querySelector(`input[value="${value}"]`).click();
+await sleep(400);
+t("Programmfilter: entfernte Häkchen blenden alle vier Kategorien aus", () => {
+  assert.equal(categoryCount(), 0);
+  assert.ok(document.querySelectorAll("#app .session-card").length > 10, "reguläre Vorträge wurden mit ausgeblendet");
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
+t("Programmfilter: Zurücksetzen blendet alle vier Kategorien wieder ein", () => {
+  assert.equal(categoryValues.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
+  assert.ok(categoryCount() > 0);
+});
+dom.window.location.hash = "#/programm";
+await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].every((el) => el.textContent !== "Alle Tage"));
 t("Programm-Raster enthält keine leere Foyer-Spalte", () => {
   const heads = [...document.querySelectorAll("#app .grid-head")].map((el) => el.textContent.trim());
   assert.ok(!heads.includes("Foyer CZS 3"));
@@ -282,15 +322,21 @@ t("Eröffnungs-Drawer: fehlender Raum ehrlich gekennzeichnet", () => {
 });
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
-dom.window.location.hash = "#/programm?day=2026-09-30&format=special";
-await waitFor(() => document.querySelector('input[value="special"]')?.checked);
-t("Sonderformat-Filter zeigt die Eröffnung", () => {
+document.querySelector('input[value="special"]').click();
+await sleep(400);
+t("Eröffnung bleibt über Rahmenprogramm sichtbar, wenn Sonderformate ausgeblendet sind", () => {
   assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
     .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
 });
-dom.window.location.hash = "#/programm?day=2026-09-30&format=rahmen";
-await waitFor(() => document.querySelector('input[value="rahmen"]')?.checked);
-t("Rahmenprogramm-Filter zeigt die Eröffnung weiterhin", () => {
+document.querySelector('input[value="rahmen"]').click();
+await sleep(400);
+t("Eröffnung wird erst ausgeblendet, wenn beide Kategorien deaktiviert sind", () => {
+  assert.equal([...document.querySelectorAll("#app .event-card .card-title")]
+    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")), false);
+});
+document.querySelector('input[value="special"]').click();
+await sleep(400);
+t("Eröffnung erscheint wieder über den aktivierten Sonderformat-Schalter", () => {
   assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
     .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
 });
