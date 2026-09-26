@@ -58,6 +58,7 @@
   },
   "links": {
     "program_pdf": "https://www.gw.uni-jena.de/phifakmedia/199705/tagungsprogramm-25-09-2026.pdf",
+    "abstracts_pdf": "https://www.gw.uni-jena.de/phifakmedia/199683/book-of-abstracts-2026.pdf",
     "downloads_page": "https://www.gw.uni-jena.de/52756/downloads",
     "city_map_pdf": "https://www.gw.uni-jena.de/phifakmedia/197439/stadtplan-jena-slavtag.pdf",
     "event_page": "https://www.gw.uni-jena.de/52745/15-slavistiktag-2026",
@@ -82,9 +83,9 @@
     { "day": "2026-10-02", "start": "18:00", "end": "18:45", "title": "Ukrainischer Chor „Ensemble Mrija“ (Universitätshauptgebäude, Aula)", "note": "Im Anschluss an das Vortragsprogramm; für Tagungsteilnehmende kostenfrei, Spenden willkommen" },
     { "day": "2026-10-03", "start": "13:00", "end": "14:00", "title": "Abschlussveranstaltung mit anschließendem Imbiss im Foyer (CZS 3)", "note": null },
     { "day": "2026-10-03", "start": "14:00", "end": "15:30", "title": "Stadtführung durch Jena", "note": "Anmeldung erforderlich (*)" },
-    { "day": "2026-09-30", "start": null, "end": null, "title": "Bilderausstellung „Menschen, Räume, Sprachen – Fotografische Streifzüge durch die vielstimmige Welt der Slawia“", "note": "Mi–Sa im Foyer und 1. OG der CZS 3; fachliche Begleitung durch Dr. Christoph Giesel" },
-    { "day": "2026-09-30", "start": null, "end": null, "title": "Ikonen-Ausstellung „Viten, Wunder und Legenden“", "note": "Mi–Sa im Foyer und 1. OG der CZS 3; fachliche Begleitung durch Dr. Dimiter Peev am Fr, 02.10., 14:00–15:30" },
-    { "day": "2026-09-30", "start": null, "end": null, "title": "Bilderausstellung „Ich bin hier – Politische Gefangene in Belarus“", "note": "Mi–Sa im Foyer und 1. OG der CZS 3; Portraitzeichnungen von Xisha Angelova" }
+    { "day": "2026-09-30", "start": null, "end": null, "title": "Bilderausstellung „Menschen, Räume, Sprachen – Fotografische Streifzüge durch die vielstimmige Welt der Slawia“", "note": "Mi–Sa im Foyer der CZS 3; fachliche Begleitung durch Dr. Christoph Giesel" },
+    { "day": "2026-09-30", "start": null, "end": null, "title": "Ikonen-Ausstellung „Viten, Wunder und Legenden“", "note": "Mi–Sa im Foyer der CZS 3; fachliche Begleitung durch Dr. Dimiter Peev am Fr, 02.10., 14:00–15:30" },
+    { "day": "2026-09-30", "start": null, "end": null, "title": "Bilderausstellung „Ich bin hier – Politische Gefangene in Belarus“", "note": "Mi–Sa im 1. OG der CZS 3; Portraitzeichnungen von Xisha Angelova" }
   ],
   "leisure": [
     {

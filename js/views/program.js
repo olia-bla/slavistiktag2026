@@ -291,7 +291,7 @@ function slotRows(sessions) {
 }
 
 function gridView(model, ctx, state, day, sessions, events) {
-  const rooms = naturalDayRooms(model, day, sessions);
+  const rooms = naturalDayRooms(sessions);
   const starts = slotRows(sessions);
   const grid = h("div", { class: "grid-wrap" });
   const g = h("div", {
@@ -344,9 +344,9 @@ function gridView(model, ctx, state, day, sessions, events) {
   return grid;
 }
 
-function naturalDayRooms(model, day, sessions) {
+function naturalDayRooms(sessions) {
   const order = [...new Set(
-    (model.byDay[day] || []).filter((s) => s.room).map((s) => s.room))];
+    sessions.filter((s) => s.type === "talk" && s.room).map((s) => s.room))];
   order.sort((a, b) => {
     const [pa, na] = [a.split(/\s+/)[0], parseInt(a.split(/\s+/)[1] || "0", 10)];
     const [pb, nb] = [b.split(/\s+/)[0], parseInt(b.split(/\s+/)[1] || "0", 10)];

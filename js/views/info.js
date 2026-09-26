@@ -14,7 +14,8 @@ export function renderInfo(model) {
     h("div", { class: "btn-row" },
       h("a", { class: "btn download-link", href: c.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }),
       h("a", { class: "btn download-link", href: c.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }),
-      h("a", { class: "btn download-link", href: c.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }))));
+      h("a", { class: "btn download-link", href: c.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }),
+      h("a", { class: "btn download-link", href: c.links.abstracts_pdf, target: "_blank", rel: "noopener", text: "Book of Abstracts (PDF)" }))));
 
   // Orte
   wrap.append(h("section", { class: "card" },
@@ -132,8 +133,8 @@ export function renderInfo(model) {
     h("h2", { text: "Farben & Favoriten" }),
     h("p", { text:
       "Farben: Der linke Rand jeder Karte markiert den Veranstaltungsbereich – " +
-      "lavendel Sprachwissenschaft (SW), orange Literatur- und Kulturwissenschaft (LKW), " +
-      "hellblau Fachdidaktik (DID) und grün sonstige Veranstaltungen wie Poster- oder " +
+      "sanftes Lavendel für Sprachwissenschaft (SW), gedecktes Orange für Literatur- und Kulturwissenschaft (LKW), " +
+      "gedämpftes Hellblau für Fachdidaktik (DID) und ruhiges Grün für sonstige Veranstaltungen wie Poster- oder " +
       "Buchpräsentationen. Die drei Disziplinfarben stehen auch an den Filtern. " +
       "Favoriten: Über den Stern auf jeder Karte stellst du dein persönliches " +
       "Programm unter „Mein Programm“ zusammen. Es wird automatisch im Browser " +

@@ -14,7 +14,31 @@ import { renderChanges } from "./views/changes.js";
 
 const app = document.getElementById("app");
 const nav = document.getElementById("main-nav");
+const backBtn = document.getElementById("back-button");
+const themeBtn = document.getElementById("theme-toggle");
 const footerStand = document.getElementById("footer-stand");
+const routeHistory = [location.hash || "#/heute"];
+
+function applyTheme(theme, persist = false) {
+  const next = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  if (themeBtn) {
+    themeBtn.textContent = next === "dark" ? "☀" : "☾";
+    themeBtn.setAttribute("aria-label", next === "dark" ? "Hellmodus aktivieren" : "Dunkelmodus aktivieren");
+  }
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#1b222a" : "#002f5d");
+  if (persist) {
+    try { localStorage.setItem("slavtag26.theme", next); } catch { /* ignore */ }
+  }
+}
+
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    applyTheme(current === "dark" ? "light" : "dark", true);
+  });
+}
+applyTheme(document.documentElement.getAttribute("data-theme") || "light");
 
 const ctx = {
   model: null,
@@ -55,13 +79,14 @@ function parseHash() {
 
 function renderNav() {
   const { route } = parseHash();
+  if (backBtn) backBtn.hidden = route === "/heute";
   const link = (href, label, badge, forceActive) => {
     const active = forceActive ?? ("#" + route) === href;
     return h("a", { class: `nav-link ${active ? "active" : ""}`, href }, label, badge || null);
   };
   nav.textContent = "";
   nav.append(
-    link("#/heute", "Heute"),
+    link("#/heute", "Startseite"),
     link("#/programm", "Programm"),
     link("#/mein", "Mein Programm", h("span", { class: "fav-count pill", text: String(favs.all().length || "") })),
     link("#/themen", "Themen", null, route.startsWith("/themen")),
@@ -122,7 +147,23 @@ function render() {
 
 export function boot() {
   renderNav();
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", () => {
+    const current = location.hash || "#/heute";
+    const previous = routeHistory.at(-2);
+    if (routeHistory.length > 1 && current === previous) routeHistory.pop();
+    else if (current !== routeHistory.at(-1)) routeHistory.push(current);
+    render();
+  });
+  backBtn?.addEventListener("click", () => {
+    if (routeHistory.length > 1) {
+      routeHistory.pop();
+      history.back();
+      return;
+    }
+    routeHistory.splice(0, routeHistory.length, "#/heute");
+    history.replaceState(null, "", "#/heute");
+    render();
+  });
   if ("serviceWorker" in navigator) {
     // Ein aktivierter Service Worker kann bereits geöffnete JS-/CSS-Dateien nicht
     // im laufenden Dokument austauschen. Sobald eine neue Version übernimmt,

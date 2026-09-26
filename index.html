@@ -6,6 +6,14 @@
   <title>Slavistiktag 2026 · Programm &amp; Themen</title>
   <meta name="description" content="Experimentelle App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten und ICS – plus Themen-Kompass (Data Mining).">
   <meta name="theme-color" content="#002f5d">
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("slavtag26.theme"); } catch (e) {}
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
+    })();
+  </script>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/slavistiktag-icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/slavistiktag-icon-192.png">
@@ -13,14 +21,12 @@
 </head>
 <body>
   <header class="topbar">
+    <button id="back-button" class="back-button" type="button" aria-label="Zurück" title="Zurück" hidden>←</button>
     <a class="brand" href="#/heute">
       <img class="brand-logo" src="icons/slavistiktag logo.svg" alt="15. Slavistiktag 2026 · Friedrich-Schiller-Universität Jena" width="3000" height="3000">
-      <span class="brand-copy">
-        <span class="brand-title">15. Deutscher Slavistiktag 2026</span>
-        <span class="brand-meta">30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3</span>
-      </span>
     </a>
     <nav id="main-nav" class="main-nav" aria-label="Hauptnavigation"></nav>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Dunkelmodus aktivieren" title="Farbschema wechseln"></button>
   </header>
   <main id="app" class="app-main"></main>
   <footer class="site-footer">

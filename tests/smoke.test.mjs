@@ -73,13 +73,16 @@ t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
   assert.ok(logo.getAttribute("alt").includes("Friedrich-Schiller-Universität Jena"));
   assert.equal(document.querySelector("#app .event-logo"), null);
 });
-t("Header zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
-  assert.equal(document.querySelector(".brand-title").textContent, "15. Deutscher Slavistiktag 2026");
-  assert.equal(document.querySelector(".brand-meta").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
+t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
+  assert.equal(document.querySelector("#app .hero h1").textContent, "15. Deutscher Slavistiktag 2026");
+  assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
+  assert.equal(document.querySelector(".topbar .brand-copy"), null);
+  assert.equal(document.querySelector("#back-button").hidden, true);
 });
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
   assert.equal(labels.length, 6);
+  assert.equal(labels[0], "Startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
   assert.ok(labels.some((l) => l.includes("Sprecher:innen")));
 });
@@ -90,9 +93,14 @@ await waitFor(() => document.querySelector("#app .filter-bar"));
 t("Programm: Filterleiste + Grid gerendert", () => {
   assert.ok(document.querySelector("#app .filter-bar"));
   assert.ok(document.querySelector("#app .grid"));
+  assert.equal(document.querySelector("#back-button").hidden, false);
 });
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
+});
+t("Programm-Raster enthält keine leere Foyer-Spalte", () => {
+  const heads = [...document.querySelectorAll("#app .grid-head")].map((el) => el.textContent.trim());
+  assert.ok(!heads.includes("Foyer CZS 3"));
 });
 
 // Suche
@@ -330,16 +338,17 @@ t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
   const text = document.querySelector("#app .view-info").textContent;
   assert.ok(text.includes("Ensemble Mrija"));
   assert.ok(text.includes("Politische Gefangene in Belarus"));
+  assert.ok(text.includes("Mi–Sa im 1. OG der CZS 3"));
   assert.ok(text.includes("Jena und Wandern"));
   assert.ok(text.includes("Weimar und Gedenkstätte Buchenwald"));
   assert.ok(text.includes("Erfurt"));
   assert.ok(document.querySelector('a[href*="103477/kultur-und-rahmenprogramm"]'));
   assert.ok(document.querySelector('a[href*="konzertprogramm.pdf"]'));
 });
-t("Info: drei offizielle PDF-Downloads als Buttons", () => {
+t("Info: vier offizielle PDF-Downloads als Buttons", () => {
   const links = [...document.querySelectorAll("#app .downloads-card .download-link")];
-  assert.equal(links.length, 3);
-  assert.deepEqual(links.map((a) => a.textContent), ["Stadtplan (PDF)", "Lageplan (PDF)", "Tagungsprogramm (PDF)"]);
+  assert.equal(links.length, 4);
+  assert.deepEqual(links.map((a) => a.textContent), ["Stadtplan (PDF)", "Lageplan (PDF)", "Tagungsprogramm (PDF)", "Book of Abstracts (PDF)"]);
   assert.ok(links.every((a) => a.href.endsWith(".pdf")));
 });
 

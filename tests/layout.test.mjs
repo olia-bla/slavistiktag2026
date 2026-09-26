@@ -132,6 +132,19 @@ for (const vp of VIEWPORTS) {
   await t(`${vp.name}: Programm-Liste ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
   });
+  await t(`${vp.name}: Suchfeld nutzbar, keine leere Foyer-Spalte`, async () => {
+    const searchWidth = await page.locator("#app .search-input").evaluate((el) => el.getBoundingClientRect().width);
+    assert.ok(searchWidth >= 180, `Suchfeld nur ${Math.round(searchWidth)} px breit`);
+    const heads = await page.locator("#app .grid-head").allTextContents();
+    assert.equal(heads.map((s) => s.trim()).includes("Foyer CZS 3"), false);
+  });
+  await t(`${vp.name}: App-Zurücktaste führt zur vorherigen Ansicht`, async () => {
+    const back = page.locator("#back-button");
+    assert.equal(await back.isVisible(), true);
+    await back.click();
+    await page.waitForSelector("#app .view-cluster");
+    assert.match(await page.evaluate(() => location.hash), /^#\/themen\//);
+  });
 
   // Info
   await page.goto(BASE + "#/info");
@@ -141,21 +154,44 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
   });
 
-  // Einheitliches helles Corporate Design – unabhängig vom Geräteschema
+  // Gedämpfter Dunkelmodus mit Umschaltung auf das helle Corporate Design
   await page.goto(BASE + "#/themen");
-  await t(`${vp.name}: kein Dark-Mode-Schalter`, async () => {
-    assert.equal(await page.locator("#theme-toggle").count(), 0);
+  await t(`${vp.name}: Dark-Mode-Schalter sichtbar`, async () => {
+    assert.equal(await page.locator("#theme-toggle").isVisible(), true);
   });
-  await t(`${vp.name}: helles Corporate Design ohne Überlauf`, async () => {
+  await t(`${vp.name}: angenehmer Dunkelmodus ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
     const colors = await page.evaluate(() => {
       const s = getComputedStyle(document.documentElement);
-      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), faculty: s.getPropertyValue("--faculty").trim() };
+      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), ink: s.getPropertyValue("--ink").trim() };
     });
-    assert.deepEqual(colors, { scheme: "light", bg: "#f4f5f6", faculty: "#8b1878" });
+    assert.deepEqual(colors, { scheme: "dark", bg: "#151a20", ink: "#e2e6e8" });
+  });
+  await page.locator("#theme-toggle").click();
+  await t(`${vp.name}: Umschaltung in Hellmodus`, async () => {
+    const colors = await page.evaluate(() => {
+      const s = getComputedStyle(document.documentElement);
+      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), saved: localStorage.getItem("slavtag26.theme") };
+    });
+    assert.deepEqual(colors, { scheme: "light", bg: "#f1f2f3", saved: "light" });
+    assert.deepEqual(await overflowIssues(page), []);
   });
 
   await ctx.close();
+}
+
+// Direkt geöffnete Unterseite: Zurück darf die installierte App nicht verlassen.
+{
+  const page = await browser.newPage();
+  await page.goto(BASE + "#/programm");
+  await page.waitForSelector("#app .view-program");
+  await page.locator("#back-button").click();
+  await page.waitForSelector("#app .view-dashboard");
+  await t("App-Zurücktaste: direkter Einstieg fällt auf Startseite zurück", async () => {
+    assert.equal(await page.evaluate(() => location.hash), "#/heute");
+    assert.equal(await page.locator("#back-button").isVisible(), false);
+  });
+  await page.close();
 }
 
 // ---------- Veranstaltungsfarben ----------
@@ -174,10 +210,10 @@ for (const vp of VIEWPORTS) {
       };
     });
     assert.deepEqual(colors, {
-      sw: "#9b7fc4",
-      lkw: "#dc9800",
-      did: "#648bc7",
-      other: "#569e31",
+      sw: "#9a86b3",
+      lkw: "#b5824b",
+      did: "#7894ad",
+      other: "#708d68",
     });
   });
   await page.close();
