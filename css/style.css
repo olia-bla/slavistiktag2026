@@ -74,10 +74,10 @@ a:hover { text-decoration: underline; }
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
   padding: 0.65rem max(1rem, calc((100vw - 1240px) / 2));
-  background: var(--topbar-bg);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(10px);
   border-top: 5px solid var(--faculty);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(0, 47, 93, 0.14);
 }
 .brand { display: flex; align-items: center; color: var(--ink); }
 .brand:hover { text-decoration: none; }
@@ -87,22 +87,21 @@ a:hover { text-decoration: underline; }
   height: 66px;
   object-fit: cover;
   object-position: center;
-  background: #fff;
 }
 .main-nav { display: flex; gap: 0.35rem; margin-left: auto; flex-wrap: wrap; }
 .nav-link {
   padding: 0.4rem 0.8rem; border-radius: 999px;
-  color: var(--ink-dim); font-size: 0.92rem;
+  color: #626969; font-size: 0.92rem;
   border: 1px solid transparent; white-space: nowrap;
 }
-.nav-link:hover { color: var(--ink); text-decoration: none; background: var(--card); }
+.nav-link:hover { color: #002f5d; text-decoration: none; background: #eeeeee; }
 .nav-link.active { color: #fff; background: var(--button); font-weight: 600; }
 .fav-count { margin-left: 0.3rem; }
 
 .theme-toggle {
-  background: var(--card); border: 1px solid var(--line);
+  background: #fff; border: 1px solid rgba(0, 47, 93, 0.18);
   border-radius: 999px; width: 2.4rem; height: 2.4rem;
-  font-size: 1.05rem; cursor: pointer; color: var(--ink);
+  font-size: 1.05rem; cursor: pointer; color: #002f5d;
   display: grid; place-items: center; flex: none;
 }
 .theme-toggle:hover { border-color: var(--accent); }
