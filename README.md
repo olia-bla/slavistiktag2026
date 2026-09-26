@@ -86,8 +86,8 @@ CI generiert – bitte nicht händisch im PR ändern (Änderungen würden beim
 nächsten Sync überschrieben). Kuratierte Inhalte in `data/content.json` sind
 ausdrücklich PR-würdig.
 
-Die Vortragssprache folgt zuerst ausdrücklichen Angaben im öffentlichen
-ConfTool-Titel oder Abstract. Fehlt eine Angabe, werden ein deutscher
+Die Vortragssprache folgt zuerst ausdrücklichen Angaben im Book of Abstracts
+oder im öffentlichen ConfTool-Titel bzw. Abstract. Fehlt eine Angabe, werden ein deutscher
 Beitragstitel, danach die Sprache des Abstracts und erst zuletzt eine
 Titelheuristik ausgewertet. So werden fremdsprachige Werkzitate nicht mehr mit
 der tatsächlichen Vortragssprache verwechselt.

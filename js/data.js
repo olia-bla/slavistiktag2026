@@ -107,7 +107,12 @@ export function buildModel(program, content) {
     // damit Chair-Treffer die Personensuche nicht fluten.
     out._searchTalks = makeSearchText({ ...out, chair: null }, out.panel_title);
     out._tags = tagsFor({ title: s.title, speakers: s.speakers });
-    const presentationLanguage = presentationLanguageInfo(s);
+    // Explizite Angaben aus dem Book of Abstracts ergänzen die öffentlichen
+    // ConfTool-Daten, ohne die generierte program.json manuell zu verändern.
+    const presentationLanguage = presentationLanguageInfo({
+      ...s,
+      presentation_language: content.presentation_languages?.[s.id] || s.presentation_language,
+    });
     out._lang = presentationLanguage.lang;
     out._langSource = presentationLanguage.source;
     return out;

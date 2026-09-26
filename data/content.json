@@ -57,6 +57,10 @@
     "MMZ": "MMZ",
     "Aula": "UHG"
   },
+  "presentation_languages": {
+    "2026-10-02-11:30-HS8-12:00": "ru",
+    "2026-10-02-14:00-SR125-14:30": "uk"
+  },
   "links": {
     "program_pdf": "https://www.gw.uni-jena.de/phifakmedia/199705/tagungsprogramm-25-09-2026.pdf",
     "abstracts_pdf": "https://www.gw.uni-jena.de/phifakmedia/199683/book-of-abstracts-2026.pdf",

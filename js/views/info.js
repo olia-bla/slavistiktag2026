@@ -110,7 +110,7 @@ export function renderInfo(model) {
       "Grenzen: Die automatische Zuordnung kann danebenliegen und ist bewusst grob – " +
       "sie ersetzt keine inhaltliche Sichtung. " +
       "Die Sprach-Badges zeigen die Vortragssprache: Eine ausdrückliche Angabe im " +
-      "öffentlichen ConfTool-Titel oder Abstract hat Vorrang. Fehlt sie, werden ein " +
+      "Book of Abstracts oder im öffentlichen ConfTool-Titel bzw. Abstract hat Vorrang. Fehlt sie, werden ein " +
       "deutscher Beitragstitel und anschließend die Sprache des Abstracts ausgewertet; " +
       "erst danach greift eine vorsichtige Titelheuristik.";
   wrap.append(h("section", { class: "card" },
@@ -161,7 +161,7 @@ export function renderInfo(model) {
       "Vortragstitel den 27 Themenfeldern zuordnet; seine Vorschläge werden " +
       "automatisch gegen die Themenliste validiert, unverständliche Fälle " +
       "bleiben bewusst ohne Zuordnung. Die Vortragssprache folgt ausdrücklichen " +
-      "ConfTool-Angaben und ersatzweise Titel bzw. Abstract. Alles ist mit Sorgfalt, aber ohne Gewähr – " +
+      "Angaben im Book of Abstracts oder in ConfTool und ersatzweise Titel bzw. Abstract. Alles ist mit Sorgfalt, aber ohne Gewähr – " +
       "maßgeblich ist immer das offizielle Programm der Tagung." }),
     h("p", { class: "meta", text: "Mit herzlichem Dank an Prof. Dr. Achim Rabus für die Idee und den ersten Entwurf." })));
 

@@ -100,10 +100,14 @@ t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () =
   const closing = m.events.find((e) => e.title.startsWith("Abschlussveranstaltung"));
   assert.equal(closing?.room, "Foyer CZS 3");
 });
-t("Vortragssprachen: Nadiya Kiss Ukrainisch, fremdsprachige Zitate nicht fehlklassifiziert", () => {
+t("Vortragssprachen: ausdrückliche Angaben aus dem Book of Abstracts haben Vorrang", () => {
   const bySpeaker = (name) => m.sessions.find((s) => s.speakers?.includes(name));
   assert.equal(bySpeaker("Nadiya Kiss")?._lang, "uk");
   assert.equal(bySpeaker("Nadiya Kiss")?._langSource, "declared");
+  assert.equal(bySpeaker("Uliana Retzlaff")?._lang, "ru");
+  assert.equal(bySpeaker("Uliana Retzlaff")?._langSource, "declared");
+  assert.equal(bySpeaker("Liudmyla Mobius (Pidkuimukha)")?._lang, "uk");
+  assert.equal(bySpeaker("Liudmyla Mobius (Pidkuimukha)")?._langSource, "declared");
   assert.equal(bySpeaker("Olga Bikkulova")?._lang, "en");
   assert.equal(bySpeaker("Nadine Menzel")?._lang, "de");
   assert.equal(bySpeaker("Schamma Schahadat")?._lang, "de");
