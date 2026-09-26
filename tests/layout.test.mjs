@@ -197,6 +197,11 @@ for (const vp of VIEWPORTS) {
         noScroll: bar.scrollWidth <= bar.clientWidth + 1,
         allInViewport: rects.every((rect) => rect.width > 0 && rect.left >= -1 && rect.right <= innerWidth + 1),
         rows: new Set(rects.map((rect) => Math.round(rect.top))).size,
+        rects: rects.map((rect) => ({
+          top: Math.round(rect.top),
+          left: Math.round(rect.left),
+          width: Math.round(rect.width),
+        })),
         display: getComputedStyle(bar).display,
       };
     });
@@ -207,6 +212,10 @@ for (const vp of VIEWPORTS) {
     if (vp.width <= 760) {
       assert.equal(tabs.display, "grid");
       assert.equal(tabs.rows, 3);
+      assert.ok(tabs.rects[0].width > tabs.rects[1].width * 1.9, "Alle Tage belegt nicht die volle Breite");
+      assert.equal(tabs.rects[1].top, tabs.rects[2].top, "Mittwoch und Donnerstag liegen nicht in einer Reihe");
+      assert.equal(tabs.rects[3].top, tabs.rects[4].top, "Freitag und Samstag liegen nicht in einer Reihe");
+      assert.ok(tabs.rects[0].top < tabs.rects[1].top && tabs.rects[1].top < tabs.rects[3].top);
     }
   });
   await t(`${vp.name}: Filter funktionieren und lassen sich vollständig zurücksetzen`, async () => {

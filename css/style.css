@@ -559,7 +559,7 @@ select {
     padding: 0.35rem 0.45rem; white-space: normal; line-height: 1.15;
     text-align: center;
   }
-  .day-tabs .chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .day-tabs .chip:first-child { grid-column: 1 / -1; }
   .view-grid { display: none; }
   .hero h1 { font-size: 1.5rem; }
   .drawer { width: 100vw; border-left: 0; }
