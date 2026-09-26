@@ -65,6 +65,10 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   const h1 = document.querySelector("#app h1");
   assert.ok(h1.textContent.includes("Slavistiktag"));
   assert.ok(document.querySelector("#app .motto").textContent.includes("Zukunft"));
+  const update = document.querySelector("#app .meta").textContent;
+  assert.match(update, /^Aktualisiert: \d{2}\.\d{2}\.\d{4}, \d{2}:\d{2} Uhr$/);
+  assert.equal(update.includes("Programmstand"), false);
+  assert.equal(document.querySelector(".site-footer").textContent.includes("Mitmachen auf GitHub"), false);
 });
 t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
   const logo = document.querySelector(".topbar .brand-logo");

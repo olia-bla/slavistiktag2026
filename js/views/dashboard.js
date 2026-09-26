@@ -3,6 +3,15 @@ import { h, dateLabel, shortDate, timeRange } from "../util.js";
 import { nowInfo } from "../now.js";
 import { icsFor, downloadIcs } from "../ics.js";
 
+function updatedAt(timestamp) {
+  const d = new Date(timestamp || "");
+  if (Number.isNaN(d.getTime())) return "Aktualisiert: —";
+  const options = { timeZone: "Europe/Berlin" };
+  const date = d.toLocaleDateString("de-DE", { ...options, day: "2-digit", month: "2-digit", year: "numeric" });
+  const time = d.toLocaleTimeString("de-DE", { ...options, hour: "2-digit", minute: "2-digit" });
+  return `Aktualisiert: ${date}, ${time} Uhr`;
+}
+
 export function renderDashboard(model, ctx) {
   const c = model.conference;
   const now = nowInfo(model);
@@ -31,7 +40,7 @@ export function renderDashboard(model, ctx) {
       h("h1", { text: `${c.title} 2026` }),
       h("p", { class: "event-dates", text: "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3" }),
       h("p", { class: "motto", text: `„${c.motto}“` }),
-      h("p", { class: "meta", text: `Programmstand: ${c.program_stand} · aktualisiert ${model.meta.generated_at?.slice(0, 10) || "—"}` })),
+      h("p", { class: "meta", text: updatedAt(model.meta.generated_at) })),
     nowCard,
     h("section", { class: "card" },
       h("h2", { text: "Tage" }),
