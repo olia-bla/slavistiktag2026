@@ -83,7 +83,13 @@ export function buildModel(program, content) {
   // unstrukturierte Fußzeile ausliefert.
   const supplements = content.program_supplements || {};
   const sourcePanels = [...(program.panels || []), ...(supplements.panels || [])];
-  const sourceSessions = [...(program.sessions || []), ...(supplements.sessions || [])];
+  const automaticSessions = program.sessions || [];
+  // Falls ConfTool einen redaktionell ergänzten Beitrag später selbst liefert,
+  // gewinnt die automatische Quelle und es entsteht keine Dublette.
+  const supplementalSessions = (supplements.sessions || []).filter((supplement) =>
+    !automaticSessions.some((session) =>
+      session.day === supplement.day && session.start === supplement.start && session.room === supplement.room));
+  const sourceSessions = [...automaticSessions, ...supplementalSessions];
   const panels = Object.fromEntries(sourcePanels.map((p) => [p.id, p]));
 
   const sessions = sourceSessions.map((s) => {

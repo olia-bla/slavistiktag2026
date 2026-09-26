@@ -53,7 +53,7 @@ export function splitPeople(raw) {
   return allNames ? parts : [String(raw)];
 }
 
-// Eintrag: { name, sortKey, talks: [session…], chairOf: [session…] }
+// Eintrag: { name, sortKey, talks, discussantOf, chairOf }
 export function buildSpeakerIndex(model) {
   const map = new Map();
   const add = (raw, role, session) => {
@@ -62,16 +62,17 @@ export function buildSpeakerIndex(model) {
       // mit „Prof. Dr.", Sprecher:innen ohne — dieselbe Person sonst doppelt.
       const key = stripTitles(one.trim());
       if (!key) continue;
-      if (!map.has(key)) map.set(key, { raw: key, ...nameParts(key), talks: [], chairOf: [] });
+      if (!map.has(key)) map.set(key, { raw: key, ...nameParts(key), talks: [], discussantOf: [], chairOf: [] });
       const entry = map.get(key);
       if (role === "chair") entry.chairOf.push(session);
+      else if (role === "discussant") entry.discussantOf.push(session);
       else entry.talks.push(session);
     }
   };
   for (const s of model.sessions) {
-    if (s.type !== "talk") continue;
-    for (const sp of s.speakers || []) add(sp, "speaker", s);
-    if (s.chair) add(s.chair, "chair", s);
+    if (s.type !== "talk" && s.type !== "discussion") continue;
+    for (const sp of s.speakers || []) add(sp, s.type === "discussion" ? "discussant" : "speaker", s);
+    if (s.type === "talk" && s.chair) add(s.chair, "chair", s);
   }
   return [...map.values()].sort((a, b) => a.sortKey.localeCompare(b.sortKey, "de"));
 }
@@ -105,6 +106,7 @@ export function renderSpeakers(model, ctx) {
       }
       const items = [
         ...p.talks.map((s) => ({ s, role: "" })),
+        ...p.discussantOf.map((s) => ({ s, role: "Discussant" })),
         ...p.chairOf.map((s) => ({ s, role: "Chair" })),
       ].sort((a, b) => (a.s.day + a.s.start).localeCompare(b.s.day + b.s.start));
       const href = `#/sprecher/${encodeURIComponent(p.raw)}`;
@@ -112,6 +114,7 @@ export function renderSpeakers(model, ctx) {
         h("span", { class: "speaker-name", text: p.display }),
         h("span", { class: "speaker-count dim" },
           [p.talks.length ? `${p.talks.length} Vortrag${p.talks.length === 1 ? "" : "e"}` : "",
+           p.discussantOf.length ? `${p.discussantOf.length}× Discussant` : "",
            p.chairOf.length ? `${p.chairOf.length}× Chair` : ""].filter(Boolean).join(" · ")));
       list.append(btn);
     }
@@ -141,6 +144,7 @@ export function renderPerson(model, ctx, rawName) {
 
   const items = [
     ...p.talks.map((s) => ({ s, role: "" })),
+    ...p.discussantOf.map((s) => ({ s, role: "Discussant" })),
     ...p.chairOf.map((s) => ({ s, role: "Chair" })),
   ].sort((a, b) => (a.s.day + a.s.start).localeCompare(b.s.day + b.s.start));
 
@@ -156,6 +160,7 @@ export function renderPerson(model, ctx, rawName) {
     h("h1", { text: p.display }),
     h("p", { class: "meta", text:
       [`${p.talks.length} Vortrag${p.talks.length === 1 ? "" : "e"}`,
+       p.discussantOf.length ? `${p.discussantOf.length}× Discussant` : "",
        p.chairOf.length ? `${p.chairOf.length}× Chair` : "",
        [...affis].join(" · ")].filter(Boolean).join(" · ") }));
 

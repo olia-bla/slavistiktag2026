@@ -114,16 +114,17 @@ function speakerLineEl(s) {
     }
     if (s.affiliations?.[i]) p.append(` (${s.affiliations[i]})`);
   });
+  if (s.role) p.append(` (${s.role})`);
   return p;
 }
 
 function sessionBody(ctx, s, close) {
   const languageBadge = nonGermanLanguageBadge(s._lang);
   const panelTalks = s.panel_id
-    ? ctx.model.byDay[s.day].filter((x) => x.panel_id === s.panel_id && x.type === "talk")
+    ? ctx.model.byDay[s.day].filter((x) => x.panel_id === s.panel_id && x.type !== "break")
     : [];
   const parallel = ctx.model.byDay[s.day]
-    .filter((x) => x.type === "talk" && x.day === s.day && x.start === s.start && x.id !== s.id);
+    .filter((x) => x.type !== "break" && x.day === s.day && x.start === s.start && x.id !== s.id);
 
   const out = h("div", { class: "drawer-body" },
     closeBtn(close),
@@ -153,11 +154,11 @@ function sessionBody(ctx, s, close) {
     h("div", { class: "btn-row" }, favBtn(ctx, s), icsBtn(s), shareBtn(s)),
     panelTalks.length > 1
       ? h("section", {},
-          h("h3", { text: `Im Panel (${panelTalks.length} Vorträge)` }),
+          h("h3", { text: `Im Panel (${panelTalks.length} Beiträge)` }),
           h("ul", { class: "mini-list" },
             panelTalks.map((x) => h("li", {},
               h("a", { href: "#", onclick: (e) => { e.preventDefault(); ctx.openSession(x.id); } },
-                `${x.start} – ${x.speakers.join(", ")}: ${x.title}`)))))
+                `${x.start} – ${x.speakers.join(", ")}${x.role ? ` (${x.role})` : ""}: ${x.title}`)))))
       : null,
     parallel.length
       ? h("section", {},

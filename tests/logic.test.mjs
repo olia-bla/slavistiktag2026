@@ -56,6 +56,10 @@ t("matchesQuery UND-Verknüpfung", () => {
 t("matchesQuery Bindestrich-Toleranz", () => {
   assert.equal(matchesQuery(normalize("Herkunftssprachlicher Unterricht"), "herkunfts"), true);
 });
+t("matchesQuery: Nachname zuerst, Komma und Buchstabendreher werden toleriert", () => {
+  assert.equal(matchesQuery("nadiya kiss motivation ukrainian", "Kiss, Nadyia"), true);
+  assert.equal(matchesQuery("nadine meier", "Kiss, Nadyia"), false);
+});
 
 const S = (over = {}) => ({
   id: "x", day: "2026-10-01", start: "09:00", end: "09:30",

@@ -5,6 +5,7 @@ import { buildModel } from "../js/data.js";
 import { normalize, filterSessions, makeSearchText } from "../js/search.js";
 import { nowInfo } from "../js/now.js";
 import { icsFor } from "../js/ics.js";
+import { buildSpeakerIndex } from "../js/views/speakers.js";
 
 let n = 0;
 let failed = 0;
@@ -29,8 +30,10 @@ const m = buildModel(program, content);
 t("Model: 3 Programmtage + Eröffnungstag", () => {
   assert.deepEqual(m.days, ["2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03"]);
 });
-t("Model: 313 Sessions, 103 Panels", () => {
-  assert.equal(m.sessions.length, 320); // 311 ConfTool-Vorträge + 2 PDF-Ergänzungen + 7 Pausen
+t("Model: 313 Vorträge, ein Diskussionsbeitrag, 103 Panels", () => {
+  assert.equal(m.sessions.length, 321); // 311 ConfTool-Vorträge + 2 PDF-Ergänzungen + Diskussion + 7 Pausen
+  assert.equal(m.sessions.filter((s) => s.type === "talk").length, 313);
+  assert.equal(m.sessions.filter((s) => s.type === "discussion").length, 1);
   assert.equal(Object.keys(m.panels).length, 103);
 });
 t("Model: Räume mit Venue", () => {
@@ -86,6 +89,21 @@ t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
   ]);
   assert.equal(helden.some((s) => s.start === "11:30"), false, "SR 125 muss bis 12:00 leer bleiben");
   assert.equal(m.events.some((e) => e.type === "event"), false);
+});
+t("LKW-Panel Exilliteraturen: Miriam Finkelstein ist um 10:30 Discussant", () => {
+  const discussion = m.sessions.find((s) => s.id === "curated-2026-10-02-SR223-10:30-discussant");
+  assert.ok(discussion, "Diskussionsbeitrag fehlt");
+  assert.equal(discussion.type, "discussion");
+  assert.equal(discussion.role, "Discussant");
+  assert.equal(discussion.start, "10:30");
+  assert.equal(discussion.end, "11:00");
+  assert.equal(discussion.room, "SR 223");
+  assert.equal(discussion.discipline, "LKW");
+  assert.deepEqual(discussion.speakers, ["Miriam Finkelstein"]);
+  assert.ok(discussion.panel_title.startsWith("Slawische Exilliteraturen:"));
+  const person = buildSpeakerIndex(m).find((entry) => entry.raw === "Miriam Finkelstein");
+  assert.equal(person?.discussantOf.length, 1);
+  assert.equal(person?.discussantOf[0].id, discussion.id);
 });
 t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () => {
   const opening = m.events.find((e) => e.title.startsWith("Eröffnung des Slavistiktages"));

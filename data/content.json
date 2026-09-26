@@ -102,6 +102,21 @@
         "type": "talk",
         "abstract": null,
         "affiliations": ["Ústav pro českou literaturu Akademie věd ČR"]
+      },
+      {
+        "id": "curated-2026-10-02-SR223-10:30-discussant",
+        "day": "2026-10-02",
+        "start": "10:30",
+        "end": "11:00",
+        "room": "SR 223",
+        "track": "LKW",
+        "panel_id": "2026-10-02|09:00|ct23",
+        "speakers": ["Miriam Finkelstein"],
+        "title": "Diskussion",
+        "type": "discussion",
+        "role": "Discussant",
+        "abstract": null,
+        "affiliations": []
       }
     ]
   },

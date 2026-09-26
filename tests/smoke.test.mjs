@@ -221,6 +221,18 @@ t("Programm: Vortrag von Nadiya Kiss ist als Ukrainisch markiert", () => {
   assert.equal(card.querySelector(".pill.lang")?.textContent, "UK");
   assert.equal(card.querySelector(".pill.lang")?.title, "Vortragssprache: Ukrainisch");
 });
+const typoSearch = document.querySelector("#app .search-input");
+typoSearch.value = "Kiss, Nadyia";
+typoSearch.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+await sleep(400);
+t("Programmsuche findet Nadiya Kiss auch als ‚Kiss, Nadyia‘", () => {
+  const cards = [...document.querySelectorAll(".session-card")];
+  assert.equal(cards.length, 1);
+  assert.ok(cards[0].textContent.includes("Nadiya Kiss"));
+});
+typoSearch.value = "";
+typoSearch.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+await sleep(400);
 t("Programm: russische und weitere ukrainische Vortragssprache aus dem Abstractband", () => {
   const bySpeaker = (name) => [...document.querySelectorAll(".session-card")]
     .find((el) => el.textContent.includes(name));
@@ -254,6 +266,14 @@ t("Programm: PDF-Zuordnung enthält vier Podien, Sonderformate und das ergänzte
   assert.equal(helden.some((card) => card.textContent.includes("11:30–12:00")), false);
   assert.ok(helden.some((card) => card.textContent.includes("12:00–12:30")));
   assert.ok(helden.some((card) => card.textContent.includes("12:30–13:00")));
+});
+t("Programm: Miriam Finkelstein steht Freitag um 10:30 als Discussant im LKW-Panel", () => {
+  const card = [...document.querySelectorAll(".session-card.track-lkw")]
+    .find((item) => item.textContent.includes("Miriam Finkelstein") && item.textContent.includes("Discussant"));
+  assert.ok(card, "Discussant-Eintrag fehlt");
+  assert.ok(card.textContent.includes("10:30–11:00"));
+  assert.ok(card.textContent.includes("Slawische Exilliteraturen:"));
+  assert.equal(card.textContent.includes("Sonderformat"), false);
 });
 document.querySelector('input[value="podium"]').click();
 await sleep(400);

@@ -322,7 +322,7 @@ function gridBtn(ctx, mode) {
 }
 
 function slotRows(sessions) {
-  const starts = [...new Set(sessions.filter((s) => s.type === "talk" && s.start).map((s) => s.start))].sort();
+  const starts = [...new Set(sessions.filter((s) => s.type !== "break" && s.start).map((s) => s.start))].sort();
   return starts;
 }
 
@@ -379,7 +379,7 @@ function gridView(model, ctx, state, day, sessions, events) {
 
 function naturalDayRooms(sessions) {
   const order = [...new Set(
-    sessions.filter((s) => s.type === "talk" && s.room).map((s) => s.room))];
+    sessions.filter((s) => s.type !== "break" && s.room).map((s) => s.room))];
   order.sort((a, b) => {
     const [pa, na] = [a.split(/\s+/)[0], parseInt(a.split(/\s+/)[1] || "0", 10)];
     const [pb, nb] = [b.split(/\s+/)[0], parseInt(b.split(/\s+/)[1] || "0", 10)];
@@ -423,7 +423,7 @@ function listView(model, ctx, sessions, events, q, allDays) {
           h("span", { text: g.key }),
           h("span", { class: "pill", text: `${g.items.length} Veranstaltung${g.items.length === 1 ? "" : "en"}` })),
         h("div", { class: "slot-grid" },
-          g.items.map((x) => (x.type === "talk"
+          g.items.map((x) => (x.type === "talk" || x.type === "discussion"
             ? sessionCard(model, ctx, x, { q })
             : eventCard(model, ctx, x))))));
     }
@@ -462,7 +462,8 @@ export function sessionCard(model, ctx, s, state) {
         },
       })),
     h("div", { class: "card-title", html: titleHtml || undefined, text: titleHtml ? undefined : s.title }),
-    s.speakers?.length ? h("div", { class: "card-speakers", text: s.speakers.join(", ") }) : null,
+    s.speakers?.length ? h("div", { class: "card-speakers",
+      text: `${s.speakers.join(", ")}${s.role ? ` (${s.role})` : ""}` }) : null,
     abstractSnippet ? h("div", { class: "card-snippet", html: abstractSnippet }) : null,
     // Vortragssprache (ConfTool-Angabe vor Abstract-/Titelprüfung): nur wenn
     // NICHT deutsch — die

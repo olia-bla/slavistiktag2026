@@ -30,11 +30,39 @@ export function makeSearchText(session, panelTitle) {
       .filter(Boolean).join(" "));
 }
 
+// Kleine Tippfehler in längeren Suchbegriffen tolerieren. Neben einem
+// Einfüge-/Lösch-/Ersetzfehler wird auch die häufige Vertauschung zweier
+// benachbarter Buchstaben erkannt (z. B. „Nadyia“ statt „Nadiya“).
+function withinOneEdit(a, b) {
+  if (a === b) return true;
+  if (Math.abs(a.length - b.length) > 1) return false;
+  if (a.length === b.length) {
+    const diff = [];
+    for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) diff.push(i);
+    if (diff.length === 1) return true;
+    return diff.length === 2 && diff[1] === diff[0] + 1 &&
+      a[diff[0]] === b[diff[1]] && a[diff[1]] === b[diff[0]];
+  }
+  const [shorter, longer] = a.length < b.length ? [a, b] : [b, a];
+  let i = 0, j = 0, skipped = false;
+  while (i < shorter.length && j < longer.length) {
+    if (shorter[i] === longer[j]) { i++; j++; continue; }
+    if (skipped) return false;
+    skipped = true;
+    j++;
+  }
+  return true;
+}
+
 export function matchesQuery(searchText, q) {
   const nq = normalize(q);
   if (!nq) return true;
-  // alle Begriffe müssen vorkommen (UND-Verknüpfung)
-  return nq.split(" ").every((term) => searchText.includes(term));
+  const terms = nq.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const words = normalize(searchText).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  // Alle Begriffe müssen vorkommen (UND-Verknüpfung). Ab fünf Zeichen ist
+  // alternativ genau ein Tippfehler erlaubt; kurze Begriffe bleiben exakt.
+  return terms.every((term) => searchText.includes(term) ||
+    (term.length >= 5 && words.some((word) => withinOneEdit(term, word))));
 }
 
 export const TIME_SLOTS = [
@@ -92,6 +120,7 @@ export function filterSessions(sessions, state) {
 
 export function formatOf(s) {
   if (s.type === "break") return "pause";
+  if (s.type === "discussion") return "panel";
   if (s.type === "talk") {
     if (s.discipline === "X" || s.track === "X") return "special";
     // Jeder Vortrag gehört im Programm-PDF zu einem Block "Sektionen und Panels":
