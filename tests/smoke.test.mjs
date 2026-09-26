@@ -673,44 +673,31 @@ t("Drawer aus Themen-Ansicht geöffnet", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
-// Info mit Mining-Abschnitt
+// Info: bewusst nur Tagungsorte/Karten und App-Installation
 dom.window.location.hash = "#/info";
 await waitFor(() => document.querySelector("#app .view-info"));
-t("Info: Orte, Poster, Mining-Methode, Urheber", () => {
+t("Info: kompakte Tagungsorte mit Karten", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
-  assert.ok(document.querySelector("#app .view-info").textContent.includes("HS 2"));
-  assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
-  assert.ok(document.body.textContent.includes("Olia Blacher"));
-  assert.ok(document.body.textContent.includes("Dank an Prof. Dr. Achim Rabus"));
+  const info = document.querySelector("#app .view-info");
+  assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
+  assert.ok(info.textContent.includes("HS 2"));
+  const mapLinks = [...info.querySelectorAll(".venue-card a")];
+  assert.equal(mapLinks.length, 4);
+  assert.ok(mapLinks.every((link) => link.textContent.includes("Auf Karte öffnen")));
+  assert.ok(mapLinks.every((link) => link.target === "_blank"));
 });
-t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
-  const text = document.querySelector("#app .view-info").textContent;
-  assert.ok(text.includes("Ensemble Mrija"));
-  assert.ok(text.includes("Politische Gefangene in Belarus"));
-  assert.ok(text.includes("Mi–Sa im 1. OG der CZS 3"));
-  assert.ok(text.includes("Führung „Jena – der Ort der deutschen Romantik“"));
-  assert.ok(text.includes("Stadtführung durch Jena"));
-  assert.ok(text.includes("Führung durch die Ausstellung „Zeitgenössische bulgarische Plakatkunst“"));
-  assert.ok(text.includes("Farbe des Zettels auf der Rückseite Ihres Namensschildes"));
-  assert.ok(text.includes("Jena und Wandern"));
-  assert.ok(text.includes("Weimar und Gedenkstätte Buchenwald"));
-  assert.ok(text.includes("Erfurt"));
-  assert.ok(document.querySelector('a[href*="103477/kultur-und-rahmenprogramm"]'));
-  assert.ok(document.querySelector('a[href*="konzertprogramm.pdf"]'));
+t("Info: Installationsanleitungen für Mobilgeräte und Computer", () => {
+  const install = document.querySelector("#app .install-card");
+  assert.ok(install.textContent.includes("iPhone / iPad"));
+  assert.ok(install.textContent.includes("Android"));
+  assert.ok(install.textContent.includes("Computer"));
+  assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
 });
-t("Info: Eröffnung steht auch unter Sonderformate", () => {
-  const heading = [...document.querySelectorAll("#app .view-info h2")]
-    .find((el) => el.textContent === "Sonderformate");
-  assert.equal(heading.closest("section").querySelectorAll("article.podium").length, 6);
-  assert.ok(heading.closest("section").textContent.includes("Eröffnung des Slavistiktages"));
-  assert.ok(heading.closest("section").textContent.includes("Russische Schockwellen"));
-  assert.equal(heading.closest("section").textContent.includes("Helden unserer Zeit?"), false);
-});
-t("Info: keine doppelten Downloads und keine Podienliste", () => {
-  assert.equal(document.querySelector("#app .downloads-card"), null);
+t("Info: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
-  assert.equal(headings.includes("Downloads"), false);
-  assert.equal(headings.includes("Podiumsdiskussionen"), false);
+  assert.deepEqual(headings, ["Tagungsorte & Karten", "Als App installieren"]);
+  assert.equal(document.querySelector("#app .downloads-card"), null);
+  assert.equal(document.querySelector("#app .view-info .podium"), null);
 });
 
 // Deep-Link: Filter in URL
