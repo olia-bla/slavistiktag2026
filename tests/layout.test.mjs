@@ -141,14 +141,18 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
   });
 
-  // Light-Theme
+  // Einheitliches helles Corporate Design – unabhängig vom Geräteschema
   await page.goto(BASE + "#/themen");
-  await page.waitForSelector("#theme-toggle");
-  await page.click("#theme-toggle");
-  const theme = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-  await t(`${vp.name}: Theme-Toggle wechselt`, () => assert.equal(theme, "light"));
-  await t(`${vp.name}: Light-Theme ohne Überlauf`, async () => {
+  await t(`${vp.name}: kein Dark-Mode-Schalter`, async () => {
+    assert.equal(await page.locator("#theme-toggle").count(), 0);
+  });
+  await t(`${vp.name}: helles Corporate Design ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
+    const colors = await page.evaluate(() => {
+      const s = getComputedStyle(document.documentElement);
+      return { scheme: s.colorScheme, bg: s.getPropertyValue("--bg").trim(), faculty: s.getPropertyValue("--faculty").trim() };
+    });
+    assert.deepEqual(colors, { scheme: "light", bg: "#f4f5f6", faculty: "#8b1878" });
   });
 
   await ctx.close();

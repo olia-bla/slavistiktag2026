@@ -14,19 +14,7 @@ import { renderChanges } from "./views/changes.js";
 
 const app = document.getElementById("app");
 const nav = document.getElementById("main-nav");
-const themeBtn = document.getElementById("theme-toggle");
 const footerStand = document.getElementById("footer-stand");
-
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  themeBtn.textContent = theme === "light" ? "🌙" : "☀";
-  try { localStorage.setItem("slavtag26.theme", theme); } catch { /* ignore */ }
-}
-themeBtn.addEventListener("click", () => {
-  const cur = document.documentElement.getAttribute("data-theme") || "dark";
-  applyTheme(cur === "light" ? "dark" : "light");
-});
-applyTheme(document.documentElement.getAttribute("data-theme") || "dark");
 
 const ctx = {
   model: null,

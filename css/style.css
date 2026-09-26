@@ -2,33 +2,6 @@
 /* Corporate Design Universität Jena: Hausblau, Lichtblau, Gold, Fakultätsviolett */
 
 :root {
-  color-scheme: dark;
-  --bg: #071a2f;
-  --bg2: #0b2745;
-  --card: #0d3154;
-  --card2: #123b64;
-  --ink: #ffffff;
-  --ink-dim: #c4d1df;
-  --heading: #ffffff;
-  --accent: #648bc7;
-  --accent2: #d7a6ce;
-  --button: #1d60bd;
-  --button-hover: #2875d4;
-  --gold: #ae9a63;
-  --faculty: #b75aa5;
-  --warn: #e2be63;
-  --did: #dc9800;
-  --sw: #378dbc;
-  --lkw: #b75aa5;
-  --line: rgba(255, 255, 255, 0.15);
-  --line-strong: rgba(255, 255, 255, 0.3);
-  --shadow: 0 4px 16px rgba(0, 20, 40, 0.24);
-  --topbar-bg: rgba(0, 47, 93, 0.96);
-  --filter-bg: rgba(11, 39, 69, 0.97);
-  --radius: 8px;
-}
-
-html[data-theme="light"] {
   color-scheme: light;
   --bg: #f4f5f6;
   --bg2: #eeeeee;
@@ -37,13 +10,14 @@ html[data-theme="light"] {
   --ink: #333939;
   --ink-dim: #626969;
   --heading: #002f5d;
-  --accent: #174488;
+  --accent: #002f5d;
   --accent2: #8b1878;
-  --button: #174488;
-  --button-hover: #0066e2;
-  --gold: #887440;
+  --button: #002f5d;
+  --button-hover: #8b1878;
+  --gold: #ae9a63;
+  --lightblue: #648bc7;
   --faculty: #8b1878;
-  --warn: #887440;
+  --warn: #ae9a63;
   --did: #dc9800;
   --sw: #378dbc;
   --lkw: #8b1878;
@@ -52,6 +26,7 @@ html[data-theme="light"] {
   --shadow: 0 3px 14px rgba(0, 47, 93, 0.08);
   --topbar-bg: rgba(255, 255, 255, 0.97);
   --filter-bg: rgba(238, 238, 238, 0.97);
+  --radius: 8px;
 }
 
 * { box-sizing: border-box; }
@@ -97,14 +72,6 @@ a:hover { text-decoration: underline; }
 .nav-link:hover { color: #002f5d; text-decoration: none; background: #eeeeee; }
 .nav-link.active { color: #fff; background: var(--button); font-weight: 600; }
 .fav-count { margin-left: 0.3rem; }
-
-.theme-toggle {
-  background: #fff; border: 1px solid rgba(0, 47, 93, 0.18);
-  border-radius: 999px; width: 2.4rem; height: 2.4rem;
-  font-size: 1.05rem; cursor: pointer; color: #002f5d;
-  display: grid; place-items: center; flex: none;
-}
-.theme-toggle:hover { border-color: var(--accent); }
 
 /* ---------- Layout ---------- */
 .app-main { max-width: 1240px; margin: 0 auto; padding: 1rem; }
@@ -470,7 +437,6 @@ select {
     border-radius: 4px; white-space: normal;
     line-height: 1.15;
   }
-  .theme-toggle { width: 2.2rem; height: 2.2rem; }
   /* Filterleiste scrollt normal mit (kein Sticky-Konflikt mit zweizeiliger Topbar) */
   .filter-bar { position: static; }
   .filter-bar .filter-row:first-child { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
@@ -483,7 +449,7 @@ select {
 /* ---------- Druck ---------- */
 /* Tagesprogramm druckbar: Chrome/Bildschirm-Zierde raus, Karten schwarz auf weiß */
 @media print {
-  .main-nav, .topbar .theme-toggle, .welcome-wall, .toast, .drawer-backdrop,
+  .main-nav, .welcome-wall, .toast, .drawer-backdrop,
   .drawer, .fav, .view-toggle, .day-tabs, .filter-bar, .grid-head
   { display: none !important; }
   body, .app-main { background: #fff; color: #000; }

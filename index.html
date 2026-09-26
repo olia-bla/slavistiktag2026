@@ -6,14 +6,6 @@
   <title>Slavistiktag 2026 · Programm &amp; Themen</title>
   <meta name="description" content="Experimentelle App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten und ICS – plus Themen-Kompass (Data Mining).">
   <meta name="theme-color" content="#002f5d">
-  <script>
-    (function () {
-      var saved = null;
-      try { saved = localStorage.getItem("slavtag26.theme"); } catch (e) {}
-      var theme = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-      document.documentElement.setAttribute("data-theme", theme);
-    })();
-  </script>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/slavistiktag logo.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -25,7 +17,6 @@
       <img class="brand-logo" src="icons/slavistiktag logo.svg" alt="15. Slavistiktag 2026 · Friedrich-Schiller-Universität Jena" width="3000" height="3000">
     </a>
     <nav id="main-nav" class="main-nav" aria-label="Hauptnavigation"></nav>
-    <button id="theme-toggle" class="theme-toggle" aria-label="Farbschema wechseln" title="Dark/Light umschalten"></button>
   </header>
   <main id="app" class="app-main"></main>
   <footer class="site-footer">
