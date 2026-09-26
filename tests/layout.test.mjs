@@ -92,6 +92,20 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
   });
   await t(`${vp.name}: keine JS-Fehler`, () => assert.deepEqual(errors, []));
+  await t(`${vp.name}: alle Menüpunkte vollständig sichtbar`, async () => {
+    const menu = await page.evaluate(() => {
+      const nav = document.querySelector("#main-nav");
+      const links = [...nav.querySelectorAll(".nav-link")];
+      const allInViewport = links.every((link) => {
+        const r = link.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && r.left >= -1 && r.right <= innerWidth + 1 && r.top >= -1 && r.bottom <= innerHeight + 1;
+      });
+      return { count: links.length, allInViewport, noHorizontalScroll: nav.scrollWidth <= nav.clientWidth + 1 };
+    });
+    assert.equal(menu.count, 6);
+    assert.equal(menu.allInViewport, true);
+    assert.equal(menu.noHorizontalScroll, true);
+  });
 
   // Themen-Kompass
   await page.goto(BASE + "#/themen");

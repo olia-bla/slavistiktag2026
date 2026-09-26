@@ -459,10 +459,17 @@ select {
   .welcome-wall { display: none; }
   .main-nav {
     margin-left: 0; width: 100%; order: 3;
-    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin;
-    padding-bottom: 0.15rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.3rem;
   }
-  .nav-link { flex: 0 0 auto; text-align: center; padding: 0.45rem 0.7rem; border-radius: 4px; }
+  .nav-link {
+    display: grid; place-items: center;
+    min-height: 2.65rem;
+    text-align: center; padding: 0.35rem 0.2rem;
+    border-radius: 4px; white-space: normal;
+    line-height: 1.15;
+  }
   .theme-toggle { width: 2.2rem; height: 2.2rem; }
   /* Filterleiste scrollt normal mit (kein Sticky-Konflikt mit zweizeiliger Topbar) */
   .filter-bar { position: static; }
