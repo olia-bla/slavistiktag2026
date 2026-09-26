@@ -8,8 +8,12 @@ import { dirname, join } from "node:path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const browser = await chromium.launch();
 const page = await browser.newPage();
-for (const variant of ["icon", "icon-maskable"]) {
-  const svg = await readFile(join(ROOT, "icons", `${variant}.svg`), "utf-8");
+const variants = [
+  { source: "slavistiktag-icon.svg", output: "slavistiktag-icon" },
+  { source: "icon-maskable.svg", output: "slavistiktag-icon-maskable" },
+];
+for (const variant of variants) {
+  const svg = await readFile(join(ROOT, "icons", variant.source), "utf-8");
   for (const size of [192, 512]) {
     const b64 = await page.evaluate(async ({ svg, size }) => {
       const img = new Image();
@@ -21,8 +25,8 @@ for (const variant of ["icon", "icon-maskable"]) {
       ctx.drawImage(img, 0, 0, size, size);
       return canvas.toDataURL("image/png").split(",")[1];
     }, { svg, size });
-    await writeFile(join(ROOT, "icons", `${variant}-${size}.png`), Buffer.from(b64, "base64"));
-    console.log(`${variant}-${size}.png geschrieben`);
+    await writeFile(join(ROOT, "icons", `${variant.output}-${size}.png`), Buffer.from(b64, "base64"));
+    console.log(`${variant.output}-${size}.png geschrieben`);
   }
 }
 await browser.close();

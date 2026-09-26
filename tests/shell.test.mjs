@@ -68,7 +68,7 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
   // aber ein Cache-Fallback braucht mind. einen früheren Online-Besuch. Manifest/Icon
   // sind Install-Ressourcen → müssen drin sein.
   assert.ok(shell.includes("manifest.json"));
-  assert.ok(shell.includes("icons/icon.svg"));
+  assert.ok(shell.includes("icons/slavistiktag-icon.svg"));
 });
 
 await Promise.allSettled(pending);

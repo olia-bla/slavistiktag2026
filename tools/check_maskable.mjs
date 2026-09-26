@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const b64 = (await readFile(join(ROOT, "icons", "icon-maskable-512.png"))).toString("base64");
+const b64 = (await readFile(join(ROOT, "icons", "slavistiktag-icon-maskable-512.png"))).toString("base64");
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
