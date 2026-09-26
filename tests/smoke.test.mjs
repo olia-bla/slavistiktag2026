@@ -128,6 +128,12 @@ t("Programm: Tagesregister enthält alle Tage ohne Scroll-Steuerung", () => {
   assert.equal(tabs[0].textContent, "Alle Tage");
   assert.equal(document.querySelector("#app .day-tabs").getAttribute("role"), "tablist");
 });
+t("Programm: Raumfilter enthält HS 2 aus ConfTool, nicht den veralteten HS 5", () => {
+  const rooms = [...document.querySelectorAll('select[aria-label="Raum"] option')]
+    .map((option) => option.value).filter(Boolean);
+  assert.ok(rooms.includes("HS 2"));
+  assert.equal(rooms.includes("HS 5"), false);
+});
 t("Programm: Panels tragen die PDF-Fachfarben", () => {
   const cards = [...document.querySelectorAll("#app .session-card")];
   const panelCards = (title) => cards.filter((card) => card.textContent.includes(title));

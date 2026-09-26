@@ -218,11 +218,37 @@ for (const vp of VIEWPORTS) {
       assert.ok(tabs.rects[0].top < tabs.rects[1].top && tabs.rects[1].top < tabs.rects[3].top);
     }
   });
+  await t(`${vp.name}: Liste und Raster lassen sich umschalten`, async () => {
+    const raster = page.locator(".view-grid");
+    const liste = page.locator(".view-list");
+    assert.equal(await raster.isVisible(), true);
+    assert.equal(await liste.isVisible(), true);
+
+    await raster.click();
+    await page.waitForSelector(".grid-wrap");
+    assert.equal(await raster.getAttribute("aria-pressed"), "true");
+    const gridBounds = await page.locator(".grid-wrap").first().evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return {
+        left: rect.left,
+        right: rect.right,
+        viewport: innerWidth,
+        scrollable: el.scrollWidth > el.clientWidth,
+      };
+    });
+    assert.ok(gridBounds.left >= -1 && gridBounds.right <= gridBounds.viewport + 1,
+      `Raster ragt aus der Seite: ${gridBounds.left}..${gridBounds.right} bei ${gridBounds.viewport}px`);
+    if (vp.width <= 760) assert.equal(gridBounds.scrollable, true);
+
+    await liste.click();
+    await page.waitForSelector(".slot-block");
+    assert.equal(await liste.getAttribute("aria-pressed"), "true");
+    assert.equal(await page.locator(".grid-wrap").count(), 0);
+    assert.deepEqual(await overflowIssues(page), []);
+  });
   await t(`${vp.name}: Filter funktionieren und lassen sich vollständig zurücksetzen`, async () => {
-    const compact = vp.width <= 760;
     assert.equal(await page.locator(".filter-toggle").count(), 0);
     assert.equal(await page.locator("#program-advanced-filters").isVisible(), true);
-    if (compact) assert.equal(await page.locator(".view-grid").isVisible(), false);
     const filterBounds = await page.locator(".filter-bar").evaluate((el) => {
       const r = el.getBoundingClientRect();
       return { left: r.left, right: r.right, viewport: innerWidth };

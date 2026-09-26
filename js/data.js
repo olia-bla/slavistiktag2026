@@ -174,7 +174,13 @@ export function buildModel(program, content) {
     panels,
     events,
     eventByDay,
-    rooms: naturalRooms(sessions.map((s) => s.room)),
+    // Der Raumfilter muss auch Räume von Podien/Sonderformaten und von
+    // ConfTool-Sitzungen ohne einzelne Präsentationen enthalten (z. B. HS 2).
+    rooms: naturalRooms([
+      ...sessions.map((s) => s.room),
+      ...events.map((e) => e.room),
+      ...Object.values(panels).map((p) => p.room),
+    ]),
     tracks: ["DID", "SW", "LKW"],
     meta: program.meta,
   };

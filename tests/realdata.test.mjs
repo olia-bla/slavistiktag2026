@@ -35,6 +35,14 @@ t("Model: 311 Sessions, 102 Panels", () => {
 });
 t("Model: Räume mit Venue", () => {
   assert.ok(m.rooms.includes("MMZ 220"));
+  assert.ok(m.rooms.includes("HS 2"), "HS 2 fehlt im Raumfilter");
+  assert.equal(m.rooms.includes("HS 5"), false, "veralteter Raum HS 5 ist noch vorhanden");
+  const sourceRooms = new Set([
+    ...program.sessions.map((s) => s.room),
+    ...program.panels.map((p) => p.room),
+    ...program.events.map((e) => e.room),
+  ].filter(Boolean));
+  for (const room of sourceRooms) assert.ok(m.rooms.includes(room), `${room} aus ConfTool fehlt im Raumfilter`);
   for (const s of m.sessions) {
     if (s.room && s.room.startsWith("SR")) assert.equal(s.venue, "CZS3");
   }
@@ -44,6 +52,8 @@ t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
   assert.equal(m.events.filter((e) => e.type === "rahmen").length, 10);
   const podiums = m.events.filter((e) => e.type === "podium");
   assert.equal(podiums.length, 4, `${podiums.length} Podien`);
+  const ohneRussland = podiums.find((e) => e.title.startsWith("Slavistik ohne Russland?"));
+  assert.equal(ohneRussland?.room, "HS 2");
 });
 t("Eröffnung ist Rahmenprogramm und Sonderformat", () => {
   const opening = m.events.find((e) => e.title.startsWith("Eröffnung des Slavistiktages"));

@@ -305,7 +305,12 @@ function normalizeText(s) {
 }
 
 function gridBtn(ctx, mode) {
-  const b = h("button", { class: `btn small view-${mode} ${ctx.viewMode === mode ? "" : "ghost"}`, text: mode === "grid" ? "Raster" : "Liste" });
+  const b = h("button", {
+    type: "button",
+    class: `btn small view-${mode} ${ctx.viewMode === mode ? "" : "ghost"}`,
+    "aria-pressed": ctx.viewMode === mode ? "true" : "false",
+    text: mode === "grid" ? "Raster" : "Liste",
+  });
   b.addEventListener("click", () => { ctx.setViewMode(mode); });
   return b;
 }

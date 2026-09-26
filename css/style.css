@@ -560,7 +560,8 @@ select {
     text-align: center;
   }
   .day-tabs .chip:first-child { grid-column: 1 / -1; }
-  .view-grid { display: none; }
+  .view-toggle .btn { min-height: 2.5rem; }
+  .grid-wrap { max-width: 100%; overscroll-behavior-inline: contain; }
   .hero h1 { font-size: 1.5rem; }
   .drawer { width: 100vw; border-left: 0; }
 }
