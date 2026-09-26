@@ -66,6 +66,12 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   assert.ok(h1.textContent.includes("Slavistiktag"));
   assert.ok(document.querySelector("#app .motto").textContent.includes("Zukunft"));
 });
+t("Dashboard zeigt das offizielle Slavistiktag-Logo", () => {
+  const logo = document.querySelector("#app .event-logo");
+  assert.ok(logo);
+  assert.equal(logo.getAttribute("src"), "icons/slavistiktag-2026.png");
+  assert.ok(logo.getAttribute("alt").includes("Friedrich-Schiller-Universität Jena"));
+});
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
   assert.equal(labels.length, 6);
@@ -313,6 +319,7 @@ t("Info: Orte, Podien, Poster, Mining-Methode, Urheber", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
   assert.ok(document.body.textContent.includes("Themen-Kompass: Methode"));
   assert.ok(document.body.textContent.includes("Olia Blacher"));
+  assert.ok(document.body.textContent.includes("Dank an Prof. Dr. Achim Rabus"));
 });
 t("Info: drei offizielle PDF-Downloads als Buttons", () => {
   const links = [...document.querySelectorAll("#app .downloads-card .download-link")];

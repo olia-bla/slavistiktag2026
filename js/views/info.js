@@ -142,7 +142,8 @@ export function renderInfo(model) {
       "automatisch gegen die Themenliste validiert, unverständliche Fälle " +
       "bleiben bewusst ohne Zuordnung. Sprach-Hinweise (RU/UK/PL/EN/CS) sind " +
       "eine einfache Heuristik. Alles ist mit Sorgfalt, aber ohne Gewähr – " +
-      "maßgeblich ist immer das offizielle Programm der Tagung." })));
+      "maßgeblich ist immer das offizielle Programm der Tagung." }),
+    h("p", { class: "meta", text: "Mit herzlichem Dank an Prof. Dr. Achim Rabus für die Idee und den ersten Entwurf." })));
 
   return wrap;
 }
