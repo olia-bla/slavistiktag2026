@@ -243,6 +243,44 @@ t("Programmfilter: Zurücksetzen entfernt alle Häkchen und zeigt alles", () => 
   assert.equal(categoryValues.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
   assert.ok(document.querySelectorAll("#app .session-card").length > 300);
 });
+const unfilteredProgramCount = document.querySelectorAll("#app .session-card, #app .event-card").length;
+document.querySelector('input[value="DID"]').click();
+document.querySelector('input[value="podium"]').click();
+await sleep(400);
+t("Programmfilter: Fachbereich und Veranstaltungsart werden gemeinsam eingeblendet", () => {
+  const cards = [...document.querySelectorAll("#app .session-card, #app .event-card")];
+  assert.ok(cards.some((card) => card.classList.contains("track-did")));
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+  assert.ok(cards.every((card) =>
+    card.classList.contains("track-did") || card.classList.contains("type-podium")));
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
+for (const value of ["SW", "LKW", "special", "pause"]) {
+  document.querySelector(`input[value="${value}"]`).click();
+}
+await sleep(400);
+t("Programmfilter: mehrere Fachbereiche und Formate sind gleichzeitig kombinierbar", () => {
+  const cards = [...document.querySelectorAll("#app .session-card, #app .event-card")];
+  assert.ok(cards.some((card) => card.classList.contains("track-sw")));
+  assert.ok(cards.some((card) => card.classList.contains("track-lkw")));
+  assert.ok(cards.some((card) => card.classList.contains("type-special")));
+  assert.ok(cards.some((card) => card.classList.contains("type-break")));
+  assert.ok(cards.every((card) =>
+    card.classList.contains("track-sw") || card.classList.contains("track-lkw") ||
+    card.classList.contains("type-special") || card.classList.contains("type-break")));
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
+for (const value of ["DID", "SW", "LKW", ...categoryValues]) {
+  document.querySelector(`input[value="${value}"]`).click();
+}
+await sleep(400);
+t("Programmfilter: alle sieben Häkchen zeigen wieder das vollständige Programm", () => {
+  assert.equal(document.querySelectorAll("#app .session-card, #app .event-card").length, unfilteredProgramCount);
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
 dom.window.location.hash = "#/programm";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].every((el) => el.textContent !== "Alle Tage"));
 t("Programm-Raster enthält keine leere Foyer-Spalte", () => {

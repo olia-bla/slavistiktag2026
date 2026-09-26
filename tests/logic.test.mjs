@@ -1,6 +1,7 @@
 // Logik-Tests für die DOM-freien Module. Ausführen: node tests/logic.test.mjs
 import assert from "node:assert/strict";
 import { normalize, matchesQuery, filterSessions, formatOf } from "../js/search.js";
+import { matchesProgramCategories } from "../js/views/program.js";
 import { icsFor } from "../js/ics.js";
 import { nowInfo } from "../js/now.js";
 import { buildModel, naturalRooms, panelDiscipline } from "../js/data.js";
@@ -105,6 +106,31 @@ t("filter: Format sektion → nur SEK_-Vorträge", () => {
   s._search = normalize(s.title);
   assert.deepEqual(filterSessions([s], { formats: ["sektion"] }).map((x) => x.id), ["sek1"]);
   assert.deepEqual(filterSessions([s], { formats: ["panel"] }).map((x) => x.id), []);
+});
+t("Programmfilter: alle 128 Kombinationen aus Fachbereichen und Formaten", () => {
+  const choices = [
+    { group: "track", value: "DID", track: "DID", formats: ["panel"] },
+    { group: "track", value: "SW", track: "SW", formats: ["sektion"] },
+    { group: "track", value: "LKW", track: "LKW", formats: ["panel"] },
+    { group: "format", value: "podium", track: "", formats: ["podium"] },
+    { group: "format", value: "special", track: "X", formats: ["special"] },
+    { group: "format", value: "rahmen", track: "", formats: ["rahmen"] },
+    { group: "format", value: "pause", track: "", formats: ["pause"] },
+  ];
+  for (let mask = 0; mask < 2 ** choices.length; mask++) {
+    const selected = choices.filter((_, index) => mask & (1 << index));
+    const state = {
+      tracks: selected.filter((x) => x.group === "track").map((x) => x.value),
+      formats: selected.filter((x) => x.group === "format").map((x) => x.value),
+    };
+    choices.forEach((item, index) => {
+      const expected = mask === 0 || Boolean(mask & (1 << index));
+      assert.equal(
+        matchesProgramCategories(item.track, item.formats, state),
+        expected,
+        `Kombination ${mask}, Kategorie ${item.value}`);
+    });
+  }
 });
 
 // ---------- ics

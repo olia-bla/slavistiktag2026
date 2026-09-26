@@ -273,28 +273,39 @@ function filterProgramSessions(sessions, events, state) {
     const sessionTitle = normalizeText(session.title);
     return eventTitle.includes(sessionTitle) || sessionTitle.includes(eventTitle);
   });
-  const hits = filterSessions(sessions, { ...state, formats: [] })
+  // Suche, Tag, Raum und Zeit gelten weiterhin für alle Treffer. Fachbereiche
+  // und Veranstaltungsarten bilden dagegen EINE gemeinsame Auswahl: z. B.
+  // Fachdidaktik + Podien zeigt beides, nicht nur deren Schnittmenge.
+  const hits = filterSessions(sessions, { ...state, tracks: [], formats: [] })
     .filter((session) => !isEventDuplicate(session));
-  if (!state.formats?.length) return hits;
-  return hits.filter((session) => {
-    const format = formatOf(session);
-    return (format === "pause" && state.formats.includes("pause")) ||
-      (format === "special" && state.formats.includes("special"));
-  });
+  return hits.filter((session) => matchesProgramCategories(
+    session.discipline || session.track,
+    [formatOf(session)],
+    state));
 }
 
 function filterEvent(e, state) {
-  // Rahmen-/Sonderveranstaltungen besitzen keine SW/LKW/DID-Zuordnung und
-  // dürfen deshalb bei einem Fach- oder Panel-Filter nicht stehenbleiben. Die
-  // aus dem PDF korrigierte Panel-Karte besitzt dagegen eine Fachzuordnung.
+  // Ein konkreter Panel-Link bleibt ein enger Filter. Die Checkbox-Gruppen
+  // (Fachbereiche + Veranstaltungsarten) werden weiter unten gemeinsam mit
+  // ODER verknüpft, damit jede beliebige Kombination eingeblendet werden kann.
   if (state.panel) return false;
-  if (state.tracks?.length && (!e.track || !state.tracks.includes(e.track))) return false;
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
   const formats = e.formats?.length ? e.formats : [e.type];
-  if (state.formats?.length && !state.formats.some((format) => formats.includes(format))) return false;
-  return true;
+  return matchesProgramCategories(e.track, formats, state);
+}
+
+// Keine Checkbox gewählt = alles. Sobald mindestens eine Checkbox gewählt ist,
+// genügt ein Treffer in EINER der beiden Gruppen. Dadurch funktionieren sowohl
+// Mehrfachauswahlen innerhalb einer Gruppe als auch Fachbereich + Format.
+export function matchesProgramCategories(track, formats, state) {
+  const selectedTracks = state.tracks || [];
+  const selectedFormats = state.formats || [];
+  if (!selectedTracks.length && !selectedFormats.length) return true;
+  const trackParts = (track || "").split("+").filter(Boolean);
+  return selectedTracks.some((selected) => trackParts.includes(selected)) ||
+    selectedFormats.some((selected) => formats.includes(selected));
 }
 function matchesLoose(text, q) {
   return normalizeText(text).includes(normalizeText(q));

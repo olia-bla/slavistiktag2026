@@ -284,6 +284,18 @@ for (const vp of VIEWPORTS) {
     assert.equal(filtered.wrongCards, 0);
     assert.equal(filtered.events, 0);
 
+    await page.locator('input[value="podium"]').check();
+    await page.waitForTimeout(400);
+    const combined = await page.evaluate(() => ({
+      didCards: document.querySelectorAll(".session-card.track-did").length,
+      wrongSessions: [...document.querySelectorAll(".session-card")]
+        .filter((card) => !card.classList.contains("track-did")).length,
+      podiums: document.querySelectorAll(".event-card.type-podium").length,
+    }));
+    assert.ok(combined.didCards > 0);
+    assert.equal(combined.wrongSessions, 0);
+    assert.ok(combined.podiums > 0, "Fachdidaktik + Podium zeigt das Podium nicht gemeinsam an");
+
     await page.locator(".filter-options > .btn").click();
     await page.waitForSelector('input[value="DID"]', { state: "attached" });
     const reset = await page.evaluate(() => ({
