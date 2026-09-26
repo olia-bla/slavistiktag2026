@@ -105,6 +105,10 @@ for (const vp of VIEWPORTS) {
         eventDates: document.querySelector(".event-dates")?.textContent,
         resourceCount: resources.length,
         resourcePositions: positions(resources),
+        contactText: document.querySelector(".dashboard-contact")?.textContent,
+        contactBounds: positions([document.querySelector(".dashboard-contact")])[0],
+        phoneHref: document.querySelector('.dashboard-contact a[href^="tel:"]')?.getAttribute("href"),
+        mailHref: document.querySelector('.dashboard-contact a[href^="mailto:"]')?.getAttribute("href"),
         oldHighlightsMissing: document.querySelector(".highlight-list") === null,
         oldDaysMissing: ![...document.querySelectorAll(".view-dashboard h2")].some((el) => el.textContent === "Tage"),
       };
@@ -112,6 +116,10 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(dashboard.actionLabels, []);
     assert.equal(dashboard.eventDates, "30.09. – 03.10. · Jena · Carl-Zeiss-Straße 3");
     assert.equal(dashboard.resourceCount, 4);
+    assert.ok(dashboard.contactText.includes("Notfälle während der Tagung"));
+    assert.equal(dashboard.phoneHref, "tel:+4915125881153");
+    assert.equal(dashboard.mailHref, "mailto:slavistiktag2026@uni-jena.de");
+    assert.ok(dashboard.contactBounds.left >= 0 && dashboard.contactBounds.right <= vp.width + 1);
     assert.equal(dashboard.oldHighlightsMissing, true);
     assert.equal(dashboard.oldDaysMissing, true);
     assert.ok(dashboard.resourcePositions.every((r) => r.left >= 0 && r.right <= vp.width + 1 && r.height >= 40));

@@ -88,6 +88,13 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Schnellzugriff"), false);
   assert.equal(document.querySelector("#app .dashboard-notice"), null, "leerer Änderungshinweis wird angezeigt");
 });
+t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
+  const contact = document.querySelector("#app .dashboard-contact");
+  assert.ok(contact.textContent.includes("Notfälle während der Tagung"));
+  assert.equal(contact.querySelector('a[href="tel:+4915125881153"]')?.textContent, "☎ +49 151 25881153");
+  assert.equal(contact.querySelector('a[href="mailto:slavistiktag2026@uni-jena.de"]')?.textContent,
+    "✉ slavistiktag2026@uni-jena.de");
+});
 t("Startseite: 14 Begrüßungen gleichmäßig auf zwei Zeilen verteilt", () => {
   const rows = [...document.querySelectorAll("#app .welcome-row")];
   assert.equal(rows.length, 2);

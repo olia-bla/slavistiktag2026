@@ -33,6 +33,11 @@ export function renderDashboard(model, ctx) {
         h("h2", { text: "Jetzt / Als Nächstes" }),
         nowBody(model, now, ctx)),
       importantLinks(model)),
+    h("aside", { class: "card dashboard-contact", "aria-label": "Kontakt während der Tagung" },
+      h("strong", { text: "Notfälle während der Tagung: " }),
+      h("a", { href: "tel:+4915125881153", text: "☎ +49 151 25881153" }),
+      h("span", { text: " · Kontakt: " }),
+      h("a", { href: `mailto:${c.contact}`, text: `✉ ${c.contact}` })),
     notice,
     welcome,
     h("p", { class: "meta dashboard-updated", text: updatedAt(model.meta.generated_at) }));
