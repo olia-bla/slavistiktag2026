@@ -73,7 +73,7 @@ t("Dashboard gerendert (Titel + Motto)", () => {
 t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
-  assert.deepEqual(actions, ["Programm öffnen", "Mein Programm"]);
+  assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Jetzt / Als Nächstes");
   const nowText = document.querySelector("#app .now-card").textContent;
   assert.ok(nowText.includes("Die Tagung beginnt am Mittwoch, 30.09.2026."));
@@ -104,7 +104,7 @@ t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
 });
 t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
   assert.equal(document.querySelector("#app .hero h1").textContent, "15. Deutscher Slavistiktag 2026");
-  assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
+  assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena · Carl-Zeiss-Straße 3");
   assert.equal(document.querySelector(".topbar .brand-copy"), null);
   assert.equal(document.querySelector("#back-button"), null);
   assert.equal(document.querySelector("#forward-button"), null);
@@ -114,9 +114,16 @@ t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
   assert.equal(labels.length, 6);
   assert.equal(labels[0], "Startseite");
+  assert.equal(document.querySelector("#main-nav .nav-link")?.getAttribute("href"), "#/startseite");
+  assert.equal(document.querySelector(".brand")?.getAttribute("href"), "#/startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
   assert.ok(labels.some((l) => l.includes("Sprecher:innen")));
   assert.equal(document.querySelector(".fav-count").textContent, "");
+});
+dom.window.location.hash = "#/heute";
+assert.equal(await waitFor(() => dom.window.location.hash === "#/startseite"), true);
+t("Alte #/heute-Adresse wird auf #/startseite weitergeleitet", () => {
+  assert.ok(document.querySelector("#app .view-dashboard"));
 });
 
 // Navigation: Programm
@@ -195,6 +202,8 @@ t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ei
   assert.equal([...document.querySelectorAll(".filter-bar select")].some((select) => select.value), false);
   assert.ok(document.querySelector("#program-advanced-filters"));
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
+  assert.equal([...document.querySelectorAll(".day-tabs .chip.active")]
+    .some((el) => el.textContent === "Alle Tage"), true);
 });
 dom.window.location.hash = "#/programm?day=all";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
@@ -205,6 +214,28 @@ t("Programm: Vortrag von Nadiya Kiss ist als Ukrainisch markiert", () => {
   assert.equal(card.querySelector(".pill.lang")?.textContent, "UK");
   assert.equal(card.querySelector(".pill.lang")?.title, "Vortragssprache: Ukrainisch");
 });
+t("Programm: russische und weitere ukrainische Vortragssprache aus dem Abstractband", () => {
+  const bySpeaker = (name) => [...document.querySelectorAll(".session-card")]
+    .find((el) => el.textContent.includes(name));
+  const russian = bySpeaker("Uliana Retzlaff");
+  const ukrainian = bySpeaker("Liudmyla Mobius");
+  assert.ok(russian, "Vortrag von Uliana Retzlaff fehlt");
+  assert.equal(russian.querySelector(".pill.lang")?.textContent, "RU");
+  assert.equal(russian.querySelector(".pill.lang")?.title, "Vortragssprache: Russisch");
+  assert.ok(ukrainian, "Vortrag von Liudmyla Mobius fehlt");
+  assert.equal(ukrainian.querySelector(".pill.lang")?.textContent, "UK");
+  assert.equal(ukrainian.querySelector(".pill.lang")?.title, "Vortragssprache: Ukrainisch");
+});
+const russianCard = [...document.querySelectorAll(".session-card")]
+  .find((el) => el.textContent.includes("Uliana Retzlaff"));
+russianCard.click();
+await sleep(50);
+t("Detailfenster: russische Vortragssprache ist vollständig bezeichnet", () => {
+  const badge = document.querySelector(".drawer .pill.lang");
+  assert.equal(badge?.textContent, "RU");
+  assert.equal(badge?.title, "Vortragssprache: Russisch");
+});
+document.querySelector(".drawer-close").click();
 t("Programm: PDF-Zuordnung enthält vier Podien, fünf besondere Veranstaltungen und den Festvortrag", () => {
   assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
   assert.equal(document.querySelectorAll(".event-card.type-special:not(.type-rahmen)").length, 6);
@@ -318,7 +349,7 @@ await sleep(400);
 t("Programmfilter: nach dem Vortragsende zeigt ausschließlich spätere Veranstaltungen", () => {
   const cards = [...document.querySelectorAll("#app .card")];
   assert.ok(cards.length > 0);
-  assert.ok(cards.some((card) => card.textContent.includes("Musikalische Begleitung mit Buffet")));
+  assert.ok(cards.some((card) => card.textContent.includes("Buffet mit musikalischer Begleitung")));
   assert.ok(cards.some((card) => card.textContent.includes("Abschlussveranstaltung")));
   assert.equal(cards.some((card) => card.textContent.includes("Eröffnung des Slavistiktages")), false);
 });
@@ -477,7 +508,7 @@ t("Eröffnungs-Drawer: aktueller Raum HS 2", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 const musicCard = [...document.querySelectorAll("#app .event-card")]
-  .find((c) => c.querySelector(".card-title")?.textContent === "Musikalische Begleitung mit Buffet im Foyer");
+  .find((c) => c.querySelector(".card-title")?.textContent === "Buffet mit musikalischer Begleitung im Foyer");
 t("Musikalische Begleitung: 20 Uhr im Foyer und ausschließlich Rahmenprogramm", () => {
   assert.ok(musicCard, "Musikalische Begleitung fehlt");
   const badges = [...musicCard.querySelectorAll(".pill")].map((el) => el.textContent);
@@ -491,7 +522,7 @@ await sleep(400);
 t("Sonderformat-Filter zeigt nur die Eröffnung am Mittwoch", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
   assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
-  assert.equal(titles.includes("Musikalische Begleitung mit Buffet im Foyer"), false);
+  assert.equal(titles.includes("Buffet mit musikalischer Begleitung im Foyer"), false);
 });
 document.querySelector('input[value="special"]').click();
 await sleep(400);
@@ -500,14 +531,14 @@ await sleep(400);
 t("Rahmenprogramm-Filter zeigt nur die musikalische Begleitung am Mittwoch", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
   assert.equal(titles.some((title) => title.includes("Eröffnung des Slavistiktages")), false);
-  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
+  assert.ok(titles.includes("Buffet mit musikalischer Begleitung im Foyer"));
 });
 document.querySelector('input[value="rahmen"]').click();
 await sleep(400);
 t("Beide Eröffnungs-Einträge erscheinen ohne Häkchen wieder", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
   assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
-  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
+  assert.ok(titles.includes("Buffet mit musikalischer Begleitung im Foyer"));
 });
 
 // Feature 4: Sprecher-Index

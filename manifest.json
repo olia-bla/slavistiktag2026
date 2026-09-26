@@ -3,7 +3,7 @@
   "short_name": "SlavTag 26",
   "id": "/slavistiktag2026/",
   "description": "Experimentelle App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten, ICS – plus Themen-Kompass (Data Mining)",
-  "start_url": "./index.html#/heute",
+  "start_url": "./index.html#/startseite",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f5f6",

@@ -40,7 +40,7 @@ scheitert sichtbar.
 
 ```
 repo/
-├── index.html                SPA, Hash-Routing (#/heute, /programm, /mein,
+├── index.html                SPA, Hash-Routing (#/startseite, /programm, /mein,
 │                             /themen, /sprecher, /aenderungen, /info)
 ├── sw.js                     Service Worker: Shell stale-while-revalidate,
 │                             Daten network-first mit Cache-Fallback

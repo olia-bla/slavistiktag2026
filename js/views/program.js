@@ -3,6 +3,7 @@ import { h, dateLabel, timeRange, debounce, minutes } from "../util.js";
 import { filterSessions, formatOf, highlight, matchesTimeSlot, snippet, TIME_SLOTS } from "../search.js";
 import { favs } from "../favorites.js";
 import { roomLink } from "../rooms.js";
+import { nonGermanLanguageBadge } from "../languages.js";
 import { stripTitles } from "./speakers.js";
 
 // Läuft diese Veranstaltung „jetzt“? Nur während der Konferenztage; der
@@ -20,16 +21,9 @@ export function isRunningNow(model, x, now = new Date()) {
 const TRACK_LABELS = { DID: "Fachdidaktik", SW: "Sprachwissenschaft", LKW: "Literatur-/Kulturwiss." };
 // Badge für die Vortragssprache (ConfTool-Angabe vor Abstract-/Titelprüfung):
 // nur nicht-deutsche Vorträge werden markiert; „de" bleibt unbezeichnet.
-const LANG_BADGES = {
-  ru: { label: "RU", title: "Russisch" },
-  uk: { label: "UK", title: "Ukrainisch" },
-  pl: { label: "PL", title: "Polnisch" },
-  en: { label: "EN", title: "Englisch" },
-  cs: { label: "CS", title: "Tschechisch" },
-};
 function langBadge(lang) {
-  const b = LANG_BADGES[lang];
-  return b ? h("span", { class: "pill lang", text: b.label, title: `Vortragssprache: ${b.title}` }) : null;
+  const b = nonGermanLanguageBadge(lang);
+  return b ? h("span", { class: "pill lang", text: b.label, title: b.title }) : null;
 }
 const FORMAT_LABELS = {
   pause: "Pausen", podium: "Podiumsdiskussionen", special: "Sonderformate", rahmen: "Rahmenprogramm",
@@ -181,7 +175,10 @@ function filterBar(model, ctx, state) {
       h("button", {
         class: "btn ghost", text: "Filter zurücksetzen",
         onclick: () => {
-          Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], formats: [], talksOnly: false });
+          Object.assign(state, {
+            q: "", day: "", dayExplicit: true, room: "", slot: "", panel: "",
+            tracks: [], formats: [], talksOnly: false,
+          });
           writeHash(model, state);
           ctx.render();
         },

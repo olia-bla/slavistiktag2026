@@ -86,7 +86,7 @@ for (const vp of VIEWPORTS) {
   });
 
   console.log(`\n=== ${vp.name} ===`);
-  await page.goto(BASE + "#/heute");
+  await page.goto(BASE + "#/startseite");
   await page.waitForSelector("#app .card");
 
   await t(`${vp.name}: Dashboard ohne Überlauf`, async () => {
@@ -102,21 +102,20 @@ for (const vp of VIEWPORTS) {
       });
       return {
         actionLabels: actions.map((el) => el.textContent.trim()),
+        eventDates: document.querySelector(".event-dates")?.textContent,
         resourceCount: resources.length,
-        actionPositions: positions(actions),
         resourcePositions: positions(resources),
         oldHighlightsMissing: document.querySelector(".highlight-list") === null,
         oldDaysMissing: ![...document.querySelectorAll(".view-dashboard h2")].some((el) => el.textContent === "Tage"),
       };
     });
-    assert.deepEqual(dashboard.actionLabels, ["Programm öffnen", "Mein Programm"]);
+    assert.deepEqual(dashboard.actionLabels, []);
+    assert.equal(dashboard.eventDates, "30.09. – 03.10. · Jena · Carl-Zeiss-Straße 3");
     assert.equal(dashboard.resourceCount, 4);
     assert.equal(dashboard.oldHighlightsMissing, true);
     assert.equal(dashboard.oldDaysMissing, true);
-    assert.ok(dashboard.actionPositions.every((r) => r.left >= 0 && r.right <= vp.width + 1 && r.height >= 40));
     assert.ok(dashboard.resourcePositions.every((r) => r.left >= 0 && r.right <= vp.width + 1 && r.height >= 40));
     if (vp.width <= 760) {
-      assert.equal(dashboard.actionPositions[0].top, dashboard.actionPositions[1].top);
       assert.equal(dashboard.resourcePositions[0].top, dashboard.resourcePositions[1].top);
     }
   });
@@ -345,11 +344,53 @@ for (const vp of VIEWPORTS) {
         .some((value) => document.querySelector(`input[value="${value}"]`)?.checked),
       selected: [...document.querySelectorAll(".filter-bar select")].some((select) => select.value),
       advancedVisible: getComputedStyle(document.querySelector(".filter-advanced")).display !== "none",
+      activeDay: document.querySelector(".day-tabs .chip.active")?.textContent,
     }));
     assert.equal(reset.disciplineChecked, false);
     assert.equal(reset.categoryChecked, false);
     assert.equal(reset.selected, false);
     assert.equal(reset.advancedVisible, true);
+    assert.equal(reset.activeDay, "Alle Tage");
+  });
+  await t(`${vp.name}: RU-/UK-Sprachangaben sind konsistent und mobil lesbar`, async () => {
+    const search = page.locator(".search-input");
+    await search.fill("Uliana Retzlaff");
+    await page.waitForTimeout(450);
+    const russian = page.locator(".session-card").filter({ hasText: "Uliana Retzlaff" });
+    assert.equal(await russian.count(), 1);
+    const ruBadge = russian.locator(".pill.lang");
+    assert.equal(await ruBadge.textContent(), "RU");
+    assert.equal(await ruBadge.getAttribute("title"), "Vortragssprache: Russisch");
+    const ruBounds = await ruBadge.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { left: r.left, right: r.right, width: r.width, viewport: innerWidth };
+    });
+    assert.ok(ruBounds.width > 0 && ruBounds.left >= -1 && ruBounds.right <= ruBounds.viewport + 1);
+
+    await russian.click();
+    await page.waitForSelector(".drawer");
+    try {
+      // Das Detailfenster fährt 0,18 s von rechts ein; erst die fertige Lage messen.
+      await page.waitForTimeout(220);
+      assert.equal(await page.locator(".drawer .pill.lang").getAttribute("title"), "Vortragssprache: Russisch");
+      const drawerBounds = await page.locator(".drawer").evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return { left: r.left, right: r.right, viewport: innerWidth };
+      });
+      assert.ok(drawerBounds.left >= -1 && drawerBounds.right <= drawerBounds.viewport + 1);
+    } finally {
+      await page.locator(".drawer-close").click({ force: true });
+    }
+
+    await search.fill("Liudmyla Mobius");
+    await page.waitForTimeout(450);
+    const ukrainian = page.locator(".session-card").filter({ hasText: "Liudmyla Mobius" });
+    assert.equal(await ukrainian.count(), 1);
+    assert.equal(await ukrainian.locator(".pill.lang").textContent(), "UK");
+    assert.equal(await ukrainian.locator(".pill.lang").getAttribute("title"), "Vortragssprache: Ukrainisch");
+    assert.deepEqual(await overflowIssues(page), []);
+    await search.fill("");
+    await page.waitForTimeout(450);
   });
   // Info
   await page.evaluate(() => { location.hash = "#/info"; });

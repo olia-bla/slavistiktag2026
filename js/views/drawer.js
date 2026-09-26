@@ -4,6 +4,7 @@ import { favs } from "../favorites.js";
 import { icsFor, downloadIcs } from "../ics.js";
 import { minutes } from "../util.js";
 import { roomLink, roomWhere, roomFloorStrip } from "../rooms.js";
+import { nonGermanLanguageBadge } from "../languages.js";
 import { splitPeople, stripTitles } from "./speakers.js";
 import { highlight } from "../search.js";
 
@@ -117,6 +118,7 @@ function speakerLineEl(s) {
 }
 
 function sessionBody(ctx, s, close) {
+  const languageBadge = nonGermanLanguageBadge(s._lang);
   const panelTalks = s.panel_id
     ? ctx.model.byDay[s.day].filter((x) => x.panel_id === s.panel_id && x.type === "talk")
     : [];
@@ -127,7 +129,7 @@ function sessionBody(ctx, s, close) {
     closeBtn(close),
     h("p", { class: "kicker", text: `${dateLabel(s.day)} · ${timeRange(s.start, s.end)}` }),
     h("h2", { text: s.title },
-      s._lang && s._lang !== "de" ? h("span", { class: "pill lang", text: s._lang.toUpperCase(), title: `Vortragssprache: ${s._lang.toUpperCase()}` }) : null),
+      languageBadge ? h("span", { class: "pill lang", text: languageBadge.label, title: languageBadge.title }) : null),
     speakerLineEl(s),
     h("p", { class: "meta" },
       roomLink(s.room), " ",

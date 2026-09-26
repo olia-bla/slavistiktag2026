@@ -1,9 +1,9 @@
 // Service Worker: Shell stale-while-revalidate, Daten network-first mit
 // Cache-Fallback. Der CACHE-Bump aktiviert die automatische App-Aktualisierung.
-const CACHE = "slavtag26-companion-v34";
+const CACHE = "slavtag26-companion-v35";
 const SHELL = [
   "./", "index.html", "css/style.css",
-  "js/app.js", "js/util.js", "js/data.js", "js/mining.js", "js/lexicon.js",
+  "js/app.js", "js/util.js", "js/data.js", "js/mining.js", "js/lexicon.js", "js/languages.js",
   "js/search.js", "js/favorites.js", "js/ics.js", "js/now.js", "js/rooms.js",
   "js/views/dashboard.js", "js/views/program.js", "js/views/mine.js", "js/views/info.js", "js/views/drawer.js", "js/views/topics.js", "js/views/speakers.js", "js/views/changes.js",
   "manifest.json", "icons/slavistiktag-icon.svg", "icons/slavistiktag-icon-192.png", "icons/slavistiktag-icon-512.png", "icons/slavistiktag-icon-maskable-192.png", "icons/slavistiktag-icon-maskable-512.png", "icons/slavistiktag logo.svg",

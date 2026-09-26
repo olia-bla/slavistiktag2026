@@ -74,10 +74,18 @@ const ctx = {
 };
 
 function parseHash() {
-  const raw = location.hash.replace(/^#/, "") || "/heute";
+  const hashValue = location.hash.replace(/^#/, "");
+  const raw = hashValue || "/startseite";
   const [path, query] = raw.split("?");
   const params = new URLSearchParams(query || "");
-  const route = path.replace(/\/+$/, "") || "/heute";
+  let route = path.replace(/\/+$/, "") || "/startseite";
+  // Alte Lesezeichen und bereits installierte Home-Screen-Apps behalten ihre
+  // Funktion, werden aber auf die neue, verständliche Adresse umgeschrieben.
+  if (!hashValue || route === "/heute") {
+    route = "/startseite";
+    const canonical = `#/startseite${query ? `?${query}` : ""}`;
+    if (location.hash !== canonical) history.replaceState(null, "", canonical);
+  }
   return { route, params };
 }
 
@@ -89,7 +97,7 @@ function renderNav() {
   };
   nav.textContent = "";
   nav.append(
-    link("#/heute", "Startseite"),
+    link("#/startseite", "Startseite"),
     link("#/programm", "Programm"),
     link("#/mein", "Mein Programm", h("span", { class: "fav-count pill", text: String(favs.all().length || "") })),
     link("#/themen", "Themen", null, route.startsWith("/themen")),
@@ -219,7 +227,7 @@ export function boot() {
       // „Jetzt“-Karte alle 60 s auffrischen
       setInterval(() => {
         const { route } = parseHash();
-        if (route === "/heute") render();
+        if (route === "/startseite") render();
       }, 60_000);
     })
     .catch((err) => {

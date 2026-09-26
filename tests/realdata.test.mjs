@@ -87,7 +87,7 @@ t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () =
   assert.equal(opening.start, "18:00");
   assert.equal(opening.end, "20:00");
   assert.equal(opening.room, "HS 2");
-  const music = m.events.find((e) => e.title === "Musikalische Begleitung mit Buffet im Foyer");
+  const music = m.events.find((e) => e.title === "Buffet mit musikalischer Begleitung im Foyer");
   assert.ok(music, "Musikalische Begleitung fehlt");
   assert.equal(music.type, "rahmen");
   assert.deepEqual(music.formats, ["rahmen"]);

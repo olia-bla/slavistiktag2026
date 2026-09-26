@@ -2,8 +2,7 @@
 import { h, dateLabel } from "../util.js";
 import { TAGS, TAG_BY_ID } from "../lexicon.js";
 import { tagStats, languageStats } from "../mining.js";
-
-const LANG_LABEL = { de: "Deutsch", en: "Englisch", ru: "Russisch", uk: "Ukrainisch", cs: "Tschechisch", pl: "Polnisch", sk: "Slowakisch" };
+import { languageName, nonGermanLanguageBadge } from "../languages.js";
 
 export function renderTopics(model, ctx, params) {
   const wrap = h("div", { class: "view view-topics" });
@@ -31,7 +30,7 @@ export function renderTopics(model, ctx, params) {
       const langs = languageStats(cluster);
       const langPills = Object.entries(langs)
         .sort((a, b) => b[1] - a[1]).slice(0, 3)
-        .map(([l, c]) => `${LANG_LABEL[l] || l} ${c}`).join(" · ");
+        .map(([l, c]) => `${languageName(l)} ${c}`).join(" · ");
 
       const card = h("article", {
         class: "card cluster-card",
@@ -85,6 +84,7 @@ export function renderCluster(model, ctx, params, tagId) {
 }
 
 function clusterItem(ctx, s) {
+  const languageBadge = nonGermanLanguageBadge(s._lang);
   return h("article", {
     class: `card cluster-item track-${(s.discipline || "x").toLowerCase()}`,
     "data-id": s.id,
@@ -95,7 +95,7 @@ function clusterItem(ctx, s) {
     h("div", { class: "item-top" },
       h("span", { class: "time", text: `${s.start}–${s.end}` }),
       h("span", { class: "pill room", text: s.room || "—" }),
-      s._lang ? h("span", { class: "pill lang", text: s._lang.toUpperCase() }) : null),
+      languageBadge ? h("span", { class: "pill lang", text: languageBadge.label, title: languageBadge.title }) : null),
     h("div", { class: "card-title", text: s.title }),
     s.speakers?.length ? h("div", { class: "card-speakers", text: s.speakers.join(", ") }) : null);
 }
