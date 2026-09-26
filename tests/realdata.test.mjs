@@ -29,9 +29,9 @@ const m = buildModel(program, content);
 t("Model: 3 Programmtage + Eröffnungstag", () => {
   assert.deepEqual(m.days, ["2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03"]);
 });
-t("Model: 311 Sessions, 102 Panels", () => {
-  assert.equal(m.sessions.length, 318); // 311 Vorträge + 7 Pausen
-  assert.equal(Object.keys(m.panels).length, 102);
+t("Model: 313 Sessions, 103 Panels", () => {
+  assert.equal(m.sessions.length, 320); // 311 ConfTool-Vorträge + 2 PDF-Ergänzungen + 7 Pausen
+  assert.equal(Object.keys(m.panels).length, 103);
 });
 t("Model: Räume mit Venue", () => {
   assert.ok(m.rooms.includes("MMZ 220"));
@@ -74,9 +74,17 @@ t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
     "Helene Jessula Wczesniak: Die Fördermöglichkeiten bei der DFG",
     "Impulsvortrag von Olaf Hamann (Staatsbibliothek zu Berlin, FID Slawistik): „Alles rechtens – alles bestens? Der Fachinformationsdienst Slawistik im Spannungsfeld zwischen Informationsfreiheit, Sanktionspolitik, Zensur und Propaganda“",
   ]);
-  const helden = m.events.find((e) => e.title.startsWith("Helden unserer Zeit?"));
-  assert.equal(helden?.type, "panel");
-  assert.equal(helden?.track, "LKW");
+  const heldenEvent = m.events.find((e) => e.title.startsWith("Helden unserer Zeit?"));
+  assert.equal(heldenEvent, undefined, "LKW-Panel wird noch als Extra-Veranstaltung geführt");
+  const helden = m.sessions.filter((s) => s.panel_title?.startsWith("Helden unserer Zeit?"));
+  assert.deepEqual(helden.map((s) => `${s.start}|${s.end}|${s.room}|${s.discipline}`).sort(), [
+    "12:00|12:30|SR 125|LKW",
+    "12:30|13:00|SR 125|LKW",
+    "14:00|14:30|SR 125|LKW",
+    "14:30|15:00|SR 125|LKW",
+    "15:00|15:30|SR 125|LKW",
+  ]);
+  assert.equal(helden.some((s) => s.start === "11:30"), false, "SR 125 muss bis 12:00 leer bleiben");
   assert.equal(m.events.some((e) => e.type === "event"), false);
 });
 t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () => {

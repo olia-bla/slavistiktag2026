@@ -12,7 +12,7 @@
    "utopie": 10,
    "exil": 20,
    "suedslavisch": 30,
-   "medien": 28,
+   "medien": 29,
    "grammatik": 54,
    "variation": 56,
    "ukrainisch": 47,
@@ -22,9 +22,9 @@
    "popkultur": 14,
    "identitaet": 55,
    "sorbisch": 8,
-   "epochen": 37,
+   "epochen": 38,
    "sowjetismus": 24,
-   "tschechisch": 14,
+   "tschechisch": 16,
    "korpora": 13,
    "oekologie": 12,
    "film": 19,
@@ -33,8 +33,8 @@
    "weissrussisch": 8,
    "slowakisch": 7
   },
-  "tagged_sessions": 311,
-  "total_talks": 311
+  "tagged_sessions": 313,
+  "total_talks": 313
  },
  "tags": {
   "2026-10-01-09:00-SR207-10:30": [
@@ -1370,6 +1370,14 @@
    "ukrainisch",
    "variation",
    "sowjetismus"
+  ],
+  "curated-2026-10-01-SR125-12:00": [
+   "tschechisch",
+   "medien"
+  ],
+  "curated-2026-10-01-SR125-12:30": [
+   "tschechisch",
+   "epochen"
   ]
  }
 }

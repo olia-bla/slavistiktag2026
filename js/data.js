@@ -16,13 +16,6 @@ const DIDACTIC_PANEL_TITLES = new Set([
   "Didaktik der Herkunftssprachen",
 ]);
 
-// Im Programm-PDF (24.09.2026, S. 14–16) ist dieser Eintrag ausdrücklich ein
-// LKW-Panel. Die öffentliche ConfTool-Tabellenansicht liefert den ersten Teil
-// ohne Sitzungslink und damit technisch wie ein Sonderformat aus.
-const PDF_PANEL_EVENTS = new Map([
-  ["Helden unserer Zeit? Die Darstellung von Dissidenz in osteuropäischen Kulturen nach 1989", "LKW"],
-]);
-
 export function panelDiscipline(panel, sourceTrack = "") {
   const codeDiscipline = panel?.code?.match(/^SEK_(LKW|SW|DID)(?:_|$)/)?.[1];
   if (codeDiscipline) return codeDiscipline;
@@ -84,9 +77,16 @@ export function naturalRooms(rooms) {
 
 export function buildModel(program, content) {
   const roomVenue = ROOM_VENUE_RE(content);
-  const panels = Object.fromEntries((program.panels || []).map((p) => [p.id, p]));
+  // Redaktionelle Ergänzungen aus dem offiziellen Tagungsprogramm werden
+  // getrennt von der automatisch aktualisierten ConfTool-Datei gehalten.
+  // So bleiben Beiträge erhalten, die die öffentliche Tabellenansicht nur als
+  // unstrukturierte Fußzeile ausliefert.
+  const supplements = content.program_supplements || {};
+  const sourcePanels = [...(program.panels || []), ...(supplements.panels || [])];
+  const sourceSessions = [...(program.sessions || []), ...(supplements.sessions || [])];
+  const panels = Object.fromEntries(sourcePanels.map((p) => [p.id, p]));
 
-  const sessions = (program.sessions || []).map((s) => {
+  const sessions = sourceSessions.map((s) => {
     const panel = panels[s.panel_id] || null;
     const discipline = panelDiscipline(panel, s.track);
     const normalizedTrack = s.type === "talk" && panel && ["LKW", "SW", "DID"].includes(discipline)
@@ -146,14 +146,18 @@ export function buildModel(program, content) {
   // (Podien, Sonderformate, Rahmenprogramm), damit nichts doppelt erscheint.
   const events = [];
   let evIdx = 0;
+  const supplementedPanelTitles = new Set((supplements.panels || []).map((panel) => panel.title));
   for (const e of program.events || []) {
-    const panelTrack = PDF_PANEL_EVENTS.get(e.title);
+    // Die Vorträge dieses Panels stehen bereits als normale LKW-Sessions im
+    // Raster. Die unstrukturierte Quell-Fußzeile darf nicht zusätzlich als
+    // vollbreite Veranstaltung erscheinen.
+    if (supplementedPanelTitles.has(e.title)) continue;
     events.push({
       ...e,
       id: `ev-${evIdx++}`,
-      type: panelTrack ? "panel" : "special",
-      track: panelTrack || null,
-      discipline: panelTrack || null,
+      type: "special",
+      track: null,
+      discipline: null,
       source: "conftool",
     });
   }

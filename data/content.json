@@ -61,6 +61,50 @@
     "2026-10-02-11:30-HS8-12:00": "ru",
     "2026-10-02-14:00-SR125-14:30": "uk"
   },
+  "program_supplements": {
+    "panels": [
+      {
+        "id": "curated-2026-10-01-11:30-SR125",
+        "day": "2026-10-01",
+        "block_start": "11:30",
+        "code": null,
+        "title": "Helden unserer Zeit? Die Darstellung von Dissidenz in osteuropäischen Kulturen nach 1989",
+        "chair": "Prof. Dr. Peter Deutschmann, Dr. Manuel Ghilarducci",
+        "room": "SR 125",
+        "track": "LKW"
+      }
+    ],
+    "sessions": [
+      {
+        "id": "curated-2026-10-01-SR125-12:00",
+        "day": "2026-10-01",
+        "start": "12:00",
+        "end": "12:30",
+        "room": "SR 125",
+        "track": "LKW",
+        "panel_id": "curated-2026-10-01-11:30-SR125",
+        "speakers": ["Peter Deutschmann"],
+        "title": "Medienhelden unserer Zeit? – zu Darstellungen von tschechischen DissidentInnen nach 1989",
+        "type": "talk",
+        "abstract": null,
+        "affiliations": ["Universität Salzburg"]
+      },
+      {
+        "id": "curated-2026-10-01-SR125-12:30",
+        "day": "2026-10-01",
+        "start": "12:30",
+        "end": "13:00",
+        "room": "SR 125",
+        "track": "LKW",
+        "panel_id": "curated-2026-10-01-11:30-SR125",
+        "speakers": ["Lucie Antošíková"],
+        "title": "Vom Dissens zur Freiheit. Heldinnen in der tschechischen Literatur des 20. Jahrhunderts",
+        "type": "talk",
+        "abstract": null,
+        "affiliations": ["Ústav pro českou literaturu Akademie věd ČR"]
+      }
+    ]
+  },
   "links": {
     "program_pdf": "https://www.gw.uni-jena.de/phifakmedia/199705/tagungsprogramm-25-09-2026.pdf",
     "abstracts_pdf": "https://www.gw.uni-jena.de/phifakmedia/199683/book-of-abstracts-2026.pdf",

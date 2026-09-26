@@ -243,14 +243,17 @@ t("Detailfenster: russische Vortragssprache ist vollständig bezeichnet", () => 
   assert.equal(badge?.title, "Vortragssprache: Russisch");
 });
 document.querySelector(".drawer-close").click();
-t("Programm: PDF-Zuordnung enthält vier Podien, fünf besondere Veranstaltungen und den Festvortrag", () => {
+t("Programm: PDF-Zuordnung enthält vier Podien, Sonderformate und das ergänzte LKW-Panel", () => {
   assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
   assert.equal(document.querySelectorAll(".event-card.type-special:not(.type-rahmen)").length, 6);
-  const helden = [...document.querySelectorAll(".event-card.type-panel")]
-    .find((card) => card.textContent.includes("Helden unserer Zeit?"));
-  assert.ok(helden, "LKW-Panel ‚Helden unserer Zeit?‘ fehlt");
-  assert.ok(helden.classList.contains("track-lkw"));
-  assert.equal(helden.textContent.includes("Sonderformat"), false);
+  assert.equal([...document.querySelectorAll(".event-card")]
+    .some((card) => card.textContent.includes("Helden unserer Zeit?")), false);
+  const helden = [...document.querySelectorAll(".session-card.track-lkw")]
+    .filter((card) => card.textContent.includes("Helden unserer Zeit?"));
+  assert.equal(helden.length, 5, "LKW-Panel ‚Helden unserer Zeit?‘ ist nicht vollständig");
+  assert.equal(helden.some((card) => card.textContent.includes("11:30–12:00")), false);
+  assert.ok(helden.some((card) => card.textContent.includes("12:00–12:30")));
+  assert.ok(helden.some((card) => card.textContent.includes("12:30–13:00")));
 });
 document.querySelector('input[value="podium"]').click();
 await sleep(400);
