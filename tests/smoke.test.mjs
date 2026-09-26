@@ -339,6 +339,10 @@ t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
   assert.ok(text.includes("Ensemble Mrija"));
   assert.ok(text.includes("Politische Gefangene in Belarus"));
   assert.ok(text.includes("Mi–Sa im 1. OG der CZS 3"));
+  assert.ok(text.includes("Führung „Jena – der Ort der deutschen Romantik“"));
+  assert.ok(text.includes("Stadtführung durch Jena"));
+  assert.ok(text.includes("Führung durch die Ausstellung „Zeitgenössische bulgarische Plakatkunst“"));
+  assert.ok(text.includes("Farbe des Zettels auf der Rückseite Ihres Namensschildes"));
   assert.ok(text.includes("Jena und Wandern"));
   assert.ok(text.includes("Weimar und Gedenkstätte Buchenwald"));
   assert.ok(text.includes("Erfurt"));
