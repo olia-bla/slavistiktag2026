@@ -27,9 +27,7 @@ function applyTheme(theme, persist = false) {
   const next = theme === "dark" ? "dark" : "light";
   document.documentElement.setAttribute("data-theme", next);
   if (themeBtn) {
-    const icon = themeBtn.querySelector(".theme-icon");
     const label = themeBtn.querySelector(".theme-label");
-    if (icon) icon.textContent = next === "dark" ? "☀" : "☾";
     if (label) label.textContent = next === "dark" ? "Hell" : "Dunkel";
     themeBtn.setAttribute("aria-label", next === "dark" ? "Hellmodus aktivieren" : "Dunkelmodus aktivieren");
   }

@@ -87,6 +87,7 @@ t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   assert.equal(labels[0], "Startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
   assert.ok(labels.some((l) => l.includes("Sprecher:innen")));
+  assert.equal(document.querySelector(".fav-count").textContent, "");
 });
 
 // Navigation: Programm

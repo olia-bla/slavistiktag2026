@@ -104,12 +104,16 @@ for (const vp of VIEWPORTS) {
         backDisabled: document.querySelector("#back-button").disabled,
         forwardDisabled: document.querySelector("#forward-button").disabled,
         themeIconBeforeLabel: icon.left < label.left,
+        sunVisible: getComputedStyle(document.querySelector(".theme-symbol-sun")).display !== "none",
+        emptyFavoriteCountHidden: getComputedStyle(document.querySelector(".fav-count")).display === "none",
       };
     });
     assert.ok(Math.abs(ui.barBottom - ui.height) <= 1);
     assert.equal(ui.backDisabled, true);
     assert.equal(ui.forwardDisabled, true);
     assert.equal(ui.themeIconBeforeLabel, true);
+    assert.equal(ui.sunVisible, true);
+    assert.equal(ui.emptyFavoriteCountHidden, true);
     if (vp.width <= 760) assert.ok(ui.logoLeft <= 16, `Logo beginnt erst bei ${ui.logoLeft}px`);
   });
   await t(`${vp.name}: keine JS-Fehler`, () => assert.deepEqual(errors, []));
@@ -198,12 +202,14 @@ for (const vp of VIEWPORTS) {
         bg: s.getPropertyValue("--bg").trim(),
         ink: s.getPropertyValue("--ink").trim(),
         logoFilter: getComputedStyle(document.querySelector(".brand-logo")).filter,
+        sunVisible: getComputedStyle(document.querySelector(".theme-symbol-sun")).display !== "none",
       };
     });
     assert.equal(colors.scheme, "dark");
     assert.equal(colors.bg, "#151a20");
     assert.equal(colors.ink, "#e2e6e8");
     assert.match(colors.logoFilter, /invert\(1\)/);
+    assert.equal(colors.sunVisible, true);
   });
   await page.locator("#theme-toggle").click();
   await t(`${vp.name}: Umschaltung in Hellmodus`, async () => {
@@ -267,10 +273,10 @@ for (const vp of VIEWPORTS) {
       };
     });
     assert.deepEqual(colors, {
-      sw: "#9a86b3",
-      lkw: "#b5824b",
-      did: "#7894ad",
-      other: "#708d68",
+      sw: "#9b7fc4",
+      lkw: "#dc9800",
+      did: "#648bc7",
+      other: "#569e31",
     });
   });
   await page.close();
