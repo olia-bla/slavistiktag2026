@@ -1,6 +1,6 @@
 // views/program.js – Programm: Filterleiste, Grid- und Listenansicht
 import { h, dateLabel, timeRange, debounce, minutes } from "../util.js";
-import { filterSessions, formatOf, highlight, snippet } from "../search.js";
+import { filterSessions, formatOf, highlight, matchesTimeSlot, snippet, TIME_SLOTS } from "../search.js";
 import { favs } from "../favorites.js";
 import { roomLink } from "../rooms.js";
 import { stripTitles } from "./speakers.js";
@@ -143,8 +143,7 @@ function filterBar(model, ctx, state) {
   };
 
   const roomOpts = model.rooms.map((r) => ({ value: r, text: r }));
-  const slotOpts = [...new Set(model.sessions.filter((s) => s.type === "talk").map((s) => s.start))]
-    .sort().map((s) => ({ value: s, text: s }));
+  const slotOpts = TIME_SLOTS.map((slot) => ({ value: slot.value, text: slot.label }));
   const panelOpts = Object.values(model.panels)
     .sort((a, b) => (a.day + a.block_start).localeCompare(b.day + b.block_start))
     .map((p) => ({ value: p.id, text: `${p.code ? p.code + " " : ""}${p.title || "?"}`.slice(0, 90) }));
@@ -291,7 +290,7 @@ function filterEvent(e, state) {
   if (state.panel) return false;
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
-  if (state.slot && e.start !== state.slot) return false;
+  if (state.slot && !matchesTimeSlot(e.start, state.slot)) return false;
   const formats = e.formats?.length ? e.formats : [e.type];
   return matchesProgramCategories(e.track, formats, state);
 }

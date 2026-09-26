@@ -26,6 +26,7 @@ function killServer() {
 
 const BASE = `http://localhost:${PORT}/`;
 const VIEWPORTS = [
+  { name: "Android-S 320", width: 320, height: 740, mobile: true },
   { name: "Android-M 360", width: 360, height: 800, mobile: true },
   { name: "iPhone 390", width: 390, height: 844, mobile: true, iphone: true },
   { name: "iPad 820", width: 820, height: 1180, mobile: true },
@@ -90,6 +91,34 @@ for (const vp of VIEWPORTS) {
 
   await t(`${vp.name}: Dashboard ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
+  });
+  await t(`${vp.name}: Startseite ist kompakt und einheitlich`, async () => {
+    const dashboard = await page.evaluate(() => {
+      const actions = [...document.querySelectorAll(".dashboard-actions .btn")];
+      const resources = [...document.querySelectorAll(".dashboard-resource")];
+      const positions = (items) => items.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { left: Math.round(r.left), right: Math.round(r.right), top: Math.round(r.top), height: Math.round(r.height) };
+      });
+      return {
+        actionLabels: actions.map((el) => el.textContent.trim()),
+        resourceCount: resources.length,
+        actionPositions: positions(actions),
+        resourcePositions: positions(resources),
+        oldHighlightsMissing: document.querySelector(".highlight-list") === null,
+        oldDaysMissing: ![...document.querySelectorAll(".view-dashboard h2")].some((el) => el.textContent === "Tage"),
+      };
+    });
+    assert.deepEqual(dashboard.actionLabels, ["Programm öffnen", "Mein Programm"]);
+    assert.equal(dashboard.resourceCount, 4);
+    assert.equal(dashboard.oldHighlightsMissing, true);
+    assert.equal(dashboard.oldDaysMissing, true);
+    assert.ok(dashboard.actionPositions.every((r) => r.left >= 0 && r.right <= vp.width + 1 && r.height >= 40));
+    assert.ok(dashboard.resourcePositions.every((r) => r.left >= 0 && r.right <= vp.width + 1 && r.height >= 40));
+    if (vp.width <= 760) {
+      assert.equal(dashboard.actionPositions[0].top, dashboard.actionPositions[1].top);
+      assert.equal(dashboard.resourcePositions[0].top, dashboard.resourcePositions[1].top);
+    }
   });
   await t(`${vp.name}: Begrüßungen bilden zwei gleich große Zeilen`, async () => {
     const welcome = await page.evaluate(() => {
@@ -260,6 +289,17 @@ for (const vp of VIEWPORTS) {
     assert.equal(categories.noneChecked, true);
     assert.equal(categories.panelMissing, true);
     assert.equal(categories.sectionMissing, true);
+
+    const timeSelect = page.locator('select[aria-label="Zeit"]');
+    assert.deepEqual(await timeSelect.locator("option").allTextContents(), [
+      "Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00",
+    ]);
+    await timeSelect.selectOption("15:30-16:00");
+    await page.waitForTimeout(400);
+    assert.ok(await page.locator(".session-card, .event-card").count() > 0);
+    assert.deepEqual(await overflowIssues(page), []);
+    await timeSelect.selectOption("");
+    await page.waitForTimeout(400);
 
     const pausesBefore = await page.locator(".event-card.type-break").count();
     assert.ok(pausesBefore > 0, "keine sichtbare Pause zum Testen");

@@ -1,6 +1,6 @@
 // Logik-Tests für die DOM-freien Module. Ausführen: node tests/logic.test.mjs
 import assert from "node:assert/strict";
-import { normalize, matchesQuery, filterSessions, formatOf } from "../js/search.js";
+import { normalize, matchesQuery, filterSessions, formatOf, matchesTimeSlot, TIME_SLOTS } from "../js/search.js";
 import { matchesProgramCategories } from "../js/views/program.js";
 import { icsFor } from "../js/ics.js";
 import { nowInfo } from "../js/now.js";
@@ -87,6 +87,22 @@ t("filter: Track-OR", () => {
 });
 t("filter: Format pause", () => {
   assert.deepEqual(filterSessions(sessions, { formats: ["pause"] }).map((s) => s.id), ["c"]);
+});
+t("Zeitfilter: fünf Zeitfenster mit eindeutigen Grenzen", () => {
+  assert.deepEqual(TIME_SLOTS.map((slot) => slot.label), [
+    "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00",
+  ]);
+  assert.equal(matchesTimeSlot("09:00", "09:00-11:00"), true);
+  assert.equal(matchesTimeSlot("11:00", "09:00-11:00"), true);
+  assert.equal(matchesTimeSlot("11:30", "09:00-11:00"), false);
+  assert.equal(matchesTimeSlot("11:30", "11:30-13:00"), true);
+  assert.equal(matchesTimeSlot("13:00", "11:30-13:00"), true);
+  assert.equal(matchesTimeSlot("14:30", "14:00-15:00"), true);
+  assert.equal(matchesTimeSlot("15:30", "15:30-16:00"), true);
+  assert.equal(matchesTimeSlot("16:00", "15:30-16:00"), true);
+  assert.equal(matchesTimeSlot("16:00", "after-16:00"), false);
+  assert.equal(matchesTimeSlot("18:00", "after-16:00"), true);
+  assert.equal(matchesTimeSlot("09:00", "09:00"), true, "alter Deep-Link funktioniert nicht mehr");
 });
 t("formatOf: SEK-Code → sektion", () => {
   assert.equal(formatOf({ type: "talk", panel_code: "SEK_SW_01" }), "sektion");

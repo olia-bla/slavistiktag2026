@@ -70,6 +70,20 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   assert.equal(update.includes("Programmstand"), false);
   assert.equal(document.querySelector(".site-footer").textContent.includes("Mitmachen auf GitHub"), false);
 });
+t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
+  const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
+  const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
+  assert.deepEqual(actions, ["Programm öffnen", "Mein Programm"]);
+  assert.equal(document.querySelector("#app .now-card h2").textContent, "Jetzt / Als Nächstes");
+  assert.ok(document.querySelector("#app .now-card").textContent.includes("Eröffnung und Festvortrag"));
+  assert.equal(resources.length, 4);
+  assert.ok(resources.some((text) => text.includes("Lageplan")));
+  assert.ok(resources.some((text) => text.includes("Book of Abstracts")));
+  assert.equal(document.querySelector("#app .highlight-list"), null);
+  assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Tage"), false);
+  assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Schnellzugriff"), false);
+  assert.equal(document.querySelector("#app .dashboard-notice"), null, "leerer Änderungshinweis wird angezeigt");
+});
 t("Startseite: 14 Begrüßungen gleichmäßig auf zwei Zeilen verteilt", () => {
   const rows = [...document.querySelectorAll("#app .welcome-row")];
   assert.equal(rows.length, 2);
@@ -278,6 +292,30 @@ for (const value of ["DID", "SW", "LKW", ...categoryValues]) {
 await sleep(400);
 t("Programmfilter: alle sieben Häkchen zeigen wieder das vollständige Programm", () => {
   assert.equal(document.querySelectorAll("#app .session-card, #app .event-card").length, unfilteredProgramCount);
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
+t("Programmfilter: Zeit-Auswahl enthält die fünf gewünschten Zeitfenster", () => {
+  const labels = [...document.querySelector('select[aria-label="Zeit"]').options].map((option) => option.textContent);
+  assert.deepEqual(labels, ["Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00"]);
+});
+const timeSelect = document.querySelector('select[aria-label="Zeit"]');
+timeSelect.value = "15:30-16:00";
+timeSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+await sleep(400);
+t("Programmfilter: Zeitfenster 15:30–16:00 enthält Pause und 16-Uhr-Veranstaltungen", () => {
+  const times = [...document.querySelectorAll("#app .card .time")].map((el) => el.textContent.slice(0, 5));
+  assert.ok(times.includes("15:30"));
+  assert.ok(times.includes("16:00"));
+  assert.ok(times.every((time) => time === "15:30" || time === "16:00"));
+});
+timeSelect.value = "after-16:00";
+timeSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+await sleep(400);
+t("Programmfilter: nach 16:00 zeigt ausschließlich spätere Veranstaltungen", () => {
+  const times = [...document.querySelectorAll("#app .card .time")].map((el) => el.textContent.slice(0, 5));
+  assert.ok(times.length > 0);
+  assert.ok(times.every((time) => time > "16:00"));
 });
 document.querySelector(".filter-options .btn").click();
 await sleep(100);

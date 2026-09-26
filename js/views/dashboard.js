@@ -1,7 +1,6 @@
-// views/dashboard.js – Startseite: Begrüßung, Jetzt & Als Nächstes, Highlights
-import { h, dateLabel, shortDate, timeRange } from "../util.js";
+// views/dashboard.js – kompakte Startseite: Orientierung, Jetzt, wichtige Links
+import { h, dateLabel, timeRange } from "../util.js";
 import { nowInfo } from "../now.js";
-import { icsFor, downloadIcs } from "../ics.js";
 
 function updatedAt(timestamp) {
   const d = new Date(timestamp || "");
@@ -15,79 +14,100 @@ function updatedAt(timestamp) {
 export function renderDashboard(model, ctx) {
   const c = model.conference;
   const now = nowInfo(model);
-
-  const nowCard = h("section", { class: "now-card card" },
-    h("h2", { text: "Wohin gehe ich?" }),
-    nowBody(model, now, ctx));
-
-  const dayChips = model.days.map((d) =>
-    h("a", { class: "chip", href: `#/programm?day=${d}` }, dateLabel(d)));
-
-  const highlights = model.events.filter((e) => e.type === "podium" || (e.day === "2026-09-30"));
-  const highlightList = h("ul", { class: "highlight-list" },
-    highlights.map((e) => h("li", {},
-      h("strong", { text: `${shortDate(e.day)} ${timeRange(e.start, e.end)}` }, ),
-      " – ",
-      h("a", { href: `#/info`, text: e.title }),
-    )));
+  const notice = changesNotice(model);
 
   const welcomeWords = model.content.welcome || [];
   const wordsPerRow = Math.ceil(welcomeWords.length / 2);
   const welcome = h("div", { class: "welcome-wall", "aria-hidden": "true" },
-    [welcomeWords.slice(0, wordsPerRow), welcomeWords.slice(wordsPerRow)].map((row, rowIndex) =>
+    [welcomeWords.slice(0, wordsPerRow), welcomeWords.slice(wordsPerRow)].map((row) =>
       h("div", { class: "welcome-row" },
-        row.map((word, columnIndex) => {
-          const index = rowIndex * wordsPerRow + columnIndex;
-          return h("span", { class: "welcome-word", style: `animation-delay:${index * 0.35}s`, text: word });
-        }))));
+        row.map((word) => h("span", { class: "welcome-word", text: word })))));
 
   return h("div", { class: "view view-dashboard" },
-    welcome,
-    h("header", { class: "hero" },
+    h("header", { class: "hero dashboard-hero" },
       h("h1", { text: `${c.title} 2026` }),
       h("p", { class: "event-dates", text: "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3" }),
       h("p", { class: "motto", text: `„${c.motto}“` }),
-      h("p", { class: "meta", text: updatedAt(model.meta.generated_at) })),
-    nowCard,
-    h("section", { class: "card" },
-      h("h2", { text: "Tage" }),
-      h("div", { class: "chip-row" }, dayChips)),
-    h("section", { class: "card" },
-      h("h2", { text: "Highlights" }),
-      highlightList,
-      h("p", {}, h("a", { class: "btn ghost", href: "#/info", text: "Kultur- und Rahmenprogramm →" }))),
-    h("section", { class: "card downloads-card" },
-      h("h2", { text: "Downloads" }),
-      h("div", { class: "btn-row" },
-        h("a", { class: "btn download-link", href: model.content.links.city_map_pdf, target: "_blank", rel: "noopener", text: "Stadtplan (PDF)" }),
-        h("a", { class: "btn download-link", href: model.content.links.lageplan_pdf, target: "_blank", rel: "noopener", text: "Lageplan (PDF)" }),
-        h("a", { class: "btn download-link", href: model.content.links.program_pdf, target: "_blank", rel: "noopener", text: "Tagungsprogramm (PDF)" }),
-        h("a", { class: "btn download-link", href: model.content.links.abstracts_pdf, target: "_blank", rel: "noopener", text: "Book of Abstracts (PDF)" }))),
-    h("section", { class: "card" },
-      h("h2", { text: "Schnellzugriff" }),
-      h("div", { class: "chip-row" },
-        h("a", { class: "btn", href: "#/programm", text: "Programm durchsuchen" }),
-        h("a", { class: "btn", href: "#/mein", text: "Mein Programm" }))));
+      h("div", { class: "dashboard-actions", "aria-label": "Schnellzugriff" },
+        h("a", { class: "btn", href: "#/programm", text: "Programm öffnen" }),
+        h("a", { class: "btn ghost", href: "#/mein", text: "Mein Programm" }))),
+    h("div", { class: "dashboard-grid" },
+      h("section", { class: "now-card card" },
+        h("h2", { text: "Jetzt / Als Nächstes" }),
+        nowBody(model, now, ctx)),
+      importantLinks(model)),
+    notice,
+    welcome,
+    h("p", { class: "meta dashboard-updated", text: updatedAt(model.meta.generated_at) }));
+}
+
+function importantLinks(model) {
+  const links = model.content.links;
+  const resource = (label, href) => h("a", {
+    class: "dashboard-resource", href, target: "_blank", rel: "noopener",
+  }, h("span", { text: label }), h("span", { class: "resource-type", text: "PDF" }));
+
+  return h("section", { class: "card dashboard-important" },
+    h("h2", { text: "Wichtige Informationen" }),
+    h("div", { class: "dashboard-resources" },
+      resource("Lageplan", links.lageplan_pdf),
+      resource("Stadtplan", links.city_map_pdf),
+      resource("Programm", links.program_pdf),
+      resource("Book of Abstracts", links.abstracts_pdf)),
+    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte und Rahmenprogramm →" }));
+}
+
+function changesNotice(model) {
+  const changes = model.changes;
+  const counts = changes?.counts || {};
+  const total = (counts.new || 0) + (counts.changed || 0) + (counts.removed || 0);
+  if (!total) return null;
+  const parts = [
+    counts.new ? `${counts.new} neu` : null,
+    counts.changed ? `${counts.changed} geändert` : null,
+    counts.removed ? `${counts.removed} entfallen` : null,
+  ].filter(Boolean).join(", ");
+  return h("section", { class: "card dashboard-notice" },
+    h("h2", { text: "Aktuelle Hinweise" }),
+    h("p", { text: `Das Programm wurde aktualisiert: ${parts}.` }),
+    h("a", { class: "btn ghost", href: "#/aenderungen", text: "Änderungen ansehen" }));
 }
 
 function nowBody(model, now, ctx) {
   if (now.status === "before") {
-    return h("p", { text: `Die Tagung beginnt am ${dateLabel(model.conference.start)}. Bis dahin: Programm stöbern und Favoriten sammeln.` });
+    const opening = model.events
+      .filter((event) => event.day === model.conference.start && event.start)
+      .sort((a, b) => a.start.localeCompare(b.start))[0];
+    return h("div", { class: "dashboard-status" },
+      h("p", { text: `Die Tagung beginnt am ${dateLabel(model.conference.start)}.` }),
+      opening ? h("div", { class: "now-item" },
+        h("span", { class: "now-label", text: "Eröffnung" }),
+        h("a", {
+          class: "now-title", href: `#/programm?day=${opening.day}&format=special`,
+          text: "Eröffnung und Festvortrag",
+          title: opening.title,
+        }),
+        h("span", { class: "now-meta", text: `${timeRange(opening.start, opening.end)}${opening.room ? " · " + opening.room : ""}` })) : null);
   }
   if (now.status === "after") {
-    return h("p", { text: "Die Tagung ist vorbei. Vielen Dank fürs Mitmachen!" });
+    return h("p", { text: "Die Tagung ist vorbei. Vielen Dank für Ihre Teilnahme!" });
   }
   if (now.status === "done") {
-    return h("p", { text: "Für heute ist das Programm zu Ende." });
+    return h("div", { class: "dashboard-status" },
+      h("p", { text: "Für heute ist das Programm zu Ende." }),
+      h("a", { class: "btn ghost", href: "#/programm", text: "Gesamtes Programm ansehen" }));
   }
   const card = (x, label) => {
     const isSession = x.type === "talk" || x.type === "break";
     return h("div", { class: "now-item" },
       h("span", { class: "now-label", text: label }),
       h("a", {
-        class: "now-title", href: isSession ? `#/programm?q=${encodeURIComponent(x.title.slice(0, 40))}` : "#/info",
-        onclick: isSession && x.id && ctx.byId[x.id]
-          ? (ev) => { ev.preventDefault(); ctx.openSession(x.id); }
+        class: "now-title", href: isSession ? `#/programm?q=${encodeURIComponent(x.title.slice(0, 40))}` : `#/programm?day=${x.day}`,
+        onclick: x.id
+          ? (ev) => {
+            ev.preventDefault();
+            isSession ? ctx.openSession(x.id) : ctx.openEvent(x.id);
+          }
           : null,
       }, x.title),
       h("span", { class: "now-meta", text: `${timeRange(x.start, x.end)}${x.room ? " · " + x.room : ""}` }));

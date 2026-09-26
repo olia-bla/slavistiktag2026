@@ -275,10 +275,58 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
 .view-changes .slot-change .new { color: var(--accent2); }
 .view-changes .mini-list li.removed { color: var(--ink-dim); }
 
-/* ---------- Welcome-Wall ---------- */
+/* ---------- Startseite ---------- */
+.view-dashboard { max-width: 1040px; margin: 0 auto; }
+.dashboard-hero {
+  margin: 0.25rem 0 0.9rem;
+  padding: 1.2rem 1.3rem;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--card) 93%, var(--faculty)), var(--card));
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--faculty);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.dashboard-hero .motto { margin-bottom: 0; }
+.dashboard-actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 1rem; }
+.dashboard-actions .btn { min-height: 2.7rem; justify-content: center; }
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 0.9rem;
+}
+.dashboard-grid > .card { height: 100%; }
+.dashboard-status > p { margin-top: 0; }
+.dashboard-resources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.dashboard-resource {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.45rem;
+  min-height: 2.7rem; padding: 0.55rem 0.65rem;
+  background: var(--card2); color: var(--heading);
+  border: 1px solid var(--line); border-radius: 6px;
+  font-weight: 600; line-height: 1.2;
+}
+.dashboard-resource > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.dashboard-resource:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--card2));
+  text-decoration: none;
+}
+.resource-type {
+  flex: none; padding: 0.12rem 0.3rem;
+  border-radius: 4px; background: var(--button); color: var(--button-ink);
+  font-size: 0.66rem; letter-spacing: 0.04em;
+}
+.dashboard-info-link { display: inline-block; margin-top: 0.8rem; font-weight: 600; }
+.dashboard-notice { border-left: 5px solid var(--gold); }
+.dashboard-notice p { margin: 0 0 0.7rem; }
+.dashboard-updated { margin: 0.65rem 0 0; text-align: right; }
+
+/* Ruhige mehrsprachige Begrüßung – dekorativ, aber ohne Bewegung. */
 .welcome-wall {
   display: grid; gap: 0.4rem;
-  padding: 0.3rem 0 0.1rem; min-height: 1.5rem;
+  padding: 0.35rem 0; margin-top: 0.2rem; min-height: 1.5rem;
   overflow: hidden;
 }
 .welcome-row {
@@ -287,15 +335,7 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
 }
 .welcome-word {
   color: var(--ink-dim); font-size: clamp(0.58rem, 1vw, 0.82rem); white-space: nowrap;
-  opacity: 0; animation: wfade 12s ease-in-out infinite;
-}
-@keyframes wfade {
-  0%, 8% { opacity: 0; transform: translateY(4px); }
-  12%, 40% { opacity: 1; transform: none; }
-  48%, 100% { opacity: 0; transform: translateY(-4px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .welcome-word { animation: none; opacity: 0.7; }
+  opacity: 0.68;
 }
 
 /* ---------- Now-Karte ---------- */
@@ -499,6 +539,13 @@ select {
   .brand-logo { width: 110px; height: 50px; }
   .theme-toggle { position: absolute; top: 0.65rem; right: 0.7rem; }
   .welcome-wall { display: none; }
+  .dashboard-hero { padding: 1rem; margin-top: 0; }
+  .dashboard-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-actions .btn { width: 100%; padding-inline: 0.55rem; }
+  .dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .dashboard-grid > .card { height: auto; }
+  .dashboard-resource { padding-inline: 0.55rem; font-size: 0.84rem; }
+  .dashboard-updated { text-align: left; }
   .main-nav {
     margin-left: 0; width: 100%; order: 3;
     display: grid;
