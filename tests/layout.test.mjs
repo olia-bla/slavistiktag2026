@@ -158,6 +158,31 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
+// ---------- Veranstaltungsfarben ----------
+{
+  const page = await browser.newPage();
+  await page.goto(BASE + "#/programm", { waitUntil: "networkidle" });
+  await page.waitForSelector("#app .results");
+  await t("Farben: Disziplinen und sonstige Veranstaltungen", async () => {
+    const colors = await page.evaluate(() => {
+      const s = getComputedStyle(document.documentElement);
+      return {
+        sw: s.getPropertyValue("--sw").trim(),
+        lkw: s.getPropertyValue("--lkw").trim(),
+        did: s.getPropertyValue("--did").trim(),
+        other: s.getPropertyValue("--other").trim(),
+      };
+    });
+    assert.deepEqual(colors, {
+      sw: "#8b1878",
+      lkw: "#dc9800",
+      did: "#648bc7",
+      other: "#569e31",
+    });
+  });
+  await page.close();
+}
+
 // ---------- Print-Stylesheet (Item 9) ----------
 {
   const page = await browser.newPage();

@@ -121,10 +121,10 @@ export function renderInfo(model) {
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Farben & Favoriten" }),
     h("p", { text:
-      "Farben: Der linke Rand jeder Karte markiert die Disziplin – " +
-      "orange Fachdidaktik (DID), türkis Sprachwissenschaft (SW), " +
-      "rosa Literatur- und Kulturwissenschaft (LKW); dieselben Punkte " +
-      "stehen an den Disziplin-Filtern. " +
+      "Farben: Der linke Rand jeder Karte markiert den Veranstaltungsbereich – " +
+      "lila Sprachwissenschaft (SW), orange Literatur- und Kulturwissenschaft (LKW), " +
+      "hellblau Fachdidaktik (DID) und grün sonstige Veranstaltungen wie Poster- oder " +
+      "Buchpräsentationen. Die drei Disziplinfarben stehen auch an den Filtern. " +
       "Favoriten: Über den Stern auf jeder Karte stellst du dein persönliches " +
       "Programm unter „Mein Programm“ zusammen. Es wird automatisch im Browser " +
       "deines Endgeräts gespeichert (localStorage) – ohne Anmeldung, ohne Export, " +

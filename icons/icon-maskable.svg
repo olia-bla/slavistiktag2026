@@ -3,6 +3,6 @@
   <rect x="0" y="0" width="512" height="512" fill="#002f5d"/>
   <rect x="58" y="58" width="396" height="396" rx="54" fill="#ffffff"/>
   <path d="M375 170V107H107V405H375V342" fill="none" stroke="#8b1878" stroke-width="22"/>
-  <text x="242" y="240" font-family="Arial, sans-serif" font-size="148" font-weight="700" fill="#002f5d" text-anchor="middle">15.</text>
-  <text x="242" y="330" font-family="Arial, sans-serif" font-size="68" font-weight="700" fill="#002f5d" text-anchor="middle">2026</text>
+  <text x="242" y="241" font-family="Arial, sans-serif" font-size="62" font-weight="700" fill="#002f5d" text-anchor="middle">SlavTag</text>
+  <text x="242" y="326" font-family="Arial, sans-serif" font-size="70" font-weight="700" fill="#002f5d" text-anchor="middle">2026</text>
 </svg>

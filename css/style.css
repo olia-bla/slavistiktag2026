@@ -18,9 +18,10 @@
   --lightblue: #648bc7;
   --faculty: #8b1878;
   --warn: #ae9a63;
-  --did: #dc9800;
-  --sw: #378dbc;
-  --lkw: #8b1878;
+  --did: #648bc7;
+  --sw: #8b1878;
+  --lkw: #dc9800;
+  --other: #569e31;
   --line: rgba(0, 47, 93, 0.14);
   --line-strong: rgba(0, 47, 93, 0.32);
   --shadow: 0 3px 14px rgba(0, 47, 93, 0.08);
@@ -342,6 +343,7 @@ select {
 .session-card.track-did { border-left-color: var(--did); }
 .session-card.track-sw { border-left-color: var(--sw); }
 .session-card.track-lkw { border-left-color: var(--lkw); }
+.session-card.track-x { border-left-color: var(--other); }
 .session-card.is-fav { outline: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); }
 .card-top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
 .time { font-variant-numeric: tabular-nums; color: var(--ink-dim); font-size: 0.8rem; flex: none; }
@@ -358,9 +360,9 @@ select {
 /* Pills nebeneinander brauchen Abstand (sonst klebt "SEK_LKW_09" an "SR 222") */
 .card-title + .pill, .pill + .pill, .pill + .card-speakers, .pill + .card-panel { margin-right: 0.35rem; }
 .session-card .pill, .event-card .pill { margin-bottom: 0.3rem; }
-.event-card.type-podium { border-left-color: var(--accent); }
-.event-card.type-special { border-left-color: var(--warn); }
-.event-card.type-rahmen { border-left-color: var(--accent2); }
+.event-card.type-podium,
+.event-card.type-special,
+.event-card.type-rahmen { border-left-color: var(--other); }
 .event-card.type-break {
   background: transparent; border: 1px dashed var(--line-strong); box-shadow: none;
   color: var(--ink-dim); font-size: 0.84rem; cursor: default;
