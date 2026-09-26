@@ -90,18 +90,22 @@ t("filter: Format pause", () => {
 });
 t("Zeitfilter: fünf Zeitfenster mit eindeutigen Grenzen", () => {
   assert.deepEqual(TIME_SLOTS.map((slot) => slot.label), [
-    "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00",
+    "09:00–11:00", "11:30–13:00", "14:00–15:30", "16:00–17:30", "nach dem Vortragsende",
   ]);
   assert.equal(matchesTimeSlot("09:00", "09:00-11:00"), true);
   assert.equal(matchesTimeSlot("11:00", "09:00-11:00"), true);
   assert.equal(matchesTimeSlot("11:30", "09:00-11:00"), false);
   assert.equal(matchesTimeSlot("11:30", "11:30-13:00"), true);
   assert.equal(matchesTimeSlot("13:00", "11:30-13:00"), true);
-  assert.equal(matchesTimeSlot("14:30", "14:00-15:00"), true);
-  assert.equal(matchesTimeSlot("15:30", "15:30-16:00"), true);
-  assert.equal(matchesTimeSlot("16:00", "15:30-16:00"), true);
-  assert.equal(matchesTimeSlot("16:00", "after-16:00"), false);
-  assert.equal(matchesTimeSlot("18:00", "after-16:00"), true);
+  assert.equal(matchesTimeSlot("14:30", "14:00-15:30"), true);
+  assert.equal(matchesTimeSlot("15:30", "14:00-15:30"), true);
+  assert.equal(matchesTimeSlot("16:00", "16:00-17:30"), true);
+  assert.equal(matchesTimeSlot("17:30", "16:00-17:30"), true);
+  assert.equal(matchesTimeSlot("17:30", "after-program", "2026-10-02"), false);
+  assert.equal(matchesTimeSlot("18:00", "after-program", "2026-10-02"), true);
+  assert.equal(matchesTimeSlot("18:00", "after-program", "2026-09-30"), false, "Eröffnung ist noch nicht nach dem Vortragsende");
+  assert.equal(matchesTimeSlot("20:00", "after-program", "2026-09-30"), true, "Buffet nach der Eröffnung fehlt");
+  assert.equal(matchesTimeSlot("13:00", "after-program", "2026-10-03"), true, "Abschlussveranstaltung am Samstag fehlt");
   assert.equal(matchesTimeSlot("09:00", "09:00"), true, "alter Deep-Link funktioniert nicht mehr");
 });
 t("formatOf: SEK-Code → sektion", () => {

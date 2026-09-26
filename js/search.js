@@ -40,12 +40,19 @@ export function matchesQuery(searchText, q) {
 export const TIME_SLOTS = [
   { value: "09:00-11:00", label: "09:00–11:00", from: 9 * 60, to: 11 * 60 },
   { value: "11:30-13:00", label: "11:30–13:00", from: 11 * 60 + 30, to: 13 * 60 },
-  { value: "14:00-15:00", label: "14:00–15:00", from: 14 * 60, to: 15 * 60 },
-  { value: "15:30-16:00", label: "15:30–16:00", from: 15 * 60 + 30, to: 16 * 60 },
-  { value: "after-16:00", label: "nach 16:00", after: 16 * 60 },
+  { value: "14:00-15:30", label: "14:00–15:30", from: 14 * 60, to: 15 * 60 + 30 },
+  { value: "16:00-17:30", label: "16:00–17:30", from: 16 * 60, to: 17 * 60 + 30 },
+  { value: "after-program", label: "nach dem Vortragsende", afterProgram: true },
 ];
 
-export function matchesTimeSlot(start, value) {
+const AFTER_PROGRAM_START = {
+  "2026-09-30": 20 * 60,
+  "2026-10-01": 18 * 60,
+  "2026-10-02": 18 * 60,
+  "2026-10-03": 13 * 60,
+};
+
+export function matchesTimeSlot(start, value, day = "") {
   if (!value) return true;
   const [hours, minutes] = (start || "").split(":").map(Number);
   if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return false;
@@ -53,7 +60,10 @@ export function matchesTimeSlot(start, value) {
   const slot = TIME_SLOTS.find((candidate) => candidate.value === value);
   // Alte Deep-Links mit einer einzelnen Beginnzeit bleiben gültig.
   if (!slot) return start === value;
-  if (slot.after != null) return startMinutes > slot.after;
+  if (slot.afterProgram) {
+    const cutoff = AFTER_PROGRAM_START[day] ?? 18 * 60;
+    return startMinutes >= cutoff;
+  }
   return startMinutes >= slot.from && startMinutes <= slot.to;
 }
 
@@ -64,7 +74,7 @@ export function filterSessions(sessions, state) {
     if (state.q && !matchesQuery(state.talksOnly && s._searchTalks ? s._searchTalks : (s._search || normalize(s.title)), state.q)) return false;
     if (state.day && s.day !== state.day) return false;
     if (state.room && s.room !== state.room) return false;
-    if (state.slot && !matchesTimeSlot(s.start, state.slot)) return false;
+    if (state.slot && !matchesTimeSlot(s.start, state.slot, s.day)) return false;
     if (state.panel && s.panel_id !== state.panel) return false;
     if (state.type && s.type !== state.type) return false;
     if (state.tracks && state.tracks.length) {

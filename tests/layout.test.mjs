@@ -292,9 +292,9 @@ for (const vp of VIEWPORTS) {
 
     const timeSelect = page.locator('select[aria-label="Zeit"]');
     assert.deepEqual(await timeSelect.locator("option").allTextContents(), [
-      "Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00",
+      "Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:30", "16:00–17:30", "nach dem Vortragsende",
     ]);
-    await timeSelect.selectOption("15:30-16:00");
+    await timeSelect.selectOption("16:00-17:30");
     await page.waitForTimeout(400);
     assert.ok(await page.locator(".session-card, .event-card").count() > 0);
     assert.deepEqual(await overflowIssues(page), []);

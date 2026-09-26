@@ -1,5 +1,5 @@
 // views/dashboard.js – kompakte Startseite: Orientierung, Jetzt, wichtige Links
-import { h, dateLabel, timeRange } from "../util.js";
+import { h, timeRange } from "../util.js";
 import { nowInfo } from "../now.js";
 
 function updatedAt(timestamp) {
@@ -74,20 +74,26 @@ function changesNotice(model) {
 }
 
 function nowBody(model, now, ctx) {
-  if (now.status === "before") {
+  const openingDayBeforeOpening = now.day === model.conference.start && now.time < "18:00";
+  if (now.status === "before" || openingDayBeforeOpening) {
     const opening = model.events
       .filter((event) => event.day === model.conference.start && event.start)
       .sort((a, b) => a.start.localeCompare(b.start))[0];
+    const scheduleItem = (time, title, room, href = null) => h("div", { class: "now-item" },
+      h("span", { class: "now-label", text: time }),
+      href
+        ? h("a", { class: "now-title", href, text: title })
+        : h("span", { class: "now-title", text: title }),
+      h("span", { class: "now-meta", text: room }));
     return h("div", { class: "dashboard-status" },
-      h("p", { text: `Die Tagung beginnt am ${dateLabel(model.conference.start)}.` }),
-      opening ? h("div", { class: "now-item" },
-        h("span", { class: "now-label", text: "Eröffnung" }),
-        h("a", {
-          class: "now-title", href: `#/programm?day=${opening.day}&format=special`,
-          text: "Eröffnung und Festvortrag",
-          title: opening.title,
-        }),
-        h("span", { class: "now-meta", text: `${timeRange(opening.start, opening.end)}${opening.room ? " · " + opening.room : ""}` })) : null);
+      h("p", { text: "Die Tagung beginnt am Mittwoch, 30.09.2026." }),
+      scheduleItem("ab 12:00", "Registrierung", "Foyer CZS 3"),
+      scheduleItem("14:00–17:00", "Jahrestag des Slavistikverbandes", "HS 2"),
+      opening ? scheduleItem(
+        timeRange(opening.start, opening.end),
+        "Eröffnung des Slavistiktages mit Festvortrag",
+        opening.room || "HS 2",
+        `#/programm?day=${opening.day}&format=special`) : null);
   }
   if (now.status === "after") {
     return h("p", { text: "Die Tagung ist vorbei. Vielen Dank für Ihre Teilnahme!" });

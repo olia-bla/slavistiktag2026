@@ -75,7 +75,11 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
   assert.deepEqual(actions, ["Programm öffnen", "Mein Programm"]);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Jetzt / Als Nächstes");
-  assert.ok(document.querySelector("#app .now-card").textContent.includes("Eröffnung und Festvortrag"));
+  const nowText = document.querySelector("#app .now-card").textContent;
+  assert.ok(nowText.includes("Die Tagung beginnt am Mittwoch, 30.09.2026."));
+  assert.ok(nowText.includes("ab 12:00RegistrierungFoyer CZS 3"));
+  assert.ok(nowText.includes("14:00–17:00Jahrestag des SlavistikverbandesHS 2"));
+  assert.ok(nowText.includes("18:00–20:00Eröffnung des Slavistiktages mit FestvortragHS 2"));
   assert.equal(resources.length, 4);
   assert.ok(resources.some((text) => text.includes("Lageplan")));
   assert.ok(resources.some((text) => text.includes("Book of Abstracts")));
@@ -297,25 +301,26 @@ document.querySelector(".filter-options .btn").click();
 await sleep(100);
 t("Programmfilter: Zeit-Auswahl enthält die fünf gewünschten Zeitfenster", () => {
   const labels = [...document.querySelector('select[aria-label="Zeit"]').options].map((option) => option.textContent);
-  assert.deepEqual(labels, ["Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:00", "15:30–16:00", "nach 16:00"]);
+  assert.deepEqual(labels, ["Zeit", "09:00–11:00", "11:30–13:00", "14:00–15:30", "16:00–17:30", "nach dem Vortragsende"]);
 });
 const timeSelect = document.querySelector('select[aria-label="Zeit"]');
-timeSelect.value = "15:30-16:00";
+timeSelect.value = "16:00-17:30";
 timeSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
 await sleep(400);
-t("Programmfilter: Zeitfenster 15:30–16:00 enthält Pause und 16-Uhr-Veranstaltungen", () => {
+t("Programmfilter: Zeitfenster 16:00–17:30 enthält die 16-Uhr-Veranstaltungen", () => {
   const times = [...document.querySelectorAll("#app .card .time")].map((el) => el.textContent.slice(0, 5));
-  assert.ok(times.includes("15:30"));
   assert.ok(times.includes("16:00"));
-  assert.ok(times.every((time) => time === "15:30" || time === "16:00"));
+  assert.ok(times.every((time) => time >= "16:00" && time <= "17:30"));
 });
-timeSelect.value = "after-16:00";
+timeSelect.value = "after-program";
 timeSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
 await sleep(400);
-t("Programmfilter: nach 16:00 zeigt ausschließlich spätere Veranstaltungen", () => {
-  const times = [...document.querySelectorAll("#app .card .time")].map((el) => el.textContent.slice(0, 5));
-  assert.ok(times.length > 0);
-  assert.ok(times.every((time) => time > "16:00"));
+t("Programmfilter: nach dem Vortragsende zeigt ausschließlich spätere Veranstaltungen", () => {
+  const cards = [...document.querySelectorAll("#app .card")];
+  assert.ok(cards.length > 0);
+  assert.ok(cards.some((card) => card.textContent.includes("Musikalische Begleitung mit Buffet")));
+  assert.ok(cards.some((card) => card.textContent.includes("Abschlussveranstaltung")));
+  assert.equal(cards.some((card) => card.textContent.includes("Eröffnung des Slavistiktages")), false);
 });
 document.querySelector(".filter-options .btn").click();
 await sleep(100);

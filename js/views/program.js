@@ -290,7 +290,7 @@ function filterEvent(e, state) {
   if (state.panel) return false;
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
-  if (state.slot && !matchesTimeSlot(e.start, state.slot)) return false;
+  if (state.slot && !matchesTimeSlot(e.start, state.slot, e.day)) return false;
   const formats = e.formats?.length ? e.formats : [e.type];
   return matchesProgramCategories(e.track, formats, state);
 }
