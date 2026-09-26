@@ -14,13 +14,8 @@ import { renderChanges } from "./views/changes.js";
 
 const app = document.getElementById("app");
 const nav = document.getElementById("main-nav");
-const backBtn = document.getElementById("back-button");
 const themeBtn = document.getElementById("theme-toggle");
 const footerStand = document.getElementById("footer-stand");
-const HOME_HASH = "#/heute";
-const initialHash = location.hash || HOME_HASH;
-const routeHistory = initialHash === HOME_HASH ? [HOME_HASH] : [HOME_HASH, initialHash];
-let routeHistoryIndex = routeHistory.length - 1;
 const savedViewMode = localStorage.getItem("slavtag26.view");
 const compactProgram = window.matchMedia && window.matchMedia("(max-width: 760px)").matches;
 const initialViewMode = ["grid", "list"].includes(savedViewMode)
@@ -88,7 +83,6 @@ function parseHash() {
 
 function renderNav() {
   const { route } = parseHash();
-  if (backBtn) backBtn.disabled = routeHistoryIndex <= 0;
   const link = (href, label, badge, forceActive) => {
     const active = forceActive ?? ("#" + route) === href;
     return h("a", { class: `nav-link ${active ? "active" : ""}`, href }, label, badge || null);
@@ -156,27 +150,7 @@ function render() {
 
 export function boot() {
   renderNav();
-  window.addEventListener("hashchange", () => {
-    const current = location.hash || "#/heute";
-    if (current === routeHistory[routeHistoryIndex - 1]) {
-      routeHistoryIndex--;
-    } else if (current === routeHistory[routeHistoryIndex + 1]) {
-      routeHistoryIndex++;
-    } else if (current !== routeHistory[routeHistoryIndex]) {
-      routeHistory.splice(routeHistoryIndex + 1);
-      routeHistory.push(current);
-      routeHistoryIndex = routeHistory.length - 1;
-    }
-    render();
-  });
-  const navigateHistory = (delta) => {
-    const nextIndex = routeHistoryIndex + delta;
-    if (nextIndex < 0 || nextIndex >= routeHistory.length) return;
-    routeHistoryIndex = nextIndex;
-    history.replaceState(null, "", routeHistory[routeHistoryIndex]);
-    render();
-  };
-  backBtn?.addEventListener("click", () => navigateHistory(-1));
+  window.addEventListener("hashchange", render);
   if ("serviceWorker" in navigator) {
     // Ein aktivierter Service Worker kann bereits geöffnete JS-/CSS-Dateien nicht
     // im laufenden Dokument austauschen. Sobald eine neue Version übernimmt,

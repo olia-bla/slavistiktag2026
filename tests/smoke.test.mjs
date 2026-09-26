@@ -88,9 +88,9 @@ t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
   assert.equal(document.querySelector("#app .hero h1").textContent, "15. Deutscher Slavistiktag 2026");
   assert.equal(document.querySelector("#app .event-dates").textContent, "30.09. – 03.10. · Jena, Carl-Zeiss-Straße 3");
   assert.equal(document.querySelector(".topbar .brand-copy"), null);
-  assert.equal(document.querySelector("#back-button").disabled, true);
+  assert.equal(document.querySelector("#back-button"), null);
   assert.equal(document.querySelector("#forward-button"), null);
-  assert.ok(document.querySelector(".history-bar #back-button"));
+  assert.equal(document.querySelector(".history-bar"), null);
 });
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
@@ -107,13 +107,13 @@ await waitFor(() => document.querySelector("#app .filter-bar"));
 t("Programm: Filterleiste + Grid gerendert", () => {
   assert.ok(document.querySelector("#app .filter-bar"));
   assert.ok(document.querySelector("#app .grid"));
-  assert.equal(document.querySelector("#back-button").disabled, false);
+  assert.equal(document.querySelector(".history-bar"), null);
   assert.ok(document.querySelector("#program-advanced-filters"));
   assert.equal(document.querySelector(".filter-toggle"), null);
 });
-t("Programmfilter: vier Sichtbarkeitsschalter sind aktiv, Panel- und Sektionsfilter fehlen", () => {
-  const visible = ["podium", "special", "rahmen", "pause"];
-  assert.equal(visible.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
+t("Programmfilter: alle Auswahlfilter starten leer; Panel- und Sektionsfilter fehlen", () => {
+  const categories = ["podium", "special", "rahmen", "pause"];
+  assert.equal(categories.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
   assert.equal(document.querySelector('input[value="panel"]'), null);
   assert.equal(document.querySelector('input[value="sektion"]'), null);
   assert.equal(document.querySelector(".filter-bar").textContent.includes("Eingereichte Panels"), false);
@@ -128,7 +128,7 @@ t("Programm: Tagesregister enthält alle Tage ohne Scroll-Steuerung", () => {
   assert.equal(tabs[0].textContent, "Alle Tage");
   assert.equal(document.querySelector("#app .day-tabs").getAttribute("role"), "tablist");
 });
-t("Programm: Raumfilter enthält HS 2 aus ConfTool, nicht den veralteten HS 5", () => {
+t("Programm: Raumfilter enthält HS 2 aus dem offiziellen Programm, nicht den veralteten HS 5", () => {
   const rooms = [...document.querySelectorAll('select[aria-label="Raum"] option')]
     .map((option) => option.value).filter(Boolean);
   assert.ok(rooms.includes("HS 2"));
@@ -171,9 +171,9 @@ document.querySelector(".filter-options .btn").click();
 await sleep(100);
 t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ein", () => {
   const disciplines = ["DID", "SW", "LKW"];
-  const visible = ["podium", "special", "rahmen", "pause"];
+  const categories = ["podium", "special", "rahmen", "pause"];
   assert.equal(disciplines.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
-  assert.equal(visible.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
+  assert.equal(categories.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
   assert.equal([...document.querySelectorAll(".filter-bar select")].some((select) => select.value), false);
   assert.ok(document.querySelector("#program-advanced-filters"));
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
@@ -198,34 +198,50 @@ t("Programm: PDF-Zuordnung enthält vier Podien, fünf besondere Veranstaltungen
 });
 document.querySelector('input[value="podium"]').click();
 await sleep(400);
-t("Programmfilter: Podiums-Häkchen blendet nur die vier Podien aus", () => {
-  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 0);
-  assert.equal(document.querySelectorAll(".event-card.type-special:not(.type-rahmen)").length, 6);
-  assert.ok([...document.querySelectorAll(".event-card.type-panel")]
-    .some((card) => card.textContent.includes("Helden unserer Zeit?")));
+t("Programmfilter: Podiums-Häkchen zeigt ausschließlich die vier Podien", () => {
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+  assert.equal(document.querySelectorAll("#app .session-card, #app .event-card").length, 4);
 });
 document.querySelector('input[value="podium"]').click();
 await sleep(400);
-t("Programmfilter: Podiums-Häkchen blendet genau vier Podien wieder ein", () => {
+t("Programmfilter: ohne Häkchen wird wieder alles angezeigt", () => {
   assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+  assert.ok(document.querySelectorAll("#app .session-card").length > 300);
 });
 const categoryValues = ["podium", "special", "rahmen", "pause"];
-const categoryCount = () => document.querySelectorAll(
-  ".event-card.type-podium, .event-card.type-special, .event-card.type-rahmen, .event-card.type-break, .session-card.track-x").length;
-t("Programmfilter: alle optionalen Kategorien sind zunächst sichtbar", () => {
-  assert.ok(categoryCount() > 0);
-});
-for (const value of categoryValues) document.querySelector(`input[value="${value}"]`).click();
+const categoryExpected = { podium: 4, special: 15, rahmen: 10, pause: 7 };
+for (const value of categoryValues) {
+  document.querySelector(`input[value="${value}"]`).click();
+  await sleep(400);
+  t(`Programmfilter: ${value} zeigt exakt die zugeordnete Kategorie`, () => {
+    assert.equal(document.querySelectorAll("#app .session-card, #app .event-card").length, categoryExpected[value]);
+    if (value === "special") {
+      assert.equal(document.querySelectorAll(".event-card.type-special").length, 6);
+      assert.equal(document.querySelectorAll(".session-card.type-special").length, 9);
+      assert.equal([...document.querySelectorAll(".session-card.type-special")]
+        .filter((card) => card.textContent.includes("Posterpräsentationen")).length, 8);
+      assert.ok([...document.querySelectorAll(".session-card.type-special")]
+        .some((card) => card.textContent.includes("Sprachenlernen in Bewegung")));
+      assert.equal([...document.querySelectorAll("#app .card-title")]
+        .some((title) => title.textContent.includes("Helden unserer Zeit?")), false);
+    }
+  });
+  document.querySelector(`input[value="${value}"]`).click();
+  await sleep(400);
+}
+document.querySelector('input[value="podium"]').click();
+document.querySelector('input[value="pause"]').click();
 await sleep(400);
-t("Programmfilter: entfernte Häkchen blenden alle vier Kategorien aus", () => {
-  assert.equal(categoryCount(), 0);
-  assert.ok(document.querySelectorAll("#app .session-card").length > 10, "reguläre Vorträge wurden mit ausgeblendet");
+t("Programmfilter: mehrere Häkchen verbinden Kategorien mit Oder", () => {
+  assert.equal(document.querySelectorAll(".event-card.type-podium").length, 4);
+  assert.equal(document.querySelectorAll(".event-card.type-break").length, 7);
+  assert.equal(document.querySelectorAll("#app .session-card, #app .event-card").length, 11);
 });
 document.querySelector(".filter-options .btn").click();
 await sleep(100);
-t("Programmfilter: Zurücksetzen blendet alle vier Kategorien wieder ein", () => {
-  assert.equal(categoryValues.every((value) => document.querySelector(`input[value="${value}"]`)?.checked), true);
-  assert.ok(categoryCount() > 0);
+t("Programmfilter: Zurücksetzen entfernt alle Häkchen und zeigt alles", () => {
+  assert.equal(categoryValues.some((value) => document.querySelector(`input[value="${value}"]`)?.checked), false);
+  assert.ok(document.querySelectorAll("#app .session-card").length > 300);
 });
 dom.window.location.hash = "#/programm";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].every((el) => el.textContent !== "Alle Tage"));
@@ -346,8 +362,7 @@ document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
 // Eröffnungs-Event (Sonderformat 30.09.): Karte im Programm-Grid klicken ->
-// Drawer mit Grußworten; Raum ist (noch) nicht bekanntgegeben und wird ehrlich
-// als solcher gekennzeichnet statt erfunden.
+// Drawer mit Grußworten und dem im aktuellen Programm veröffentlichten HS 2.
 dom.window.location.hash = "#/programm?day=2026-09-30";
 await waitFor(() => [...document.querySelectorAll("#app .event-card")]
   .some((c) => c.querySelector(".card-title")?.textContent.includes("Eröffnung des Slavistiktages")));
@@ -373,10 +388,10 @@ t("Eröffnungs-Drawer: Grußworte-Abschnitt mit Namen", () => {
   assert.ok(items.length >= 3, `nur ${items.length} Grußworte`);
   assert.ok([...items].some((li) => li.textContent.includes("Sonnenhauser")));
 });
-t("Eröffnungs-Drawer: fehlender Raum ehrlich gekennzeichnet", () => {
+t("Eröffnungs-Drawer: aktueller Raum HS 2", () => {
   const d = document.querySelector(".drawer");
-  assert.ok(!d.querySelector("a.pill.room"), "unerwartet doch ein Raum-Link");
-  assert.ok(d.textContent.includes("Raum noch nicht bekanntgegeben"), "kein Raum-Hinweis");
+  assert.equal(d.querySelector("a.pill.room")?.textContent.trim(), "HS 2");
+  assert.equal(d.textContent.includes("Raum noch nicht bekanntgegeben"), false);
 });
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
@@ -387,28 +402,28 @@ t("Musikalische Begleitung: 20 Uhr im Foyer und ausschließlich Rahmenprogramm",
   const badges = [...musicCard.querySelectorAll(".pill")].map((el) => el.textContent);
   assert.ok(badges.includes("Rahmenprogramm"));
   assert.equal(badges.includes("Sonderformat"), false);
-  assert.ok(musicCard.textContent.includes("20:00"));
+  assert.ok(musicCard.textContent.includes("20:00–22:00"));
   assert.ok(musicCard.textContent.includes("Foyer CZS 3"));
 });
 document.querySelector('input[value="special"]').click();
 await sleep(400);
-t("Sonderformat-Filter blendet nur die Eröffnung aus", () => {
+t("Sonderformat-Filter zeigt nur die Eröffnung am Mittwoch", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
-  assert.equal(titles.some((title) => title.includes("Eröffnung des Slavistiktages")), false);
-  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
+  assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
+  assert.equal(titles.includes("Musikalische Begleitung mit Buffet im Foyer"), false);
 });
 document.querySelector('input[value="special"]').click();
 await sleep(400);
 document.querySelector('input[value="rahmen"]').click();
 await sleep(400);
-t("Rahmenprogramm-Filter blendet nur die musikalische Begleitung aus", () => {
+t("Rahmenprogramm-Filter zeigt nur die musikalische Begleitung am Mittwoch", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
-  assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
-  assert.equal(titles.includes("Musikalische Begleitung mit Buffet im Foyer"), false);
+  assert.equal(titles.some((title) => title.includes("Eröffnung des Slavistiktages")), false);
+  assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));
 });
 document.querySelector('input[value="rahmen"]').click();
 await sleep(400);
-t("Beide Eröffnungs-Einträge erscheinen nach Reaktivierung wieder", () => {
+t("Beide Eröffnungs-Einträge erscheinen ohne Häkchen wieder", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
   assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
   assert.ok(titles.includes("Musikalische Begleitung mit Buffet im Foyer"));

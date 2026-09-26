@@ -53,7 +53,7 @@ async function overflowIssues(page) {
       }
       return false;
     };
-    const selectors = ".card, .cluster-card, .cluster-item, .topics-intro, .topbar, .history-bar, .cluster-list";
+    const selectors = ".card, .cluster-card, .cluster-item, .topics-intro, .topbar, .cluster-list";
     for (const el of document.querySelectorAll(selectors)) {
       const r = el.getBoundingClientRect();
       if (r.width > 0 && r.right > window.innerWidth + 1 && !inScrollableX(el)) {
@@ -111,29 +111,24 @@ for (const vp of VIEWPORTS) {
     assert.equal(welcome.displayed, vp.width > 760);
     if (vp.width > 760) assert.notEqual(welcome.rowTops[0], welcome.rowTops[1]);
   });
-  await t(`${vp.name}: Logo links oben, Navigation unten`, async () => {
+  await t(`${vp.name}: Logo links oben, keine Zurück-Leiste`, async () => {
     const ui = await page.evaluate(() => {
       const logo = document.querySelector(".brand-logo").getBoundingClientRect();
-      const bar = document.querySelector(".history-bar").getBoundingClientRect();
       const icon = document.querySelector(".theme-icon").getBoundingClientRect();
       const label = document.querySelector(".theme-label").getBoundingClientRect();
       return {
         logoLeft: logo.left,
-        barBottom: bar.bottom,
-        height: innerHeight,
-        backDisabled: document.querySelector("#back-button").disabled,
-        backWidth: document.querySelector("#back-button").getBoundingClientRect().width,
-        barWidth: document.querySelector(".history-bar-inner").getBoundingClientRect().width,
+        historyMissing: document.querySelector(".history-bar") === null,
+        backMissing: document.querySelector("#back-button") === null,
         forwardMissing: document.querySelector("#forward-button") === null,
         themeIconBeforeLabel: icon.left < label.left,
         sunVisible: getComputedStyle(document.querySelector(".theme-symbol-sun")).display !== "none",
         emptyFavoriteCountHidden: getComputedStyle(document.querySelector(".fav-count")).display === "none",
       };
     });
-    assert.ok(Math.abs(ui.barBottom - ui.height) <= 1);
-    assert.equal(ui.backDisabled, true);
+    assert.equal(ui.historyMissing, true);
+    assert.equal(ui.backMissing, true);
     assert.equal(ui.forwardMissing, true);
-    assert.ok(Math.abs(ui.backWidth - ui.barWidth) <= 1, `Zurück nur ${ui.backWidth}px von ${ui.barWidth}px breit`);
     assert.equal(ui.themeIconBeforeLabel, true);
     assert.equal(ui.sunVisible, true);
     assert.equal(ui.emptyFavoriteCountHidden, true);
@@ -256,22 +251,24 @@ for (const vp of VIEWPORTS) {
     assert.ok(filterBounds.left >= -1 && filterBounds.right <= filterBounds.viewport + 1,
       `Filterleiste ragt heraus: ${filterBounds.left}..${filterBounds.right} bei ${filterBounds.viewport}px`);
 
-    const visibilityValues = ["podium", "special", "rahmen", "pause"];
-    const visibility = await page.evaluate((values) => ({
-      allChecked: values.every((value) => document.querySelector(`input[value="${value}"]`)?.checked),
+    const categoryValues = ["podium", "special", "rahmen", "pause"];
+    const categories = await page.evaluate((values) => ({
+      noneChecked: values.every((value) => !document.querySelector(`input[value="${value}"]`)?.checked),
       panelMissing: document.querySelector('input[value="panel"]') === null,
       sectionMissing: document.querySelector('input[value="sektion"]') === null,
-    }), visibilityValues);
-    assert.equal(visibility.allChecked, true);
-    assert.equal(visibility.panelMissing, true);
-    assert.equal(visibility.sectionMissing, true);
+    }), categoryValues);
+    assert.equal(categories.noneChecked, true);
+    assert.equal(categories.panelMissing, true);
+    assert.equal(categories.sectionMissing, true);
 
     const pausesBefore = await page.locator(".event-card.type-break").count();
     assert.ok(pausesBefore > 0, "keine sichtbare Pause zum Testen");
-    await page.locator('input[value="pause"]').uncheck();
-    await page.waitForTimeout(400);
-    assert.equal(await page.locator(".event-card.type-break").count(), 0);
     await page.locator('input[value="pause"]').check();
+    await page.waitForTimeout(400);
+    const pauseOnly = await page.locator(".event-card.type-break").count();
+    assert.ok(pauseOnly > 0);
+    assert.equal(await page.locator(".session-card, .event-card").count(), pauseOnly);
+    await page.locator('input[value="pause"]').uncheck();
     await page.waitForTimeout(400);
     assert.ok(await page.locator(".event-card.type-break").count() > 0);
 
@@ -292,25 +289,16 @@ for (const vp of VIEWPORTS) {
     const reset = await page.evaluate(() => ({
       disciplineChecked: ["DID", "SW", "LKW"]
         .some((value) => document.querySelector(`input[value="${value}"]`)?.checked),
-      allVisible: ["podium", "special", "rahmen", "pause"]
-        .every((value) => document.querySelector(`input[value="${value}"]`)?.checked),
+      categoryChecked: ["podium", "special", "rahmen", "pause"]
+        .some((value) => document.querySelector(`input[value="${value}"]`)?.checked),
       selected: [...document.querySelectorAll(".filter-bar select")].some((select) => select.value),
       advancedVisible: getComputedStyle(document.querySelector(".filter-advanced")).display !== "none",
     }));
     assert.equal(reset.disciplineChecked, false);
-    assert.equal(reset.allVisible, true);
+    assert.equal(reset.categoryChecked, false);
     assert.equal(reset.selected, false);
     assert.equal(reset.advancedVisible, true);
   });
-  await t(`${vp.name}: App-Zurücktaste führt zur vorherigen Ansicht`, async () => {
-    const back = page.locator("#back-button");
-    assert.equal(await back.isVisible(), true);
-    assert.equal(await back.isEnabled(), true);
-    await back.click();
-    await page.waitForSelector("#app .view-cluster");
-    assert.match(await page.evaluate(() => location.hash), /^#\/themen\//);
-  });
-
   // Info
   await page.evaluate(() => { location.hash = "#/info"; });
   await page.waitForSelector("#app .view-info");
@@ -367,17 +355,14 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
-// Direkt geöffnete Unterseite: Zurück bleibt in der App und fällt auf Home zurück.
+// Direkt geöffnete Unterseite: keine zusätzliche Browserleiste der App.
 {
   const page = await browser.newPage();
   await page.goto(BASE + "#/programm");
   await page.waitForSelector("#app .view-program");
-  await page.locator("#back-button").click();
-  await page.waitForSelector("#app .view-dashboard");
-  await t("App-Zurücktaste: direkter Einstieg fällt auf Startseite zurück", async () => {
-    assert.equal(await page.evaluate(() => location.hash), "#/heute");
-    assert.equal(await page.locator("#back-button").isVisible(), true);
-    assert.equal(await page.locator("#back-button").isDisabled(), true);
+  await t("Direkter Einstieg: keine Zurück- oder Weiter-Leiste", async () => {
+    assert.equal(await page.locator(".history-bar").count(), 0);
+    assert.equal(await page.locator("#back-button").count(), 0);
     assert.equal(await page.locator("#forward-button").count(), 0);
   });
   await page.close();

@@ -52,8 +52,7 @@ export function renderProgram(model, ctx, params) {
 function readState(model, params) {
   const q = params.get("q") || "";
   const dayParam = params.get("day");
-  const legacyFormats = params.getAll("format").filter((format) => OPTIONAL_FORMATS.includes(format));
-  const hiddenFormats = params.getAll("hide").filter((format) => OPTIONAL_FORMATS.includes(format));
+  const formats = params.getAll("format").filter((format) => OPTIONAL_FORMATS.includes(format));
   const browseDefault = model.days.includes(todayIso()) && inConf(model)
     ? todayIso()
     : model.days.find((d) => d !== model.conference.start) || model.days[0];
@@ -66,12 +65,9 @@ function readState(model, params) {
     slot: params.get("slot") || "",
     panel: params.get("panel") || "",
     tracks: params.getAll("track"),
-    // Diese vier Kategorien sind standardmäßig sichtbar. Ein entferntes
-    // Häkchen wird als Ausschluss in der URL gespeichert. Alte ?format=-Links
-    // bleiben als reine Auswahl weiterhin verständlich.
-    hiddenFormats: hiddenFormats.length || !legacyFormats.length
-      ? hiddenFormats
-      : OPTIONAL_FORMATS.filter((format) => !legacyFormats.includes(format)),
+    // Einheitliche positive Filterlogik: keine Auswahl zeigt alles; gesetzte
+    // Häkchen schränken auf die gewählten Veranstaltungsarten ein.
+    formats,
     // „Nur Vorträge": Chair-Treffer bei Personensuche ausblenden (Checkbox)
     talksOnly: params.get("talks") === "1",
   };
@@ -97,7 +93,7 @@ function writeHash(model, state) {
   if (state.slot) p.set("slot", state.slot);
   if (state.panel) p.set("panel", state.panel);
   for (const t of state.tracks) p.append("track", t);
-  for (const f of state.hiddenFormats) p.append("hide", f);
+  for (const f of state.formats) p.append("format", f);
   if (state.talksOnly) p.set("talks", "1");
   const hash = `#/programm${p.toString() ? "?" + p.toString() : ""}`;
   if (location.hash !== hash) history.replaceState(null, "", hash);
@@ -134,25 +130,6 @@ function filterBar(model, ctx, state) {
       box.append(h("label", { class: "check" }, cb,
         dotClass ? h("span", { class: `legend-dot ${dotClass(value)}`, "aria-hidden": "true" }) : null,
         h("span", { text })));
-    }
-    return box;
-  };
-
-  const visibilityChecks = (label, options) => {
-    const box = h("fieldset", { class: "check-group visibility-filters" },
-      h("legend", { text: label }));
-    for (const { value, text } of options) {
-      const cb = h("input", {
-        type: "checkbox", value, checked: !state.hiddenFormats.includes(value),
-        "aria-label": `${text} anzeigen`,
-      });
-      cb.addEventListener("change", () => {
-        state.hiddenFormats = cb.checked
-          ? state.hiddenFormats.filter((format) => format !== value)
-          : [...new Set([...state.hiddenFormats, value])];
-        sync();
-      });
-      box.append(h("label", { class: "check" }, cb, h("span", { text })));
     }
     return box;
   };
@@ -196,16 +173,16 @@ function filterBar(model, ctx, state) {
         { value: "SW", text: TRACK_LABELS.SW },
         { value: "LKW", text: TRACK_LABELS.LKW },
       ], "tracks", (v) => `dot-${v.toLowerCase()}`),
-      visibilityChecks("Anzeigen", [
+      checks("Veranstaltungsart", [
         { value: "podium", text: FORMAT_LABELS.podium },
         { value: "special", text: FORMAT_LABELS.special },
         { value: "rahmen", text: FORMAT_LABELS.rahmen },
         { value: "pause", text: FORMAT_LABELS.pause },
-      ]),
+      ], "formats"),
       h("button", {
         class: "btn ghost", text: "Filter zurücksetzen",
         onclick: () => {
-          Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], hiddenFormats: [], talksOnly: false });
+          Object.assign(state, { q: "", room: "", slot: "", panel: "", tracks: [], formats: [], talksOnly: false });
           writeHash(model, state);
           ctx.render();
         },
@@ -222,8 +199,7 @@ export function renderResults(model, ctx, state, results) {
   if (talksOnlyEl) talksOnlyEl.classList.toggle("hidden", !state.q);
   results.textContent = "";
 
-  const sessions = filterSessions(model.sessions, state)
-    .filter((session) => !state.hiddenFormats.includes(formatOf(session)));
+  const sessions = filterProgramSessions(model.sessions, model.events, state);
   const events = (state.day ? (model.eventByDay[state.day] || []) : model.events)
     .filter((event) => filterEvent(event, state));
   // Jede tatsächlich gerenderte Karte mitzählen – einschließlich Pausen.
@@ -235,8 +211,7 @@ export function renderResults(model, ctx, state, results) {
   if (!count && state.day && state.q) {
     const globalState = { ...state, day: "" };
     const globalHits =
-      filterSessions(model.sessions, globalState)
-        .filter((session) => !state.hiddenFormats.includes(formatOf(session)))
+      filterProgramSessions(model.sessions, model.events, globalState)
         .filter((s) => s.type === "talk").length +
       model.events.filter((e) => filterEvent(e, globalState)).length;
     if (globalHits > 0) {
@@ -287,6 +262,27 @@ export function renderResults(model, ctx, state, results) {
   }
 }
 
+function filterProgramSessions(sessions, events, state) {
+  // Podien, Sonder- und Rahmenformate sind eigene Event-Kategorien. ConfTool
+  // verwendet den internen Track X für Poster, Workshops und besondere
+  // Veranstaltungen. Poster und Workshop gehören zum Sonderformat-Filter;
+  // die zusätzlich kuratierte DFG-Eventkarte ersetzt dabei ihre Talk-Dublette.
+  const isEventDuplicate = (session) => events.some((event) => {
+    if (event.type !== "special" || event.day !== session.day || event.start !== session.start || event.room !== session.room) return false;
+    const eventTitle = normalizeText(event.title);
+    const sessionTitle = normalizeText(session.title);
+    return eventTitle.includes(sessionTitle) || sessionTitle.includes(eventTitle);
+  });
+  const hits = filterSessions(sessions, { ...state, formats: [] })
+    .filter((session) => !isEventDuplicate(session));
+  if (!state.formats?.length) return hits;
+  return hits.filter((session) => {
+    const format = formatOf(session);
+    return (format === "pause" && state.formats.includes("pause")) ||
+      (format === "special" && state.formats.includes("special"));
+  });
+}
+
 function filterEvent(e, state) {
   // Rahmen-/Sonderveranstaltungen besitzen keine SW/LKW/DID-Zuordnung und
   // dürfen deshalb bei einem Fach- oder Panel-Filter nicht stehenbleiben. Die
@@ -297,7 +293,7 @@ function filterEvent(e, state) {
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
   const formats = e.formats?.length ? e.formats : [e.type];
-  if (formats.every((format) => state.hiddenFormats.includes(format))) return false;
+  if (state.formats?.length && !state.formats.some((format) => formats.includes(format))) return false;
   return true;
 }
 function matchesLoose(text, q) {
@@ -346,12 +342,16 @@ function gridView(model, ctx, state, day, sessions, events) {
   // Nur bereits gefilterte Pausen verwenden; sonst tauchen sie trotz aktivem
   // Fach-, Such- oder Formatfilter wieder im Raster auf.
   const extras = [...sessions.filter((s) => s.type === "break"), ...events]
-    .filter((x) => x.start)
-    .sort((a, b) => minutes(a.start) - minutes(b.start));
+    .sort((a, b) => {
+      if (!a.start && !b.start) return (a.title || "").localeCompare(b.title || "");
+      if (!a.start) return -1;
+      if (!b.start) return 1;
+      return minutes(a.start) - minutes(b.start);
+    });
   const rowItems = [
-    ...starts.map((start) => ({ kind: "slot", start, sortTime: start, sortOrder: 1 })),
-    ...extras.map((item) => ({ kind: "full", item, sortTime: item.start, sortOrder: 0 })),
-  ].sort((a, b) => minutes(a.sortTime) - minutes(b.sortTime) || a.sortOrder - b.sortOrder);
+    ...starts.map((start) => ({ kind: "slot", start, sortMinutes: minutes(start), sortOrder: 1 })),
+    ...extras.map((item) => ({ kind: "full", item, sortMinutes: item.start ? minutes(item.start) : -1, sortOrder: 0 })),
+  ].sort((a, b) => a.sortMinutes - b.sortMinutes || a.sortOrder - b.sortOrder);
 
   for (const row of rowItems) {
     if (row.kind === "full") {
@@ -426,6 +426,7 @@ function listView(model, ctx, sessions, events, q, allDays) {
 
 export function sessionCard(model, ctx, s, state) {
   const isFav = favs.has(s.id);
+  const isSpecial = formatOf(s) === "special";
   const titleHtml = state.q ? highlight(s.title, state.q) : null;
   // Treffer-Snippet aus dem Abstract (nur bei aktiver Suche)
   const abstractSnippet = state.q && s.abstract ? snippet(s.abstract, state.q) : null;
@@ -433,7 +434,7 @@ export function sessionCard(model, ctx, s, state) {
   const now = ctx.now instanceof Date ? ctx.now : new Date();
   const isNow = isRunningNow(model, s, now);
   return h("article", {
-    class: `card session-card track-${(s.discipline || "x").toLowerCase()} ${isFav ? "is-fav" : ""} ${isNow ? "is-now" : ""}`,
+    class: `card session-card track-${(s.discipline || "x").toLowerCase()} ${isSpecial ? "type-special" : ""} ${isFav ? "is-fav" : ""} ${isNow ? "is-now" : ""}`,
     "data-id": s.id,
     onclick: () => ctx.openSession(s.id),
     tabindex: "0",
@@ -462,6 +463,7 @@ export function sessionCard(model, ctx, s, state) {
     langBadge(s._lang),
     s.panel_code ? h("span", { class: "pill code", text: s.panel_code }) : null,
     s.room ? roomLink(s.room) : null,
+    isSpecial ? h("span", { class: "pill", text: "Sonderformat" }) : null,
     // Chair sichtbar machen: bei Personensuchen ist er der (einzige) Treffergrund
     s.chair && state.q ? h("div", { class: "card-speakers dim-chair", text: `Chair: ${stripTitles(s.chair)}` }) : null,
     s.panel_title && !s.panel_code ? h("div", { class: "card-panel", text: s.panel_title }) : null);

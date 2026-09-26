@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 
 const { ROOMS, roomMeta, roomMapUrl, unmappedRooms } = await import("../js/rooms.js");
 const program = JSON.parse(await readFile(new URL("../data/program.json", import.meta.url), "utf-8"));
+const content = JSON.parse(await readFile(new URL("../data/content.json", import.meta.url), "utf-8"));
 
 let n = 0;
 let failed = 0;
@@ -33,6 +34,18 @@ t("Alle Event-Räume gemappt", () => {
   const all = [...new Set(program.events.map((e) => e.room).filter(Boolean))];
   const missing = unmappedRooms(all);
   assert.deepEqual(missing, [], `fehlend: ${missing.join(", ")}`);
+});
+
+// 1c. Auch die redaktionell aus dem offiziellen Tagungsprogramm ergänzten
+//     Podien, Sonder- und Rahmenveranstaltungen müssen vollständig gemappt sein.
+t("Alle kuratierten Veranstaltungsräume gemappt", () => {
+  const curated = [...content.accompanying, ...content.special, ...content.podiums];
+  const all = [...new Set(curated.map((e) => e.room).filter(Boolean))];
+  const missing = unmappedRooms(all);
+  assert.deepEqual(missing, [], `fehlend: ${missing.join(", ")}`);
+  assert.ok(all.includes("HS 2"), "HS 2 fehlt in den kuratierten Veranstaltungsräumen");
+  assert.ok(all.includes("Foyer CZS 3"), "Foyer CZS 3 fehlt in den kuratierten Veranstaltungsräumen");
+  assert.ok(all.includes("Aula UHG"), "Aula UHG fehlt in den kuratierten Veranstaltungsräumen");
 });
 
 // 2. Jeder Eintrag hat Gebäude + Adresse + Koordinaten

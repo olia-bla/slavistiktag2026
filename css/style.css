@@ -71,7 +71,7 @@ html[data-theme="dark"] .brand-logo { filter: brightness(0) invert(1); }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   font-family: Roboto, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
   background: linear-gradient(180deg, color-mix(in srgb, var(--bg2) 45%, var(--bg)), var(--bg) 28rem);
   color: var(--ink);
@@ -135,29 +135,6 @@ a:hover { text-decoration: underline; }
 .theme-symbol-sun { display: none; }
 html[data-theme="dark"] .theme-symbol-moon { display: none; }
 html[data-theme="dark"] .theme-symbol-sun { display: block; }
-
-/* ---------- App-Verlauf wie im Browser ---------- */
-.history-bar {
-  position: fixed; right: 0; bottom: 0; left: 0; z-index: 80;
-  padding: 0.35rem max(0.7rem, calc((100vw - 1240px) / 2)) calc(0.35rem + env(safe-area-inset-bottom));
-  background: var(--topbar-bg);
-  border-top: 1px solid var(--line-strong);
-  backdrop-filter: blur(10px);
-}
-.history-bar-inner {
-  display: flex; align-items: center;
-  max-width: 1240px; margin: 0 auto;
-}
-.history-button {
-  display: flex; align-items: center; justify-content: flex-start; gap: 0.45rem;
-  width: 100%; min-height: 2.6rem; padding: 0.35rem 0.65rem;
-  border: 0; border-radius: 6px; background: transparent;
-  color: var(--accent); font: inherit; font-size: 0.88rem; font-weight: 600;
-  cursor: pointer;
-}
-.history-button:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 12%, transparent); }
-.history-button:disabled { color: var(--ink-dim); opacity: 0.38; cursor: default; }
-.history-arrow { font-size: 1.45rem; line-height: 1; }
 
 /* ---------- Layout ---------- */
 .app-main { max-width: 1240px; margin: 0 auto; padding: 1rem; }
@@ -572,7 +549,7 @@ select {
 /* ---------- Druck ---------- */
 /* Tagesprogramm druckbar: Chrome/Bildschirm-Zierde raus, Karten schwarz auf weiß */
 @media print {
-  .main-nav, .history-bar, .welcome-wall, .toast, .drawer-backdrop,
+  .main-nav, .welcome-wall, .toast, .drawer-backdrop,
   .drawer, .fav, .view-toggle, .day-tabs, .filter-bar, .grid-head
   { display: none !important; }
   body, .app-main { background: #fff; color: #000; }

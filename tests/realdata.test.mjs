@@ -43,6 +43,9 @@ t("Model: Räume mit Venue", () => {
     ...program.events.map((e) => e.room),
   ].filter(Boolean));
   for (const room of sourceRooms) assert.ok(m.rooms.includes(room), `${room} aus ConfTool fehlt im Raumfilter`);
+  for (const event of m.events) {
+    if (event.room) assert.ok(m.rooms.includes(event.room), `${event.room} aus dem Programm-PDF fehlt im Raumfilter`);
+  }
   for (const s of m.sessions) {
     if (s.room && s.room.startsWith("SR")) assert.equal(s.venue, "CZS3");
   }
@@ -83,12 +86,19 @@ t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () =
   assert.deepEqual(opening.formats, ["special"]);
   assert.equal(opening.start, "18:00");
   assert.equal(opening.end, "20:00");
+  assert.equal(opening.room, "HS 2");
   const music = m.events.find((e) => e.title === "Musikalische Begleitung mit Buffet im Foyer");
   assert.ok(music, "Musikalische Begleitung fehlt");
   assert.equal(music.type, "rahmen");
   assert.deepEqual(music.formats, ["rahmen"]);
   assert.equal(music.start, "20:00");
+  assert.equal(music.end, "22:00");
   assert.equal(music.room, "Foyer CZS 3");
+  const choir = m.events.find((e) => e.title.startsWith("Ukrainischer Chor"));
+  assert.equal(choir?.end, "19:00");
+  assert.equal(choir?.room, "Aula UHG");
+  const closing = m.events.find((e) => e.title.startsWith("Abschlussveranstaltung"));
+  assert.equal(closing?.room, "Foyer CZS 3");
 });
 t("Vortragssprachen: Nadiya Kiss Ukrainisch, fremdsprachige Zitate nicht fehlklassifiziert", () => {
   const bySpeaker = (name) => m.sessions.find((s) => s.speakers?.includes(name));
