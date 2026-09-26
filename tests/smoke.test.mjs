@@ -66,11 +66,12 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   assert.ok(h1.textContent.includes("Slavistiktag"));
   assert.ok(document.querySelector("#app .motto").textContent.includes("Zukunft"));
 });
-t("Dashboard zeigt das offizielle Slavistiktag-Logo", () => {
-  const logo = document.querySelector("#app .event-logo");
+t("Offizielles Slavistiktag-Logo steht ausschließlich im Header", () => {
+  const logo = document.querySelector(".topbar .brand-logo");
   assert.ok(logo);
-  assert.equal(logo.getAttribute("src"), "icons/slavistiktag-2026.png");
+  assert.equal(logo.getAttribute("src"), "icons/slavistiktag logo.svg");
   assert.ok(logo.getAttribute("alt").includes("Friedrich-Schiller-Universität Jena"));
+  assert.equal(document.querySelector("#app .event-logo"), null);
 });
 t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());

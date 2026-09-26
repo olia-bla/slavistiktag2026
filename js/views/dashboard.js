@@ -26,14 +26,6 @@ export function renderDashboard(model, ctx) {
     model.content.welcome.map((w, i) => h("span", { class: "welcome-word", style: `animation-delay:${i * 0.35}s`, text: w })));
 
   return h("div", { class: "view view-dashboard" },
-    h("div", { class: "event-brand-panel" },
-      h("img", {
-        class: "event-logo",
-        src: "icons/slavistiktag-2026.png",
-        alt: "15. Slavistiktag 2026 · Friedrich-Schiller-Universität Jena",
-        width: "1600",
-        height: "900",
-      })),
     welcome,
     h("header", { class: "hero" },
       h("p", { class: "kicker", text: `${shortDate(c.start)} – ${shortDate(c.end)} · Jena` }),
