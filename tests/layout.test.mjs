@@ -186,6 +186,29 @@ for (const vp of VIEWPORTS) {
     const heads = await page.locator("#app .grid-head").allTextContents();
     assert.equal(heads.map((s) => s.trim()).includes("Foyer CZS 3"), false);
   });
+  await t(`${vp.name}: alle Tagesregister ohne horizontales Scrollen sichtbar`, async () => {
+    const tabs = await page.evaluate(() => {
+      const bar = document.querySelector(".day-tabs");
+      const buttons = [...bar.querySelectorAll(".chip")];
+      const rects = buttons.map((button) => button.getBoundingClientRect());
+      return {
+        count: buttons.length,
+        labels: buttons.map((button) => button.textContent.trim()),
+        noScroll: bar.scrollWidth <= bar.clientWidth + 1,
+        allInViewport: rects.every((rect) => rect.width > 0 && rect.left >= -1 && rect.right <= innerWidth + 1),
+        rows: new Set(rects.map((rect) => Math.round(rect.top))).size,
+        display: getComputedStyle(bar).display,
+      };
+    });
+    assert.equal(tabs.count, 5);
+    assert.equal(tabs.labels[0], "Alle Tage");
+    assert.equal(tabs.noScroll, true);
+    assert.equal(tabs.allInViewport, true);
+    if (vp.width <= 760) {
+      assert.equal(tabs.display, "grid");
+      assert.equal(tabs.rows, 3);
+    }
+  });
   await t(`${vp.name}: Filter funktionieren und lassen sich vollständig zurücksetzen`, async () => {
     const compact = vp.width <= 760;
     assert.equal(await page.locator(".filter-toggle").count(), 0);

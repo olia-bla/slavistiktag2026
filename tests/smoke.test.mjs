@@ -122,6 +122,12 @@ t("Programmfilter: vier Sichtbarkeitsschalter sind aktiv, Panel- und Sektionsfil
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
+t("Programm: Tagesregister enthält alle Tage ohne Scroll-Steuerung", () => {
+  const tabs = [...document.querySelectorAll("#app .day-tabs .chip")];
+  assert.equal(tabs.length, 5);
+  assert.equal(tabs[0].textContent, "Alle Tage");
+  assert.equal(document.querySelector("#app .day-tabs").getAttribute("role"), "tablist");
+});
 t("Programm: Panels tragen die PDF-Fachfarben", () => {
   const cards = [...document.querySelectorAll("#app .session-card")];
   const panelCards = (title) => cards.filter((card) => card.textContent.includes(title));
