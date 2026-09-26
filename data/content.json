@@ -70,6 +70,7 @@
     {
       "day": "2026-09-30", "start": "18:00", "end": null,
       "title": "Eröffnung des Slavistiktages mit Festvortrag von Dr. Andreas Umland (Kyjiw/Stockholm): „Panrussismus, Eurasismus und Imperialismus als Schlüsselkonzepte zur Erklärung des russischen Überfalls auf die Ukraine“, anschließend Buffet",
+      "formats": ["rahmen", "special"],
       "grussworte": [
         "Univ.-Prof. Dr. Thede Kahl, Direktor des Instituts für Slawistik und Kaukasusstudien, FSU Jena",
         "Prof. Dr. Barbara Sonnenhauser, Vorsitzende des Verbandes der deutschen Slavistik",

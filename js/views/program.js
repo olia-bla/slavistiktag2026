@@ -273,7 +273,8 @@ function filterEvent(e, state) {
   if (state.q && !matchesLoose(e.title, state.q)) return false;
   if (state.room && e.room !== state.room) return false;
   if (state.slot && e.start !== state.slot) return false;
-  if (state.formats.length && !state.formats.includes(e.type)) return false;
+  const formats = e.formats?.length ? e.formats : [e.type];
+  if (state.formats.length && !state.formats.some((format) => formats.includes(format))) return false;
   return true;
 }
 function matchesLoose(text, q) {
@@ -447,11 +448,14 @@ export function sessionCard(model, ctx, s, state) {
 }
 
 export function eventCard(model, ctx, e) {
-  const typeLabel = { podium: "Podiumsdiskussion", special: "Sonderformat", rahmen: "Rahmenprogramm", break: "Pause" }[e.type] || "";
+  const formats = e.formats?.length ? [...new Set(e.formats)] : [e.type];
+  const typeLabels = formats
+    .map((format) => ({ podium: "Podiumsdiskussion", special: "Sonderformat", rahmen: "Rahmenprogramm", break: "Pause" })[format])
+    .filter(Boolean);
   const now = ctx.now instanceof Date ? ctx.now : new Date();
   const isNow = isRunningNow(model, e, now);
   return h("article", {
-    class: `card event-card type-${e.type} ${isNow ? "is-now" : ""}`,
+    class: `card event-card ${formats.map((format) => `type-${format}`).join(" ")} ${isNow ? "is-now" : ""}`,
     "data-id": e.id || "",
     onclick: e.id ? () => ctx.openEvent(e.id) : null,
     tabindex: e.id ? "0" : null,
@@ -460,7 +464,7 @@ export function eventCard(model, ctx, e) {
     h("div", { class: "card-top" },
       h("span", { class: "time", text: timeRange(e.start, e.end) || "ganztägig" }),
       isNow ? h("span", { class: "pill now", text: "jetzt" }) : null,
-      typeLabel ? h("span", { class: "pill", text: typeLabel }) : null),
+      typeLabels.map((label) => h("span", { class: "pill", text: label }))),
     h("div", { class: "card-title", text: e.title }),
     e.room ? roomLink(e.room) : null,
     e.note ? h("div", { class: "card-panel", text: e.note }) : null);

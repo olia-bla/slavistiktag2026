@@ -45,6 +45,11 @@ t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
   const podiums = m.events.filter((e) => e.type === "podium");
   assert.equal(podiums.length, 4, `${podiums.length} Podien`);
 });
+t("Eröffnung ist Rahmenprogramm und Sonderformat", () => {
+  const opening = m.events.find((e) => e.title.startsWith("Eröffnung des Slavistiktages"));
+  assert.ok(opening, "Eröffnung fehlt");
+  assert.deepEqual(opening.formats, ["rahmen", "special"]);
+});
 t("Suchindex: Ukraine-Vortrag über Query findbar", () => {
   for (const s of m.sessions) s._search = makeSearchText(s, s.panel_title);
   const hits = filterSessions(m.sessions, { q: "suržyk" });

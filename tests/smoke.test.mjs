@@ -260,6 +260,11 @@ t("Eröffnungs-Event: Karte klickbar (data-id + onclick)", () => {
   assert.ok(eroffCard.getAttribute("data-id"), "Event-Karte ohne data-id");
   assert.ok(eroffCard.getAttribute("role") === "button", "Event-Karte nicht als button");
 });
+t("Eröffnungs-Event: Rahmenprogramm und Sonderformat", () => {
+  const badges = [...eroffCard.querySelectorAll(".pill")].map((el) => el.textContent);
+  assert.ok(badges.includes("Rahmenprogramm"));
+  assert.ok(badges.includes("Sonderformat"));
+});
 eroffCard.click();
 await waitFor(() => document.querySelector(".drawer h2")?.textContent.includes("Eröffnung des Slavistiktages"));
 t("Eröffnungs-Drawer: Grußworte-Abschnitt mit Namen", () => {
@@ -277,6 +282,18 @@ t("Eröffnungs-Drawer: fehlender Raum ehrlich gekennzeichnet", () => {
 });
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
+dom.window.location.hash = "#/programm?day=2026-09-30&format=special";
+await waitFor(() => document.querySelector('input[value="special"]')?.checked);
+t("Sonderformat-Filter zeigt die Eröffnung", () => {
+  assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
+    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
+});
+dom.window.location.hash = "#/programm?day=2026-09-30&format=rahmen";
+await waitFor(() => document.querySelector('input[value="rahmen"]')?.checked);
+t("Rahmenprogramm-Filter zeigt die Eröffnung weiterhin", () => {
+  assert.ok([...document.querySelectorAll("#app .event-card .card-title")]
+    .some((el) => el.textContent.includes("Eröffnung des Slavistiktages")));
+});
 
 // Feature 4: Sprecher-Index
 dom.window.location.hash = "#/sprecher";
@@ -382,6 +399,11 @@ t("Info: vollständiges Kultur- und Rahmenprogramm", () => {
   assert.ok(text.includes("Erfurt"));
   assert.ok(document.querySelector('a[href*="103477/kultur-und-rahmenprogramm"]'));
   assert.ok(document.querySelector('a[href*="konzertprogramm.pdf"]'));
+});
+t("Info: Eröffnung steht auch unter Sonderformate", () => {
+  const heading = [...document.querySelectorAll("#app .view-info h2")]
+    .find((el) => el.textContent === "Sonderformate");
+  assert.ok(heading.closest("section").textContent.includes("Eröffnung des Slavistiktages"));
 });
 t("Info: vier offizielle PDF-Downloads als Buttons", () => {
   const links = [...document.querySelectorAll("#app .downloads-card .download-link")];

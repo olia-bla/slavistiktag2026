@@ -3,6 +3,10 @@ import { h, dateLabel, timeRange } from "../util.js";
 
 export function renderInfo(model) {
   const c = model.content;
+  const specialFormats = [
+    ...(c.special || []),
+    ...(c.accompanying || []).filter((event) => event.formats?.includes("special")),
+  ].sort((a, b) => `${a.day || ""} ${a.start || ""}`.localeCompare(`${b.day || ""} ${b.start || ""}`));
   const wrap = h("div", { class: "view view-info" });
 
   wrap.append(h("header", { class: "hero compact" },
@@ -40,10 +44,11 @@ export function renderInfo(model) {
   // Sonderformate
   wrap.append(h("section", { class: "card" },
     h("h2", { text: "Sonderformate" }),
-    c.special.map((s) => h("article", { class: "podium" },
+    specialFormats.map((s) => h("article", { class: "podium" },
       h("h3", { text: s.title }),
-      h("p", { class: "meta", text: `${dateLabel(s.day)} · ${timeRange(s.start, s.end)} · ${s.room || ""}` }),
-      s.people ? h("p", { class: "meta", text: s.people }) : null))));
+      h("p", { class: "meta", text: `${dateLabel(s.day)} · ${timeRange(s.start, s.end)}${s.room ? ` · ${s.room}` : ""}` }),
+      s.people ? h("p", { class: "meta", text: s.people }) : null,
+      s.note ? h("p", { class: "meta", text: s.note }) : null))));
 
   // Rahmenprogramm
   wrap.append(h("section", { class: "card" },
