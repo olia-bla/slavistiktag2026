@@ -178,9 +178,10 @@ function nowBody(model, now, ctx) {
   };
 
   const rowsFor = (items, label, current) => {
-    if (items.length > 1 && items.every((x) => x.type === "rahmen")) {
-      // Die wenigen parallelen Führungen sollen namentlich sichtbar sein.
-      // Bei vielen Vorträgen bleibt die kompakte Sammelanzeige bestehen.
+    if (items.length > 1 && items.length <= 3 &&
+        items.every((x) => x.type === "rahmen" || x.type === "podium")) {
+      // Parallele Podien und Führungen namentlich zeigen; bei vielen
+      // Vorträgen bleibt die kompakte Sammelanzeige bestehen.
       return items.map((x, index) => card(x, index === 0 ? label : null));
     }
     if (items.length > 1) return [parallelCard(items, label, current)];

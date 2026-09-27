@@ -565,6 +565,39 @@ for (const [time, expectedTitles] of [
   await ctx.close();
 }
 
+// Am Freitag sollen beide gleichzeitig laufenden Podien einzeln erscheinen;
+// am Samstag wechseln Pause, Abschluss und Stadtführung korrekt.
+for (const [day, time, expectedTitles] of [
+  ["2026-10-02", "16:05", ["Zwischen Krise und Comeback?", "Slavistik ohne Russland?"]],
+  ["2026-10-02", "18:05", ["Ukrainischer Chor"]],
+  ["2026-10-03", "11:05", ["Kaffeepause am Vormittag", "Wenn die Welt brennt"]],
+  ["2026-10-03", "13:05", ["Abschlussveranstaltung", "Stadtführung durch Jena"]],
+  ["2026-10-03", "14:05", ["Stadtführung durch Jena"]],
+]) {
+  const ctx = await browser.newContext({
+    viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    timezoneId: "Europe/Berlin",
+  });
+  const page = await ctx.newPage();
+  await page.addInitScript(({ fixedNow }) => {
+    const NativeDate = Date;
+    window.Date = class extends NativeDate {
+      constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+      static now() { return fixedNow; }
+    };
+  }, { fixedNow: new Date(`${day}T${time}:00+02:00`).getTime() });
+  await page.goto(BASE + "#/startseite");
+  await page.waitForSelector("#app .now-card");
+  await t(`iPhone ${day} ${time}: Podien, Pause und Rahmenprogramm sichtbar`, async () => {
+    const titles = await page.locator(".now-card .now-title").allTextContents();
+    for (const title of expectedTitles) {
+      assert.ok(titles.some((shown) => shown.includes(title)), `${title} fehlt: ${titles.join(" | ")}`);
+    }
+    assert.deepEqual(await overflowIssues(page), []);
+  });
+  await ctx.close();
+}
+
 // ---------- Veranstaltungsfarben ----------
 {
   const page = await browser.newPage();
