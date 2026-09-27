@@ -92,6 +92,15 @@ for (const vp of VIEWPORTS) {
   await t(`${vp.name}: Dashboard ohne Überlauf`, async () => {
     assert.deepEqual(await overflowIssues(page), []);
   });
+  await t(`${vp.name}: Installationsanleitung zeigt beide Symbole ohne Überlauf`, async () => {
+    await page.evaluate(() => { document.querySelector(".install-guide").open = true; });
+    await page.waitForFunction(() => [...document.querySelectorAll(".install-guide-body img")]
+      .every((icon) => icon.complete && icon.naturalWidth > 0));
+    const icons = await page.locator(".install-guide-body img").count();
+    assert.equal(icons, 2);
+    assert.deepEqual(await overflowIssues(page), []);
+    await page.evaluate(() => { document.querySelector(".install-guide").open = false; });
+  });
   await t(`${vp.name}: Startseite ist kompakt und einheitlich`, async () => {
     const dashboard = await page.evaluate(() => {
       const actions = [...document.querySelectorAll(".dashboard-actions .btn")];

@@ -77,11 +77,15 @@ function installCard() {
       h("div", { class: "install-guide-body" },
         h("p", { text: "Die Seite funktioniert auch ohne Installation im Browser." }),
         h("p", {}, h("strong", { text: "iPhone / iPad (Safari): " }),
-          "Teilen → „Zum Home-Bildschirm“ → „Hinzufügen“."),
+          "Auf das Teilen-Symbol ",
+          h("img", { class: "install-step-icon", src: "icons/install-share-ios.svg", alt: "Teilen-Symbol", width: "20", height: "20" }),
+          " tippen, dann „Zum Home-Bildschirm“ → „Hinzufügen“."),
         h("p", {}, h("strong", { text: "Android (Chrome): " }),
           "Oben rechts auf die drei Punkte ⋮ tippen, dann „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen."),
         h("p", {}, h("strong", { text: "Computer: " }),
-          "Installationssymbol in der Adressleiste wählen."))));
+          "In der Adressleiste auf das Installationssymbol ",
+          h("img", { class: "install-step-icon", src: "icons/install-address-bar.svg", alt: "Installationssymbol", width: "20", height: "20" }),
+          " klicken, falls es angezeigt wird."))));
 }
 
 function changesNotice(model) {

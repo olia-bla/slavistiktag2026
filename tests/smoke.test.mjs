@@ -126,6 +126,8 @@ t("Startseite: Begrüßungen stehen vor der anklickbaren Installationsanleitung"
   assert.ok(install.textContent.includes("Oben rechts auf die drei Punkte ⋮ tippen"));
   assert.ok(install.textContent.includes("Computer"));
   assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
+  assert.equal(install.querySelector('img[src="icons/install-share-ios.svg"]')?.getAttribute("alt"), "Teilen-Symbol");
+  assert.equal(install.querySelector('img[src="icons/install-address-bar.svg"]')?.getAttribute("alt"), "Installationssymbol");
 });
 t("Startseite: 14 Begrüßungen gleichmäßig auf zwei Zeilen verteilt", () => {
   const rows = [...document.querySelectorAll("#app .welcome-row")];

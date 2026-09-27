@@ -71,6 +71,8 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
   // sind Install-Ressourcen → müssen drin sein.
   assert.ok(shell.includes("manifest.json"));
   assert.ok(shell.includes("icons/slavistiktag-icon.svg"));
+  assert.ok(shell.includes("icons/install-share-ios.svg"));
+  assert.ok(shell.includes("icons/install-address-bar.svg"));
   assert.ok(!shell.includes("Stadtplan Jena.pdf"));
 });
 
