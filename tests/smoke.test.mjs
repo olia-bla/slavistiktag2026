@@ -84,7 +84,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
   assert.equal(document.querySelector("#app .dashboard-important h2")?.textContent, "Downloads");
-  assert.equal(document.querySelector("#app .dashboard-info-link")?.textContent, "Orte & Adressen →");
+  assert.equal(document.querySelector("#app .dashboard-info-link")?.textContent, "Tagungsorte und Mittagessen-Empfehlungen →");
   assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
