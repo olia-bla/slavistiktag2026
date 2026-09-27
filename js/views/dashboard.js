@@ -97,25 +97,42 @@ function changesNotice(model) {
 
 function nowBody(model, now, ctx) {
   const openingDayBeforeOpening = now.day === model.conference.start && now.time < "18:00";
-  if (now.status === "before" || openingDayBeforeOpening) {
-    const opening = model.events
-      .filter((event) => event.day === model.conference.start && event.start)
-      .sort((a, b) => a.start.localeCompare(b.start))[0];
-    const scheduleItem = (time, title, room, href = null) => h("div", { class: "now-item" },
-      h("span", { class: "now-label", text: time }),
-      href
-        ? h("a", { class: "now-title", href, text: title })
-        : h("span", { class: "now-title", text: title }),
-      h("span", { class: "now-meta", text: room }));
+  const opening = model.events
+    .filter((event) => event.day === model.conference.start && event.start)
+    .sort((a, b) => a.start.localeCompare(b.start))[0];
+  const openingHref = opening ? `#/programm?day=${opening.day}&format=special` : null;
+  const scheduleItem = (label, title, meta, href = null) => h("div", { class: "now-item" },
+    label ? h("span", { class: "now-label", text: label }) : null,
+    href
+      ? h("a", { class: "now-title", href, text: title })
+      : h("span", { class: "now-title", text: title }),
+    h("span", { class: "now-meta", text: meta }));
+
+  if (now.status === "before" || (openingDayBeforeOpening && now.time < "12:00")) {
     return h("div", { class: "dashboard-status" },
       h("p", { text: "Die Tagung beginnt am Mittwoch, 30.09.2026." }),
       scheduleItem("ab 12:00", "Registrierung", "Foyer CZS 3"),
-      scheduleItem("14:00–17:00", "Jahrestag des Slavistikverbandes", "HS 2"),
+      scheduleItem("14:00–17:00", "Jahrestagung des Slavistikverbandes", "HS 2"),
       opening ? scheduleItem(
         timeRange(opening.start, opening.end),
         "Eröffnung des Slavistiktages mit Festvortrag",
         opening.room || "HS 2",
-        `#/programm?day=${opening.day}&format=special`) : null);
+        openingHref) : null);
+  }
+  if (openingDayBeforeOpening) {
+    const rows = [scheduleItem("Läuft gerade", "Registrierung", "12:00–18:00 · Foyer CZS 3")];
+    const meeting = "Jahrestagung des Slavistikverbandes";
+    if (now.time < "14:00") {
+      rows.push(scheduleItem("Als Nächstes", meeting, "14:00–17:00 · HS 2"));
+    } else {
+      if (now.time < "17:00") rows.push(scheduleItem(null, meeting, "14:00–17:00 · HS 2"));
+      if (opening) rows.push(scheduleItem(
+        "Als Nächstes",
+        "Eröffnung des Slavistiktages mit Festvortrag",
+        `${timeRange(opening.start, opening.end)} · ${opening.room || "HS 2"}`,
+        openingHref));
+    }
+    return h("div", { class: "dashboard-status" }, rows);
   }
   if (now.status === "after") {
     return h("p", { text: "Die Tagung ist vorbei. Vielen Dank für Ihre Teilnahme!" });

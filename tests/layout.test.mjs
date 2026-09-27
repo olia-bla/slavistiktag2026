@@ -469,6 +469,40 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
+// Mittwoch wechselt die Startseite zu den richtigen Uhrzeiten vom Tageshinweis
+// zu Registrierung, Jahrestagung und schließlich dem Abendprogramm.
+for (const [time, expectedItems] of [
+  ["12:00", [["Läuft gerade", "Registrierung"], ["Als Nächstes", "Jahrestagung des Slavistikverbandes"]]],
+  ["14:00", [["Läuft gerade", "Registrierung"], [null, "Jahrestagung des Slavistikverbandes"], ["Als Nächstes", "Eröffnung des Slavistiktages"]]],
+  ["17:00", [["Läuft gerade", "Registrierung"], ["Als Nächstes", "Eröffnung des Slavistiktages"]]],
+  ["18:00", [["Läuft gerade", "Eröffnung des Slavistiktages"], ["Als Nächstes", "Buffet mit musikalischer Begleitung"]]],
+]) {
+  const ctx = await browser.newContext({
+    viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    timezoneId: "Europe/Berlin",
+  });
+  const page = await ctx.newPage();
+  await page.addInitScript(({ fixedNow }) => {
+    const NativeDate = Date;
+    window.Date = class extends NativeDate {
+      constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+      static now() { return fixedNow; }
+    };
+  }, { fixedNow: new Date(`2026-09-30T${time}:00+02:00`).getTime() });
+  await page.goto(BASE + "#/startseite");
+  await page.waitForSelector("#app .now-card");
+  await t(`iPhone Mittwoch ${time}: Registrierung, Jahrestagung und Abendprogramm`, async () => {
+    const items = await page.locator(".now-card .now-item").allTextContents();
+    assert.equal(items.length, expectedItems.length);
+    for (const [index, [label, title]] of expectedItems.entries()) {
+      if (label) assert.ok(items[index].includes(label), items[index]);
+      assert.ok(items[index].includes(title), items[index]);
+    }
+    assert.deepEqual(await overflowIssues(page), []);
+  });
+  await ctx.close();
+}
+
 // Donnerstag während des parallelen Vortragsprogramms: Die Startseite darf
 // keinen zufälligen Einzelvortrag als repräsentativ hervorheben.
 {
