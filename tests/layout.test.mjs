@@ -424,6 +424,8 @@ for (const vp of VIEWPORTS) {
         ink: s.getPropertyValue("--ink").trim(),
         logoFilter: getComputedStyle(document.querySelector(".brand-logo")).filter,
         sunVisible: getComputedStyle(document.querySelector(".theme-symbol-sun")).display !== "none",
+        footerColor: getComputedStyle(document.querySelector(".site-footer"), "::before").backgroundColor,
+        footerGradient: getComputedStyle(document.querySelector(".site-footer"), "::before").backgroundImage,
       };
     });
     assert.equal(colors.scheme, "dark");
@@ -431,6 +433,8 @@ for (const vp of VIEWPORTS) {
     assert.equal(colors.ink, "#e2e6e8");
     assert.match(colors.logoFilter, /invert\(1\)/);
     assert.equal(colors.sunVisible, true);
+    assert.equal(colors.footerColor, "rgb(168, 120, 159)");
+    assert.equal(colors.footerGradient, "none");
   });
   await page.locator("#theme-toggle").click();
   await t(`${vp.name}: Umschaltung in Hellmodus`, async () => {
@@ -442,6 +446,8 @@ for (const vp of VIEWPORTS) {
         blue: s.getPropertyValue("--accent").trim(),
         violet: s.getPropertyValue("--faculty").trim(),
         saved: localStorage.getItem("slavtag26.theme"),
+        footerColor: getComputedStyle(document.querySelector(".site-footer"), "::before").backgroundColor,
+        footerGradient: getComputedStyle(document.querySelector(".site-footer"), "::before").backgroundImage,
       };
     });
     assert.deepEqual(colors, {
@@ -450,6 +456,8 @@ for (const vp of VIEWPORTS) {
       blue: "#002f5d",
       violet: "#8b1878",
       saved: "light",
+      footerColor: "rgb(139, 24, 120)",
+      footerGradient: "none",
     });
     assert.deepEqual(await overflowIssues(page), []);
   });

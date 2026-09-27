@@ -146,7 +146,7 @@ html[data-theme="dark"] .theme-symbol-sun { display: block; }
 }
 .site-footer::before {
   content: ""; display: block; width: 4.5rem; height: 4px;
-  margin-bottom: 1rem; background: linear-gradient(90deg, var(--faculty), var(--gold), var(--accent));
+  margin-bottom: 1rem; background: var(--faculty);
 }
 .site-footer a { overflow-wrap: anywhere; }
 
