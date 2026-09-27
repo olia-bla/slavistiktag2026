@@ -180,6 +180,18 @@ t("now: Sa 03.10. mittags → Podium läuft", () => {
   assert.equal(info.current.type, "podium");
   assert.equal(info.current.title.includes("Welt brennt"), true);
 });
+t("now: Donnerstag zeigt Kaffee- und Mittagspausen sowie Rahmenprogramm", () => {
+  const morning = nowInfo(m, new Date("2026-10-01T11:05:00"));
+  assert.equal(morning.status, "break");
+  assert.equal(morning.current.title, "Kaffeepause am Vormittag und Kurzvorstellung der Poster");
+  const lunch = nowInfo(m, new Date("2026-10-01T13:05:00"));
+  assert.equal(lunch.current.title, "Mittagspause");
+  const afternoon = nowInfo(m, new Date("2026-10-01T15:35:00"));
+  assert.equal(afternoon.current.title, "Kaffeepause am Nachmittag");
+  const evening = nowInfo(m, new Date("2026-10-01T18:05:00"));
+  assert.equal(evening.currentItems.filter((x) => x.type === "rahmen").length, 3);
+  assert.equal(evening.nextItems.length, 0);
+});
 t("ICS: erster Favorit erzeugt validen VEVENT", () => {
   const s = m.byDay["2026-10-01"][0];
   const ics = icsFor([{ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room }]);

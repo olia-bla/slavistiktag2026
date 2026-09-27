@@ -497,6 +497,40 @@ for (const vp of VIEWPORTS) {
   await ctx.close();
 }
 
+// Die Startseite zeigt Pausen und die parallelen Führungen namentlich,
+// sowohl während der Veranstaltung als auch kurz davor.
+for (const [time, expectedTitles] of [
+  ["2026-10-01T10:45:00+02:00", ["Kaffeepause am Vormittag"]],
+  ["2026-10-01T11:05:00+02:00", ["Kaffeepause am Vormittag"]],
+  ["2026-10-01T13:05:00+02:00", ["Mittagspause"]],
+  ["2026-10-01T15:35:00+02:00", ["Kaffeepause am Nachmittag"]],
+  ["2026-10-01T17:45:00+02:00", ["Jena – der Ort der deutschen Romantik", "Stadtführung durch Jena", "bulgarische Plakatkunst"]],
+  ["2026-10-01T18:05:00+02:00", ["Jena – der Ort der deutschen Romantik", "Stadtführung durch Jena", "bulgarische Plakatkunst"]],
+]) {
+  const ctx = await browser.newContext({
+    viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    timezoneId: "Europe/Berlin",
+  });
+  const page = await ctx.newPage();
+  await page.addInitScript(({ fixedNow }) => {
+    const NativeDate = Date;
+    window.Date = class extends NativeDate {
+      constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+      static now() { return fixedNow; }
+    };
+  }, { fixedNow: new Date(time).getTime() });
+  await page.goto(BASE + "#/startseite");
+  await page.waitForSelector("#app .now-card");
+  await t(`iPhone Donnerstag ${time.slice(11, 16)}: Pause oder Rahmenprogramm sichtbar`, async () => {
+    const titles = await page.locator(".now-card .now-title").allTextContents();
+    for (const title of expectedTitles) {
+      assert.ok(titles.some((shown) => shown.includes(title)), `${title} fehlt: ${titles.join(" | ")}`);
+    }
+    assert.deepEqual(await overflowIssues(page), []);
+  });
+  await ctx.close();
+}
+
 // ---------- Veranstaltungsfarben ----------
 {
   const page = await browser.newPage();

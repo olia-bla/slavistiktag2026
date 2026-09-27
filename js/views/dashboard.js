@@ -128,7 +128,7 @@ function nowBody(model, now, ctx) {
   const card = (x, label) => {
     const isSession = x.type === "talk" || x.type === "break";
     return h("div", { class: "now-item" },
-      h("span", { class: "now-label", text: label }),
+      label ? h("span", { class: "now-label", text: label }) : null,
       h("a", {
         class: "now-title", href: isSession ? `#/programm?q=${encodeURIComponent(x.title.slice(0, 40))}` : `#/programm?day=${x.day}`,
         onclick: x.id
@@ -160,11 +160,20 @@ function nowBody(model, now, ctx) {
       }));
   };
 
-  const rows = [];
-  if (now.currentItems.length > 1) rows.push(parallelCard(now.currentItems, "Läuft gerade", true));
-  else if (now.current) rows.push(card(now.current, "Läuft gerade"));
-  if (now.nextItems.length > 1) rows.push(parallelCard(now.nextItems, "Als Nächstes", false));
-  else if (now.next) rows.push(card(now.next, "Als Nächstes"));
+  const rowsFor = (items, label, current) => {
+    if (items.length > 1 && items.every((x) => x.type === "rahmen")) {
+      // Die wenigen parallelen Führungen sollen namentlich sichtbar sein.
+      // Bei vielen Vorträgen bleibt die kompakte Sammelanzeige bestehen.
+      return items.map((x, index) => card(x, index === 0 ? label : null));
+    }
+    if (items.length > 1) return [parallelCard(items, label, current)];
+    return items.length ? [card(items[0], label)] : [];
+  };
+
+  const rows = [
+    ...rowsFor(now.currentItems, "Läuft gerade", true),
+    ...rowsFor(now.nextItems, "Als Nächstes", false),
+  ];
   if (!rows.length) rows.push(h("p", { text: "Momentan keine Veranstaltung." }));
   return h("div", {}, rows);
 }

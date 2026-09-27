@@ -10,9 +10,11 @@ export function nowInfo(model, now = new Date()) {
   const t = hhmm(now);
   const tm = minutes(t);
 
-  // Vorträge/Pausen + Events (Podien, Rahmenprogramm) in einer Timeline
+  // Vorträge, Pausen und Events (Podien, Rahmenprogramm) in einer Timeline.
+  // Pausen gehören auch auf die Startseite: sonst wirkt das Programm während
+  // der Kaffee- und Mittagspausen fälschlich leer.
   const items = [
-    ...(model.byDay[day] || []).filter((s) => s.start && s.end && s.type !== "break"),
+    ...(model.byDay[day] || []).filter((s) => s.start && s.end),
     ...(model.eventByDay?.[day] || []).filter((e) => e.start && e.end),
   ].sort((a, b) => itemStart(a) - itemStart(b));
 
@@ -29,7 +31,7 @@ export function nowInfo(model, now = new Date()) {
   if (!inRange) {
     status = day < conf.start ? "before" : "after";
   } else if (current) {
-    status = "session";
+    status = current.type === "break" ? "break" : "session";
   } else if (next) {
     status = "break";
   } else {
