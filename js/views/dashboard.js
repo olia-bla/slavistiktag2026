@@ -51,7 +51,7 @@ function importantLinks(model) {
   }, h("span", { text: label }), h("span", { class: "resource-type", text: "PDF" }));
 
   return h("section", { class: "card dashboard-important" },
-    h("h2", { text: "Wichtige Informationen" }),
+    h("h2", { text: "Pläne & Downloads" }),
     h("div", { class: "dashboard-resources" },
       resource("Lageplan", links.lageplan_pdf),
       resource("Stadtplan", links.city_map_pdf),
