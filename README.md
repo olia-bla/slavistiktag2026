@@ -21,7 +21,7 @@ installierbar als PWA (Offline-Nutzung über Service Worker).
 
 ```
 ConfTool der Tagung (slavistiktag2026)
-   │  GitHub Action update.yml (Cron alle 30 min): Fetch → Parser →
+   │  GitHub Action update.yml (27.09.–04.10. alle 30 min): Fetch → Parser →
    │  Validierungs-Gate → bei Änderung: Commit → Pages-Deploy auslösen
    ▼
 data/program.json   (generiert, committed)
@@ -73,7 +73,7 @@ repo/
 ├── tools/verify_lexicon.mjs  Lexikon gegen echte Titel verifizieren
 ├── tests/                    mining, logic, realdata, rooms, shell, smoke
 │                             (jsdom), layout (Playwright)
-└── .github/workflows/        deploy.yml (Pages), update.yml (Cron 30 min),
+└── .github/workflows/        deploy.yml (Pages), update.yml (Cron 30 min zur Tagung),
                               test.yml (Tests bei Push/PR)
 ```
 
