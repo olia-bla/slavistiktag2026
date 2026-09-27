@@ -51,18 +51,34 @@ export function roomMapUrl(name) {
   return `https://www.openstreetmap.org/?mlat=${m.lat}&mlon=${m.lon}#map=19/${m.lat}/${m.lon}`;
 }
 
-// Klickbarer Raum als <a> (OSM-Deep-Link); ohne Mapping: schlichter Pill-Text
-export function roomLink(name) {
+// Universeller Google-Maps-Link zum selben Gebäudemarker (ohne API-Schlüssel).
+export function roomGoogleMapUrl(name) {
+  const m = roomMeta(name);
+  if (!m) return null;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${m.lat},${m.lon}`)}`;
+}
+
+// Raum mit beiden Kartenlinks; im engen Rasterkopf nur die Raum-Pill anzeigen.
+export function roomLink(name, showGoogle = true) {
   if (!name) return null;
   const url = roomMapUrl(name);
   if (!url) return h("span", { class: "pill room", text: name });
   const m = roomMeta(name);
-  return h("a", {
+  const osm = h("a", {
     class: "pill room room-link", href: url, target: "_blank", rel: "noopener",
-    "aria-label": `Raum ${name} (${m.building}, ${m.address}) auf Karte zeigen`,
+    "aria-label": `Raum ${name} (${m.building}, ${m.address}) in OpenStreetMap zeigen`,
     onclick: (e) => e.stopPropagation(),
     text: name,
   });
+  if (!showGoogle) return osm;
+  return h("span", { class: "room-map-links" }, osm,
+    h("a", {
+      class: "room-google-link", href: roomGoogleMapUrl(name),
+      target: "_blank", rel: "noopener",
+      "aria-label": `Raum ${name} (${m.building}, ${m.address}) in Google Maps zeigen`,
+      onclick: (e) => e.stopPropagation(),
+      text: "Google Maps ↗",
+    }));
 }
 
 // Gebäude+Etage+amtliche Innen-Nummer als Zusatzzeile für den Drawer

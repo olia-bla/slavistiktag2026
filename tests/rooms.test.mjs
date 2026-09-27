@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const { ROOMS, roomMeta, roomMapUrl, unmappedRooms } = await import("../js/rooms.js");
+const { ROOMS, roomMeta, roomMapUrl, roomGoogleMapUrl, unmappedRooms } = await import("../js/rooms.js");
 const program = JSON.parse(await readFile(new URL("../data/program.json", import.meta.url), "utf-8"));
 const content = JSON.parse(await readFile(new URL("../data/content.json", import.meta.url), "utf-8"));
 
@@ -104,6 +104,16 @@ t("roomMapUrl erzeugt OSM-Link mit Marker", () => {
   assert.ok(url.startsWith("https://www.openstreetmap.org/?mlat="));
   assert.ok(url.includes("map=19/"));
   assert.equal(roomMapUrl("Unbekannt 999"), null);
+});
+t("Google Maps zeigt denselben Gebäudemarker für jeden Raum", () => {
+  for (const [name, room] of Object.entries(ROOMS)) {
+    const url = new URL(roomGoogleMapUrl(name));
+    assert.equal(url.origin, "https://www.google.com");
+    assert.equal(url.pathname, "/maps/search/");
+    assert.equal(url.searchParams.get("api"), "1");
+    assert.equal(url.searchParams.get("query"), `${room.lat},${room.lon}`);
+  }
+  assert.equal(roomGoogleMapUrl("Unbekannt 999"), null);
 });
 
 // 6. Koordinaten plausibel (Jena-Zentrum)

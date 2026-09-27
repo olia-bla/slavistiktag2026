@@ -337,7 +337,7 @@ function gridView(model, ctx, state, day, sessions, events) {
 
   g.append(h("div", { class: "grid-head corner", text: "Zeit" }));
   for (const r of rooms) {
-    g.append(h("div", { class: "grid-head" }, r ? roomLink(r) : h("span", { text: r })));
+    g.append(h("div", { class: "grid-head" }, r ? roomLink(r, false) : h("span", { text: r })));
   }
 
   const byStart = {};

@@ -456,13 +456,18 @@ t("Drawer öffnet mit Panel-Kontext", () => {
   assert.ok(d.querySelector("h2").textContent.length > 5);
   assert.ok(d.querySelector(".btn-row"));
 });
-t("Drawer: Raum-Deep-Link auf OSM + Gebäude-Zeile", () => {
+t("Drawer: Raumlinks für OpenStreetMap und Google Maps + Gebäude-Zeile", () => {
   const d = document.querySelector(".drawer");
   const a = d.querySelector("a.pill.room");
   assert.ok(a, "kein Raum-Link im Drawer");
   assert.ok(a.getAttribute("href").includes("openstreetmap.org"));
   assert.ok(a.getAttribute("href").startsWith("https://"));
   assert.ok(a.getAttribute("rel").includes("noopener"));
+  const google = d.querySelector(".room-google-link");
+  assert.ok(google, "Google-Maps-Link fehlt im Drawer");
+  assert.ok(google.href.startsWith("https://www.google.com/maps/search/?api=1&query="));
+  assert.equal(google.target, "_blank");
+  assert.ok(google.getAttribute("rel").includes("noopener"));
   assert.ok(d.querySelector(".room-where").textContent.includes("CZS 3"),
     d.querySelector(".room-where")?.textContent);
   assert.ok(d.querySelector(".floor-strip"), "kein Etagen-Streifen im Drawer");
@@ -603,6 +608,8 @@ t("Rahmenprogramm: Haus auf der Mauer ist als Raum anklickbar", () => {
   assert.equal(room?.textContent, "Haus auf der Mauer");
   assert.ok(room?.href.includes("mlat=50.9297151"));
   assert.ok(room?.href.includes("mlon=11.5840878"));
+  const google = posterTourCard.querySelector(".room-google-link");
+  assert.ok(google?.href.includes("query=50.9297151%2C11.5840878"));
 });
 const podiumCard = document.querySelector("#app .event-card.type-podium");
 t("Podium im Programm: Hinweis auf Beschreibung und Beteiligte", () => {
@@ -723,8 +730,13 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(info.textContent.includes("HS 2"));
   assert.ok(info.textContent.includes("Foyer und HS 2 (EG), HS 6–8 (1. OG), Seminarräume (1. und 2. OG)"));
   const mapLinks = [...info.querySelectorAll(".venue-card a")];
-  assert.equal(mapLinks.length, 4);
-  assert.ok(mapLinks.every((link) => link.textContent.includes("Auf Karte öffnen")));
+  assert.equal(mapLinks.length, 8);
+  assert.equal(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap")).length, 4);
+  assert.equal(mapLinks.filter((link) => link.textContent.includes("Google Maps")).length, 4);
+  assert.ok(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap"))
+    .every((link) => link.href.includes("mlat=") && link.href.includes("mlon=")));
+  assert.ok(mapLinks.filter((link) => link.textContent.includes("Google Maps"))
+    .every((link) => link.href.startsWith("https://www.google.com/maps/search/?api=1&query=")));
   assert.ok(mapLinks.every((link) => link.target === "_blank"));
 });
 t("Orte: keine redundanten Programm- und Downloadinhalte", () => {

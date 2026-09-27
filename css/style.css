@@ -200,6 +200,9 @@ p { overflow-wrap: anywhere; }
 .pill.room { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); font-weight: 600; }
 a.pill.room { text-decoration: none; }
 a.pill.room:hover { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.room-map-links { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.45rem; max-width: 100%; vertical-align: middle; }
+.room-google-link { color: var(--accent2); font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+.room-google-link:hover { text-decoration: underline; }
 .room-where { color: var(--dim); font-size: 0.82rem; margin-left: 0.35rem; }
 .grid-head a.pill.room { padding: 0.1rem 0.5rem; }
 .floor-strip { margin: 0.6rem 0 0.2rem; padding: 0.55rem 0.7rem; border: 1px solid var(--border); border-radius: 8px; background: color-mix(in srgb, var(--accent) 4%, transparent); }
@@ -534,6 +537,7 @@ select {
 .venue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 0.7rem; margin-bottom: 0.8rem; }
 .venue-card { background: var(--card2); border: 1px solid var(--line); border-radius: 12px; padding: 0.75rem; min-width: 0; }
 .venue-card p { overflow-wrap: anywhere; }
+.venue-map-links { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.55rem; }
 .podium { border-top: 1px solid var(--line); padding: 0.75rem 0; }
 .podium:first-of-type { border-top: 0; }
 .podium .body { font-size: 0.9rem; }
