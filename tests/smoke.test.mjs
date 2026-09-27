@@ -78,7 +78,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
   assert.equal(document.querySelector("#app .dashboard-important h2")?.textContent, "Pläne & Downloads");
   assert.deepEqual(actions, []);
-  assert.equal(document.querySelector("#app .now-card h2").textContent, "Jetzt / Als Nächstes");
+  assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
   assert.ok(nowText.includes("Die Tagung beginnt am Mittwoch, 30.09.2026."));
   assert.ok(nowText.includes("ab 12:00RegistrierungFoyer CZS 3"));

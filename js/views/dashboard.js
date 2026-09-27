@@ -30,7 +30,7 @@ export function renderDashboard(model, ctx) {
       h("p", { class: "motto", text: `„${c.motto}“` })),
     h("div", { class: "dashboard-grid" },
       h("section", { class: "now-card card" },
-        h("h2", { text: "Jetzt / Als Nächstes" }),
+        h("h2", { text: "Auf einen Blick" }),
         nowBody(model, now, ctx)),
       importantLinks(model)),
     now.day === "2026-10-02" ? holidayNotice() : null,
