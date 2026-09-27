@@ -123,6 +123,7 @@ t("Startseite: Begrüßungen stehen vor der anklickbaren Installationsanleitung"
   assert.ok(guide.querySelector("summary")?.textContent.includes("iPhone, Android und Computer"));
   assert.ok(install.textContent.includes("iPhone / iPad"));
   assert.ok(install.textContent.includes("Android"));
+  assert.ok(install.textContent.includes("Oben rechts auf die drei Punkte ⋮ tippen"));
   assert.ok(install.textContent.includes("Computer"));
   assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
 });

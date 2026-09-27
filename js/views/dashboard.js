@@ -79,7 +79,7 @@ function installCard() {
         h("p", {}, h("strong", { text: "iPhone / iPad (Safari): " }),
           "Teilen → „Zum Home-Bildschirm“ → „Hinzufügen“."),
         h("p", {}, h("strong", { text: "Android (Chrome): " }),
-          "Menü ⋮ → „App installieren“ oder „Zum Startbildschirm hinzufügen“."),
+          "Oben rechts auf die drei Punkte ⋮ tippen, dann „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen."),
         h("p", {}, h("strong", { text: "Computer: " }),
           "Installationssymbol in der Adressleiste wählen."))));
 }
