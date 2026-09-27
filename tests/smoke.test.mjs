@@ -706,7 +706,7 @@ await waitFor(() => document.querySelector("#app .view-info"));
 t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
   const info = document.querySelector("#app .view-info");
-  assert.equal(info.querySelector("h1")?.textContent, "Orte");
+  assert.equal(info.querySelector("h1")?.textContent, "Tagungsorte & Karten");
   assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
   assert.ok(info.textContent.includes("HS 2"));
   assert.ok(info.textContent.includes("Foyer und HS 2 (EG), HS 6–8 (1. OG), Seminarräume (1. und 2. OG)"));
@@ -717,7 +717,7 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
 });
 t("Orte: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
-  assert.deepEqual(headings, ["Tagungsorte & Karten"]);
+  assert.deepEqual(headings, []);
   assert.equal(document.querySelector("#app .downloads-card"), null);
   assert.equal(document.querySelector("#app .install-card"), null);
   assert.equal(document.querySelector("#app .view-info .podium"), null);

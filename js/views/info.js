@@ -6,12 +6,10 @@ export function renderInfo(model) {
   const wrap = h("div", { class: "view view-info" });
 
   wrap.append(h("header", { class: "hero compact" },
-    h("h1", { text: "Orte" }),
-    h("p", { class: "meta", text: "Tagungsorte und Karten" })));
+    h("h1", { text: "Tagungsorte & Karten" }),
+    h("p", { class: "meta", text: "Der Haupttagungsort ist die Carl-Zeiss-Straße 3. Raumnummern sind auch im Programm anklickbar und öffnen den jeweiligen Ort auf der Karte." })));
 
   wrap.append(h("section", { class: "card venues-card" },
-    h("h2", { text: "Tagungsorte & Karten" }),
-    h("p", { class: "meta", text: "Der Haupttagungsort ist die Carl-Zeiss-Straße 3. Raumnummern sind auch im Programm anklickbar und öffnen den jeweiligen Ort auf der Karte." }),
     h("div", { class: "venue-grid" },
       Object.values(c.venues).map((venue) => h("article", { class: "venue-card" },
         h("h3", { text: venue.name }),
