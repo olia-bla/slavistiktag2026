@@ -38,6 +38,7 @@ export function renderDashboard(model, ctx) {
       h("a", { href: "tel:+4915125881153", text: "☎ +49 151 25881153" }),
       h("span", { text: " · Kontakt: " }),
       h("a", { href: `mailto:${c.contact}`, text: `✉ ${c.contact}` })),
+    installCard(),
     notice,
     welcome,
     h("p", { class: "meta dashboard-updated", text: updatedAt(model.meta.generated_at) }));
@@ -56,7 +57,26 @@ function importantLinks(model) {
       resource("Stadtplan", links.city_map_pdf),
       resource("Programm", links.program_pdf),
       resource("Book of Abstracts", links.abstracts_pdf)),
-    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte und App-Installation →" }));
+    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte →" }));
+}
+
+function installCard() {
+  return h("section", { class: "card install-card dashboard-install" },
+    h("h2", { text: "App installieren" }),
+    h("p", { text: "Die Seite funktioniert direkt im Browser. Als App öffnet sie sich im Vollbild und bleibt auch offline verfügbar." }),
+    h("h3", { text: "iPhone / iPad (Safari)" }),
+    h("ol", { class: "mini-list" },
+      h("li", { text: "Diese Seite in Safari öffnen." }),
+      h("li", { text: "Unten auf das Teilen-Symbol tippen (Quadrat mit Pfeil nach oben)." }),
+      h("li", { text: "„Zum Home-Bildschirm“ wählen." }),
+      h("li", { text: "Mit „Hinzufügen“ bestätigen." })),
+    h("h3", { text: "Android (Chrome)" }),
+    h("ol", { class: "mini-list" },
+      h("li", { text: "Diese Seite in Chrome öffnen." }),
+      h("li", { text: "Oben rechts auf die drei Punkte tippen." }),
+      h("li", { text: "„App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen und bestätigen." })),
+    h("h3", { text: "Computer" }),
+    h("p", { text: "Im Browser das Installationssymbol in der Adressleiste auswählen. Falls kein Symbol erscheint, kann die Seite weiterhin normal im Browser genutzt werden." }));
 }
 
 function changesNotice(model) {

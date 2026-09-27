@@ -1,4 +1,4 @@
-// views/info.js – kompakte Orientierung zu Tagungsorten und App-Installation
+// views/info.js – kompakte Orientierung zu Tagungsorten
 import { h } from "../util.js";
 
 export function renderInfo(model) {
@@ -7,7 +7,7 @@ export function renderInfo(model) {
 
   wrap.append(h("header", { class: "hero compact" },
     h("h1", { text: "Orte" }),
-    h("p", { class: "meta", text: "Tagungsorte, Karten und App-Installation" })));
+    h("p", { class: "meta", text: "Tagungsorte und Karten" })));
 
   wrap.append(h("section", { class: "card venues-card" },
     h("h2", { text: "Tagungsorte & Karten" }),
@@ -25,23 +25,6 @@ export function renderInfo(model) {
               text: "Auf Karte öffnen ↗",
             })
           : null)))));
-
-  wrap.append(h("section", { class: "card install-card" },
-    h("h2", { text: "Als App installieren" }),
-    h("p", { text: "Die Seite funktioniert direkt im Browser. Als App öffnet sie sich im Vollbild und bleibt auch offline verfügbar." }),
-    h("h3", { text: "iPhone / iPad (Safari)" }),
-    h("ol", { class: "mini-list" },
-      h("li", { text: "Diese Seite in Safari öffnen." }),
-      h("li", { text: "Unten auf das Teilen-Symbol tippen (Quadrat mit Pfeil nach oben)." }),
-      h("li", { text: "„Zum Home-Bildschirm“ wählen." }),
-      h("li", { text: "Mit „Hinzufügen“ bestätigen." })),
-    h("h3", { text: "Android (Chrome)" }),
-    h("ol", { class: "mini-list" },
-      h("li", { text: "Diese Seite in Chrome öffnen." }),
-      h("li", { text: "Oben rechts auf die drei Punkte tippen." }),
-      h("li", { text: "„App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen und bestätigen." })),
-    h("h3", { text: "Computer" }),
-    h("p", { text: "Im Browser das Installationssymbol in der Adressleiste auswählen. Falls kein Symbol erscheint, kann die Seite weiterhin normal im Browser genutzt werden." })));
 
   return wrap;
 }

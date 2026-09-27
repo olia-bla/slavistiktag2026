@@ -95,6 +95,16 @@ t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
   assert.equal(contact.querySelector('a[href="mailto:slavistiktag2026@uni-jena.de"]')?.textContent,
     "✉ slavistiktag2026@uni-jena.de");
 });
+t("Startseite: App-Installation steht direkt nach Telefon und E-Mail", () => {
+  const contact = document.querySelector("#app .dashboard-contact");
+  const install = document.querySelector("#app .dashboard-install");
+  assert.equal(contact.nextElementSibling, install);
+  assert.equal(install.querySelector("h2")?.textContent, "App installieren");
+  assert.ok(install.textContent.includes("iPhone / iPad"));
+  assert.ok(install.textContent.includes("Android"));
+  assert.ok(install.textContent.includes("Computer"));
+  assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
+});
 t("Startseite: 14 Begrüßungen gleichmäßig auf zwei Zeilen verteilt", () => {
   const rows = [...document.querySelectorAll("#app .welcome-row")];
   assert.equal(rows.length, 2);
@@ -674,7 +684,7 @@ t("Drawer aus Themen-Ansicht geöffnet", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
-// Orte: bewusst nur Tagungsorte/Karten und App-Installation
+// Orte: bewusst nur Tagungsorte und Karten
 dom.window.location.hash = "#/info";
 await waitFor(() => document.querySelector("#app .view-info"));
 t("Orte: kompakte Tagungsorte mit Karten", () => {
@@ -688,17 +698,11 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(mapLinks.every((link) => link.textContent.includes("Auf Karte öffnen")));
   assert.ok(mapLinks.every((link) => link.target === "_blank"));
 });
-t("Orte: Installationsanleitungen für Mobilgeräte und Computer", () => {
-  const install = document.querySelector("#app .install-card");
-  assert.ok(install.textContent.includes("iPhone / iPad"));
-  assert.ok(install.textContent.includes("Android"));
-  assert.ok(install.textContent.includes("Computer"));
-  assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
-});
 t("Orte: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
-  assert.deepEqual(headings, ["Tagungsorte & Karten", "Als App installieren"]);
+  assert.deepEqual(headings, ["Tagungsorte & Karten"]);
   assert.equal(document.querySelector("#app .downloads-card"), null);
+  assert.equal(document.querySelector("#app .install-card"), null);
   assert.equal(document.querySelector("#app .view-info .podium"), null);
 });
 
