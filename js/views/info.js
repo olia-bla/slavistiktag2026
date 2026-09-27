@@ -6,7 +6,7 @@ export function renderInfo(model) {
   const wrap = h("div", { class: "view view-info" });
 
   wrap.append(h("header", { class: "hero compact" },
-    h("h1", { text: "Info" }),
+    h("h1", { text: "Orte" }),
     h("p", { class: "meta", text: "Tagungsorte, Karten und App-Installation" })));
 
   wrap.append(h("section", { class: "card venues-card" },

@@ -102,7 +102,7 @@ function renderNav() {
     link("#/mein", "Mein Programm", h("span", { class: "fav-count pill", text: String(favs.all().length || "") })),
     link("#/themen", "Themen", null, route.startsWith("/themen")),
     link("#/sprecher", "Sprecher:innen"),
-    link("#/info", "Info"));
+    link("#/info", "Orte"));
 }
 
 function buildClusterModel(model) {

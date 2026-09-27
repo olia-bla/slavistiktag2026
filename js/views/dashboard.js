@@ -56,7 +56,7 @@ function importantLinks(model) {
       resource("Stadtplan", links.city_map_pdf),
       resource("Programm", links.program_pdf),
       resource("Book of Abstracts", links.abstracts_pdf)),
-    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte und Rahmenprogramm →" }));
+    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte und App-Installation →" }));
 }
 
 function changesNotice(model) {

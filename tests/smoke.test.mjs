@@ -125,6 +125,7 @@ t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
   assert.equal(document.querySelector(".brand")?.getAttribute("href"), "#/startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
   assert.ok(labels.some((l) => l.includes("Sprecher:innen")));
+  assert.ok(labels.includes("Orte"));
   assert.equal(document.querySelector(".fav-count").textContent, "");
 });
 dom.window.location.hash = "#/heute";
@@ -673,12 +674,13 @@ t("Drawer aus Themen-Ansicht geöffnet", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
-// Info: bewusst nur Tagungsorte/Karten und App-Installation
+// Orte: bewusst nur Tagungsorte/Karten und App-Installation
 dom.window.location.hash = "#/info";
 await waitFor(() => document.querySelector("#app .view-info"));
-t("Info: kompakte Tagungsorte mit Karten", () => {
+t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
   const info = document.querySelector("#app .view-info");
+  assert.equal(info.querySelector("h1")?.textContent, "Orte");
   assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
   assert.ok(info.textContent.includes("HS 2"));
   const mapLinks = [...info.querySelectorAll(".venue-card a")];
@@ -686,14 +688,14 @@ t("Info: kompakte Tagungsorte mit Karten", () => {
   assert.ok(mapLinks.every((link) => link.textContent.includes("Auf Karte öffnen")));
   assert.ok(mapLinks.every((link) => link.target === "_blank"));
 });
-t("Info: Installationsanleitungen für Mobilgeräte und Computer", () => {
+t("Orte: Installationsanleitungen für Mobilgeräte und Computer", () => {
   const install = document.querySelector("#app .install-card");
   assert.ok(install.textContent.includes("iPhone / iPad"));
   assert.ok(install.textContent.includes("Android"));
   assert.ok(install.textContent.includes("Computer"));
   assert.ok(install.textContent.includes("Zum Home-Bildschirm"));
 });
-t("Info: keine redundanten Programm- und Downloadinhalte", () => {
+t("Orte: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
   assert.deepEqual(headings, ["Tagungsorte & Karten", "Als App installieren"]);
   assert.equal(document.querySelector("#app .downloads-card"), null);
