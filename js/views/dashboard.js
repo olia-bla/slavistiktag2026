@@ -1,6 +1,6 @@
 // views/dashboard.js – kompakte Startseite: Orientierung, Jetzt, wichtige Links
 import { h, timeRange } from "../util.js";
-import { nowInfo } from "../now.js";
+import { conferenceCountdown, nowInfo } from "../now.js";
 
 function updatedAt(timestamp) {
   const d = new Date(timestamp || "");
@@ -13,7 +13,8 @@ function updatedAt(timestamp) {
 
 export function renderDashboard(model, ctx) {
   const c = model.conference;
-  const now = nowInfo(model, ctx.now instanceof Date ? ctx.now : new Date());
+  const currentDate = ctx.now instanceof Date ? ctx.now : new Date();
+  const now = nowInfo(model, currentDate);
   const notice = changesNotice(model);
 
   const welcomeWords = model.content.welcome || [];
@@ -31,7 +32,7 @@ export function renderDashboard(model, ctx) {
     h("div", { class: "dashboard-grid" },
       h("section", { class: "now-card card" },
         h("h2", { text: "Auf einen Blick" }),
-        nowBody(model, now, ctx)),
+        nowBody(model, now, ctx, conferenceCountdown(currentDate))),
       importantLinks(model)),
     now.day === "2026-10-02" ? holidayNotice() : null,
     h("aside", { class: "card dashboard-contact", "aria-label": "Kontakt während der Tagung" },
@@ -102,7 +103,15 @@ function changesNotice(model) {
     h("a", { class: "btn ghost", href: "#/aenderungen", text: "Änderungen ansehen" }));
 }
 
-function nowBody(model, now, ctx) {
+function countdownText({ days, hours, minutes }) {
+  const parts = [];
+  if (days) parts.push(`${days} ${days === 1 ? "Tag" : "Tagen"}`);
+  if (hours) parts.push(`${hours} ${hours === 1 ? "Stunde" : "Stunden"}`);
+  if (minutes || !parts.length) parts.push(`${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`);
+  return parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(", ")} und ${parts.at(-1)}`;
+}
+
+function nowBody(model, now, ctx, countdown) {
   const openingDayBeforeOpening = now.day === model.conference.start && now.time < "18:00";
   const opening = model.events
     .filter((event) => event.day === model.conference.start && event.start)
@@ -115,9 +124,9 @@ function nowBody(model, now, ctx) {
       : h("span", { class: "now-title", text: title }),
     h("span", { class: "now-meta", text: meta }));
 
-  if (now.status === "before" || (openingDayBeforeOpening && now.time < "12:00")) {
+  if (countdown) {
     return h("div", { class: "dashboard-status" },
-      h("p", { text: "Die Tagung beginnt am Mittwoch, 30.09.2026." }),
+      h("p", { text: `Die Tagung beginnt in ${countdownText(countdown)} – am Mittwoch, den 30. September 2026.` }),
       scheduleItem("ab 12:00", "Registrierung", "Foyer CZS 3"),
       scheduleItem("14:00–17:00", "Jahrestagung des Slavistikverbandes", "HS 2"),
       opening ? scheduleItem(

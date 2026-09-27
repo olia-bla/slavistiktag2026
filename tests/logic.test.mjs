@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { normalize, matchesQuery, filterSessions, formatOf, matchesTimeSlot, TIME_SLOTS } from "../js/search.js";
 import { matchesProgramCategories } from "../js/views/program.js";
 import { icsFor } from "../js/ics.js";
-import { nowInfo } from "../js/now.js";
+import { conferenceCountdown, nowInfo } from "../js/now.js";
 import { buildModel, naturalRooms, panelDiscipline } from "../js/data.js";
 import { minutes, dateLabel, isoDay } from "../js/util.js";
 import fs from "node:fs";
@@ -212,6 +212,13 @@ t("now: Pause zwischen Slots", () => {
 t("now: vor der Tagung", () => {
   const info = nowInfo(model, new Date("2026-09-15T10:00:00"));
   assert.equal(info.status, "before");
+});
+t("Countdown: bis Mittwoch 12 Uhr in Jena, auch in anderen Zeitzonen", () => {
+  assert.deepEqual(conferenceCountdown(new Date("2026-09-27T10:30:00+02:00")),
+    { days: 3, hours: 1, minutes: 30 });
+  assert.deepEqual(conferenceCountdown(new Date("2026-09-30T11:59:30+02:00")),
+    { days: 0, hours: 0, minutes: 1 });
+  assert.equal(conferenceCountdown(new Date("2026-09-30T03:00:00-07:00")), null);
 });
 t("now: nach der Tagung", () => {
   const info = nowInfo(model, new Date("2026-10-05T10:00:00"));

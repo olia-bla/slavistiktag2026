@@ -18,6 +18,13 @@ globalThis.URL = dom.window.URL;
 globalThis.URLSearchParams = dom.window.URLSearchParams;
 globalThis.Blob = dom.window.Blob;
 globalThis.getComputedStyle = dom.window.getComputedStyle;
+// Die Startseite bleibt auch nach der Tagung reproduzierbar testbar.
+const NativeDate = Date;
+const fixedNow = NativeDate.parse("2026-09-27T10:30:00+02:00");
+globalThis.Date = class extends NativeDate {
+  constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+  static now() { return fixedNow; }
+};
 window.scrollTo = () => {};
 globalThis.scrollTo = window.scrollTo;
 
@@ -80,7 +87,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
-  assert.ok(nowText.includes("Die Tagung beginnt am Mittwoch, 30.09.2026."));
+  assert.ok(nowText.includes("Die Tagung beginnt in 3 Tagen, 1 Stunde und 30 Minuten – am Mittwoch, den 30. September 2026."));
   assert.ok(nowText.includes("ab 12:00RegistrierungFoyer CZS 3"));
   assert.ok(nowText.includes("14:00–17:00Jahrestagung des SlavistikverbandesHS 2"));
   assert.ok(nowText.includes("18:00–20:00Eröffnung des Slavistiktages mit FestvortragHS 2"));

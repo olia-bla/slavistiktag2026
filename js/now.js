@@ -5,6 +5,20 @@ import { minutes, isoDay, hhmm } from "./util.js";
 function itemStart(x) { return minutes(x.start); }
 function itemEnd(x) { return minutes(x.end || x.start); }
 
+// Beginn der Registrierung in Jena; der feste Offset vermeidet Unterschiede
+// zwischen Geräten in Deutschland und Gästen in anderen Zeitzonen.
+const CONFERENCE_START = Date.parse("2026-09-30T12:00:00+02:00");
+
+export function conferenceCountdown(now = new Date()) {
+  const totalMinutes = Math.ceil((CONFERENCE_START - now.getTime()) / 60_000);
+  if (totalMinutes <= 0) return null;
+  return {
+    days: Math.floor(totalMinutes / 1_440),
+    hours: Math.floor((totalMinutes % 1_440) / 60),
+    minutes: totalMinutes % 60,
+  };
+}
+
 export function nowInfo(model, now = new Date()) {
   const day = isoDay(now);
   const t = hhmm(now);
