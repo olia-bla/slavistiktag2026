@@ -44,22 +44,25 @@ export function renderMine(model, ctx) {
     wrap.append(h("div", { class: "card" },
       h("p", { text: "Tippe in der Programmansicht auf ☆, um Vorträge zu merken. Sie erscheinen hier und lassen sich als Kalenderdatei exportieren." }),
       h("a", { class: "btn", href: "#/programm", text: "Zum Programm" })));
-    return wrap;
+  } else {
+    wrap.append(h("div", { class: "btn-row" },
+      h("button", {
+        class: "btn", text: "⤓ Alle als Kalender (.ics)",
+        onclick: () => {
+          const events = ids
+            .map((id) => model.sessions.find((x) => x.id === id))
+            .filter(Boolean)
+            .map((s) => ({ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room || "" }));
+          downloadIcs("mein-slavistiktag.ics", icsFor(events));
+        },
+      })));
   }
-
-  wrap.append(h("div", { class: "btn-row" },
-    h("button", {
-      class: "btn", text: "⤓ Alle als Kalender (.ics)",
-      onclick: () => {
-        const events = ids
-          .map((id) => model.sessions.find((x) => x.id === id))
-          .filter(Boolean)
-          .map((s) => ({ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room || "" }));
-        downloadIcs("mein-slavistiktag.ics", icsFor(events));
-      },
-    }),
-    h("button", {
-      class: "btn ghost", text: "⇩ Backup (.json)",
+  wrap.append(h("details", { class: "backup-options" },
+    h("summary", { text: "Favoriten sichern oder übertragen (optional)" }),
+    h("p", { class: "meta", text: "Nur nötig, wenn du deine Favoriten als Datei sichern oder auf einem anderen Gerät nutzen möchtest." }),
+    h("div", { class: "btn-row" },
+    ids.length ? h("button", {
+      class: "btn ghost", text: "Favoriten speichern (.json)",
       onclick: () => {
         const payload = JSON.stringify({ app: "slavtag26", version: 1, favs: ids, exported: new Date().toISOString() }, null, 2);
         const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
@@ -67,9 +70,9 @@ export function renderMine(model, ctx) {
         document.body.append(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 2000);
       },
-    }),
+    }) : null,
     h("button", {
-      class: "btn ghost", text: "⇧ Backup laden",
+      class: "btn ghost", text: "Favoriten laden",
       onclick: () => {
         const inp = h("input", { type: "file", accept: "application/json,.json", style: "display:none" });
         inp.addEventListener("change", async () => {
@@ -90,7 +93,7 @@ export function renderMine(model, ctx) {
         });
         inp.click();
       },
-    })));
+    }))));
 
   for (const day of days) {
     const list = byDay[day].sort((a, b) => (a.start || "").localeCompare(b.start || ""));

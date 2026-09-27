@@ -182,6 +182,10 @@ p { overflow-wrap: anywhere; }
 .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
 .btn.small { padding: 0.28rem 0.65rem; font-size: 0.8rem; }
 .btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 0.6rem 0; }
+.backup-options { margin: 0.15rem 0 1rem; }
+.backup-options summary { cursor: pointer; color: var(--ink-dim); font-size: 0.85rem; }
+.backup-options summary:hover { color: var(--heading); }
+.backup-options > p { margin: 0.65rem 0 0; }
 
 .chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .chip {

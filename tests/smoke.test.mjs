@@ -477,6 +477,14 @@ await waitFor(() => document.querySelector("#app .view-mine"));
 t("Mein Programm zeigt Favorit", () => {
   assert.ok(document.querySelector("#app .view-mine .session-card"));
 });
+t("Mein Programm: Sicherung ist optional eingeklappt", () => {
+  const mine = document.querySelector("#app .view-mine");
+  const backup = mine.querySelector(".backup-options");
+  assert.ok(backup);
+  assert.equal(backup.hasAttribute("open"), false);
+  assert.equal(mine.querySelectorAll(":scope > .btn-row button").length, 1);
+  assert.equal(backup.querySelectorAll("button").length, 2);
+});
 
 // Feature 1: Konflikt-Warnung (zweiter Favorit im selben Slot)
 const allCards = [...document.querySelectorAll("#app .session-card")];
@@ -731,6 +739,17 @@ await waitFor(() => document.querySelector("#app .grid"));
 t("Deep-Link: Sa + SR 206 gefiltert", () => {
   const cards = [...document.querySelectorAll("#app .session-card")];
   assert.ok(cards.length >= 1 && cards.length <= 6, `${cards.length} Karten`);
+});
+
+localStorage.setItem("slavtag26.favs", "[]");
+dom.window.location.hash = "#/mein";
+await waitFor(() => document.querySelector("#app .view-mine"));
+t("Mein Programm: Sicherung laden ist auch ohne Favoriten erreichbar", () => {
+  const backup = document.querySelector("#app .view-mine .backup-options");
+  assert.ok(backup);
+  assert.equal(backup.hasAttribute("open"), false);
+  assert.equal(backup.querySelectorAll("button").length, 1);
+  assert.equal(backup.querySelector("button")?.textContent, "Favoriten laden");
 });
 
 await Promise.allSettled(pending);
