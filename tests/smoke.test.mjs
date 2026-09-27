@@ -773,6 +773,13 @@ t("Orte: Mensa und Goethe Galerie mit korrekten Links", () => {
     assert.ok(links.every((link) => link.target === "_blank" && link.rel.includes("noopener")));
   }
 });
+t("Orte: weitere gastronomische Empfehlungen führen zur Uni Jena", () => {
+  const link = document.querySelector("#app .restaurant-more-link");
+  assert.equal(link?.textContent, "Weitere gastronomische Empfehlungen ↗");
+  assert.equal(link.href, "https://www.gw.uni-jena.de/52800/organisatorisches-hotels-anfahrt-usw");
+  assert.equal(link.target, "_blank");
+  assert.ok(link.rel.includes("noopener"));
+});
 
 // Deep-Link: Filter in URL
 dom.window.location.hash = "#/programm?day=2026-10-03&room=SR%20206";

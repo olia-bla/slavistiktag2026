@@ -57,7 +57,13 @@ export function renderInfo(model) {
   });
   wrap.append(h("section", { class: "card lunch-card" },
     h("h2", { text: "Schnelles Mittagessen" }),
-    h("div", { class: "venue-grid lunch-grid" }, lunchCards)));
+    h("div", { class: "venue-grid lunch-grid" }, lunchCards),
+    h("a", {
+      class: "btn ghost restaurant-more-link",
+      href: c.links.restaurant_recommendations,
+      target: "_blank", rel: "noopener",
+      text: "Weitere gastronomische Empfehlungen ↗",
+    })));
 
   return wrap;
 }

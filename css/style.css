@@ -555,6 +555,7 @@ select {
 .lunch-grid { margin-bottom: 0; }
 .lunch-place .meta { margin: 0.3rem 0; }
 .lunch-place > .btn { margin-top: 0.3rem; }
+.restaurant-more-link { margin-top: 0.8rem; }
 .podium { border-top: 1px solid var(--line); padding: 0.75rem 0; }
 .podium:first-of-type { border-top: 0; }
 .podium .body { font-size: 0.9rem; }
