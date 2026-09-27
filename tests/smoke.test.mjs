@@ -76,7 +76,7 @@ t("Dashboard gerendert (Titel + Motto)", () => {
 t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
-  assert.equal(document.querySelector("#app .dashboard-important h2")?.textContent, "Pläne & Downloads");
+  assert.equal(document.querySelector("#app .dashboard-important h2")?.textContent, "Downloads");
   assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
