@@ -123,6 +123,8 @@ t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () =
   const choir = m.events.find((e) => e.title.startsWith("Ukrainischer Chor"));
   assert.equal(choir?.end, "19:00");
   assert.equal(choir?.room, "Aula UHG");
+  const posterTour = m.events.find((e) => e.title.includes("bulgarische Plakatkunst"));
+  assert.equal(posterTour?.room, "Haus auf der Mauer");
   const closing = m.events.find((e) => e.title.startsWith("Abschlussveranstaltung"));
   assert.equal(closing?.room, "Foyer CZS 3");
 });

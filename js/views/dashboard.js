@@ -38,9 +38,9 @@ export function renderDashboard(model, ctx) {
       h("a", { href: "tel:+4915125881153", text: "☎ +49 151 25881153" }),
       h("span", { text: " · Kontakt: " }),
       h("a", { href: `mailto:${c.contact}`, text: `✉ ${c.contact}` })),
+    welcome,
     installCard(),
     notice,
-    welcome,
     h("p", { class: "meta dashboard-updated", text: updatedAt(model.meta.generated_at) }));
 }
 

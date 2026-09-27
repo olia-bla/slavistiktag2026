@@ -85,6 +85,14 @@ t("MMZ 220 → Ernst-Abbe-Platz 8", () => {
   assert.ok(url.includes("mlon=11.5827306"));
 });
 
+t("Haus auf der Mauer → Johannisplatz 26", () => {
+  const venue = roomMeta("Haus auf der Mauer");
+  assert.equal(venue.address, "Johannisplatz 26");
+  assert.equal(venue.lat, 50.9297151);
+  assert.equal(venue.lon, 11.5840878);
+  assert.ok(roomMapUrl("Haus auf der Mauer").includes("mlat=50.9297151"));
+});
+
 // 5. Deep-Link-Format valide
 t("roomMapUrl erzeugt OSM-Link mit Marker", () => {
   const url = roomMapUrl("SR 206");

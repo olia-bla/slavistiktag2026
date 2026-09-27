@@ -38,6 +38,7 @@ export const ROOMS = {
   "MMZ 220": { building: "MMZ",  address: "Ernst-Abbe-Platz 8",  floor: "2. OG", inner: "220",  lat: 50.9289611, lon: 11.5827306 },
   "Foyer CZS 3": { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: "EG", inner: null, lat: 50.92879, lon: 11.58161 },
   "Aula UHG":    { building: "UHG",  address: "Fürstengraben 1",     floor: "EG", inner: "E008", lat: 50.92945, lon: 11.58944 },
+  "Haus auf der Mauer": { building: "Haus auf der Mauer", address: "Johannisplatz 26", floor: null, inner: null, lat: 50.9297151, lon: 11.5840878 },
 };
 
 export function roomMeta(name) {

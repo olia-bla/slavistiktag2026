@@ -95,10 +95,12 @@ t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
   assert.equal(contact.querySelector('a[href="mailto:slavistiktag2026@uni-jena.de"]')?.textContent,
     "✉ slavistiktag2026@uni-jena.de");
 });
-t("Startseite: App-Installation steht direkt nach Telefon und E-Mail", () => {
+t("Startseite: Begrüßungen stehen zwischen Kontakt und App-Installation", () => {
   const contact = document.querySelector("#app .dashboard-contact");
+  const welcome = document.querySelector("#app .welcome-wall");
   const install = document.querySelector("#app .dashboard-install");
-  assert.equal(contact.nextElementSibling, install);
+  assert.equal(contact.nextElementSibling, welcome);
+  assert.equal(welcome.nextElementSibling, install);
   assert.equal(install.querySelector("h2")?.textContent, "App installieren");
   assert.ok(install.textContent.includes("iPhone / iPad"));
   assert.ok(install.textContent.includes("Android"));
@@ -586,6 +588,15 @@ t("Beide Eröffnungs-Einträge erscheinen ohne Häkchen wieder", () => {
 // Info-Seite, sondern öffnen sie direkt dort, wo das Podium im Programm steht.
 dom.window.location.hash = "#/programm?day=2026-10-01";
 await waitFor(() => document.querySelector("#app .event-card.type-podium"));
+const posterTourCard = [...document.querySelectorAll("#app .event-card")]
+  .find((card) => card.textContent.includes("bulgarische Plakatkunst"));
+t("Rahmenprogramm: Haus auf der Mauer ist als Raum anklickbar", () => {
+  assert.ok(posterTourCard, "Führung zur Plakatkunst fehlt");
+  const room = posterTourCard.querySelector("a.room-link");
+  assert.equal(room?.textContent, "Haus auf der Mauer");
+  assert.ok(room?.href.includes("mlat=50.9297151"));
+  assert.ok(room?.href.includes("mlon=11.5840878"));
+});
 const podiumCard = document.querySelector("#app .event-card.type-podium");
 t("Podium im Programm: Hinweis auf Beschreibung und Beteiligte", () => {
   assert.ok(podiumCard.textContent.includes("Antippen für Beschreibung und Beteiligte"));
