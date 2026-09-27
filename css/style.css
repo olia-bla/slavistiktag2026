@@ -217,7 +217,6 @@ a.pill.room:hover { background: color-mix(in srgb, var(--accent) 30%, transparen
 .session-card.is-now, .event-card.is-now { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
 .session-card.is-cancelled {
   background: color-mix(in srgb, var(--card2) 82%, var(--card));
-  border-left-color: var(--line-strong);
   box-shadow: none;
 }
 .session-card.is-cancelled .card-title,
@@ -498,6 +497,7 @@ select {
 .session-card.track-sw { border-left-color: var(--sw); }
 .session-card.track-lkw { border-left-color: var(--lkw); }
 .session-card.track-x { border-left-color: var(--other); }
+.session-card.is-cancelled { border-left-color: var(--line-strong); }
 .session-card.is-fav { outline: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); }
 .card-top { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
 .time { font-variant-numeric: tabular-nums; color: var(--ink-dim); font-size: 0.8rem; flex: none; }
