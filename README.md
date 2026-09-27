@@ -1,6 +1,6 @@
 # Slavistiktag 2026 – Programm-App mit Themen-Kompass
 
-Experimentelle App zum 15. Deutschen Slavistiktag 2026 in Jena (30.09.–03.10.2026).
+Konferenz-App zum 15. Deutschen Slavistiktag 2026 in Jena (30.09.–03.10.2026).
 Eine Anwendung, zwei Ebenen:
 
 - **Programm** – alle Vorträge, Panels, Podien und Rahmenveranstaltungen mit
