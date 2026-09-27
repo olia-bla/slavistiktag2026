@@ -5,6 +5,7 @@ import { favs } from "../favorites.js";
 import { roomLink } from "../rooms.js";
 import { nonGermanLanguageBadge } from "../languages.js";
 import { stripTitles } from "./speakers.js";
+import { panelDiscipline } from "../data.js";
 
 // Läuft diese Veranstaltung „jetzt“? Nur während der Konferenztage; der
 // Zeitpunkt ist per ctx.now injizierbar (Tests).
@@ -29,6 +30,24 @@ const FORMAT_LABELS = {
   pause: "Pausen", podium: "Podiumsdiskussionen", special: "Sonderformate", rahmen: "Rahmenprogramm",
 };
 const OPTIONAL_FORMATS = ["podium", "special", "rahmen", "pause"];
+
+// Filter-Reihenfolge: je Fach zuerst Panels, dann SEK-Sektionen; sonstige
+// ConfTool-Formate wie Poster und DFG stehen am Ende.
+export function panelFilterRank(parts) {
+  const section = parts.find((p) => /^SEK_/.test(p.code || ""));
+  const discipline = panelDiscipline(section || parts[0]);
+  const base = { SW: 0, DID: 2, LKW: 4 }[discipline];
+  return base == null ? 6 : base + (section ? 1 : 0);
+}
+
+export function sortedPanelGroups(groups) {
+  return [...groups].sort((a, b) => {
+    const pa = a[1][0], pb = b[1][0];
+    return panelFilterRank(a[1]) - panelFilterRank(b[1]) ||
+      `${pa.day || ""}|${pa.block_start || ""}`.localeCompare(`${pb.day || ""}|${pb.block_start || ""}`) ||
+      (pa.title || "").localeCompare(pb.title || "", "de");
+  });
+}
 
 export function renderProgram(model, ctx, params) {
   const state = readState(model, params);
@@ -144,11 +163,7 @@ function filterBar(model, ctx, state) {
 
   const roomOpts = model.rooms.map((r) => ({ value: r, text: r }));
   const slotOpts = TIME_SLOTS.map((slot) => ({ value: slot.value, text: slot.label }));
-  const panelOpts = [...model.panelGroups]
-    .sort((a, b) => {
-      const pa = a[1][0], pb = b[1][0];
-      return (pa.day + pa.block_start).localeCompare(pb.day + pb.block_start);
-    })
+  const panelOpts = sortedPanelGroups(model.panelGroups)
     .map(([key, parts]) => {
       const p = parts[0];
       return { value: key, text: `${p.code ? p.code + " " : ""}${p.title || "?"}`.slice(0, 90) };

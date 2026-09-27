@@ -1,7 +1,7 @@
 // Logik-Tests für die DOM-freien Module. Ausführen: node tests/logic.test.mjs
 import assert from "node:assert/strict";
 import { normalize, matchesQuery, filterSessions, formatOf, matchesTimeSlot, TIME_SLOTS } from "../js/search.js";
-import { matchesProgramCategories } from "../js/views/program.js";
+import { matchesProgramCategories, panelFilterRank, sortedPanelGroups } from "../js/views/program.js";
 import { icsFor } from "../js/ics.js";
 import { conferenceCountdown, nowInfo } from "../js/now.js";
 import { buildModel, naturalRooms, panelDiscipline } from "../js/data.js";
@@ -48,6 +48,22 @@ t("Fachzuordnung: Panels folgen den Farben des offiziellen PDFs", () => {
   assert.equal(panelDiscipline({ code: null, title: "Didaktik der Herkunftssprachen", track: "SW+DID" }), "DID");
   assert.equal(panelDiscipline({ code: null, title: "Sprache und Krieg", track: "SW+DID" }), "SW");
   assert.equal(panelDiscipline({ code: null, title: "Migration in Film", track: "LKW" }), "LKW");
+});
+t("Panel-Filter: SW, Didaktik, LKW, Sonstiges; jeweils Panel vor SEK", () => {
+  const ordered = sortedPanelGroups(_model.panelGroups);
+  const ranks = ordered.map(([, parts]) => panelFilterRank(parts));
+  assert.equal(ordered.length, _model.panelGroups.size);
+  assert.deepEqual([...new Set(ranks)], [0, 1, 2, 3, 4, 5, 6]);
+  assert.ok(ranks.every((rank, i) => i === 0 || rank >= ranks[i - 1]));
+  const rankOf = (part) => panelFilterRank(ordered.find(([, parts]) =>
+    parts.some((p) => p.title.includes(part)))[1]);
+  assert.equal(rankOf("Sprache und Krieg"), 0);
+  assert.equal(rankOf("Historische Ostslavistik"), 1);
+  assert.equal(rankOf("Fremdsprachendidaktik"), 2);
+  assert.equal(rankOf("Ukrainische Sprache im Unterricht"), 3);
+  assert.equal(rankOf("gastarbajteri"), 4);
+  assert.equal(rankOf("Neue(re) utopische Diskurse"), 5);
+  assert.equal(rankOf("Posterpr"), 6);
 });
 t("matchesQuery UND-Verknüpfung", () => {
   assert.equal(matchesQuery("polnisch herkunft russisch", "polnisch russisch"), true);

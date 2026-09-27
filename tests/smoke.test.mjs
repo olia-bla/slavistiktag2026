@@ -257,6 +257,15 @@ t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ei
 });
 dom.window.location.hash = "#/programm?day=all";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
+t("Panel-Filter: alle Gruppen in Fach- und Format-Reihenfolge", async () => {
+  const { buildModel } = await import("../js/data.js");
+  const { sortedPanelGroups } = await import("../js/views/program.js");
+  const program = JSON.parse(await readFile(new URL("../data/program.json", import.meta.url), "utf-8"));
+  const content = JSON.parse(await readFile(new URL("../data/content.json", import.meta.url), "utf-8"));
+  const expected = sortedPanelGroups(buildModel(program, content).panelGroups).map(([key]) => key);
+  const options = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')].slice(1);
+  assert.deepEqual(options.map((option) => option.value), expected);
+});
 t("Panel-Filter zeigt jeden Namen nur einmal", () => {
   const labels = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')]
     .filter((option) => option.textContent.includes("Fremdsprachendidaktik slavischer Sprachen"));
