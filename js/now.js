@@ -5,16 +5,21 @@ import { minutes, isoDay, hhmm } from "./util.js";
 function itemStart(x) { return minutes(x.start); }
 function itemEnd(x) { return minutes(x.end || x.start); }
 
-// Beginn der Registrierung in Jena; der feste Offset vermeidet Unterschiede
-// zwischen Geräten in Deutschland und Gästen in anderen Zeitzonen.
+// Countdown nach Jenaer Zeit: bis 29.09. nur Kalendertage, am 30.09.
+// Stunden/Minuten bis zur Registrierung. Der feste Offset vermeidet
+// Unterschiede zwischen Geräten in verschiedenen Zeitzonen.
+const CONFERENCE_DAY = Date.parse("2026-09-30T00:00:00+02:00");
 const CONFERENCE_START = Date.parse("2026-09-30T12:00:00+02:00");
 
 export function conferenceCountdown(now = new Date()) {
+  if (now.getTime() < CONFERENCE_DAY) {
+    return { unit: "days", days: Math.ceil((CONFERENCE_DAY - now.getTime()) / 86_400_000) };
+  }
   const totalMinutes = Math.ceil((CONFERENCE_START - now.getTime()) / 60_000);
   if (totalMinutes <= 0) return null;
   return {
-    days: Math.floor(totalMinutes / 1_440),
-    hours: Math.floor((totalMinutes % 1_440) / 60),
+    unit: "hours",
+    hours: Math.floor(totalMinutes / 60),
     minutes: totalMinutes % 60,
   };
 }

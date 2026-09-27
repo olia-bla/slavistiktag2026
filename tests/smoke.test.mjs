@@ -87,7 +87,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
-  assert.ok(nowText.includes("Die Tagung beginnt in 3 Tagen, 1 Stunde und 30 Minuten – am Mittwoch, den 30. September 2026."));
+  assert.ok(nowText.includes("Die Tagung beginnt in 3 Tagen – am Mittwoch, den 30. September 2026."));
   assert.ok(nowText.includes("ab 12:00RegistrierungFoyer CZS 3"));
   assert.ok(nowText.includes("14:00–17:00Jahrestagung des SlavistikverbandesHS 2"));
   assert.ok(nowText.includes("18:00–20:00Eröffnung des Slavistiktages mit FestvortragHS 2"));

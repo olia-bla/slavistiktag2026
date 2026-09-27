@@ -469,8 +469,13 @@ for (const vp of VIEWPORTS) {
   await page.close();
 }
 
-// Der Countdown bleibt auch auf schmalen Home-Screens lesbar.
-for (const [name, width] of [["Android", 320], ["iPhone", 390]]) {
+// Beide Countdown-Phasen bleiben auch auf schmalen Home-Screens lesbar.
+for (const [name, width, fixedTime, expected] of [
+  ["Android", 320, "2026-09-27T10:30:00+02:00", "3 Tagen"],
+  ["iPhone", 390, "2026-09-27T10:30:00+02:00", "3 Tagen"],
+  ["Android", 320, "2026-09-30T00:00:00+02:00", "12 Stunden"],
+  ["iPhone", 390, "2026-09-30T00:00:00+02:00", "12 Stunden"],
+]) {
   const ctx = await browser.newContext({
     viewport: { width, height: 844 }, isMobile: true, hasTouch: true,
     timezoneId: "Europe/Berlin",
@@ -482,12 +487,12 @@ for (const [name, width] of [["Android", 320], ["iPhone", 390]]) {
       constructor(...args) { super(...(args.length ? args : [fixedNow])); }
       static now() { return fixedNow; }
     };
-  }, { fixedNow: new Date("2026-09-27T10:30:00+02:00").getTime() });
+  }, { fixedNow: new Date(fixedTime).getTime() });
   await page.goto(BASE + "#/startseite");
   await page.waitForSelector("#app .now-card");
-  await t(`${name}: Countdown vor Tagungsbeginn ohne Überlauf`, async () => {
+  await t(`${name} ${fixedTime.slice(0, 10)}: Countdown ohne Überlauf`, async () => {
     const text = await page.locator(".now-card").textContent();
-    assert.ok(text.includes("Die Tagung beginnt in 3 Tagen, 1 Stunde und 30 Minuten"), text);
+    assert.ok(text.includes(`Die Tagung beginnt in ${expected}`), text);
     assert.ok(text.includes("am Mittwoch, den 30. September 2026"), text);
     assert.deepEqual(await overflowIssues(page), []);
   });

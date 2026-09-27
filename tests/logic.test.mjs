@@ -213,11 +213,17 @@ t("now: vor der Tagung", () => {
   const info = nowInfo(model, new Date("2026-09-15T10:00:00"));
   assert.equal(info.status, "before");
 });
-t("Countdown: bis Mittwoch 12 Uhr in Jena, auch in anderen Zeitzonen", () => {
+t("Countdown: bis 29.09. Tage, ab 30.09. 00 Uhr Stunden nach Jenaer Zeit", () => {
   assert.deepEqual(conferenceCountdown(new Date("2026-09-27T10:30:00+02:00")),
-    { days: 3, hours: 1, minutes: 30 });
+    { unit: "days", days: 3 });
+  assert.deepEqual(conferenceCountdown(new Date("2026-09-29T23:59:59+02:00")),
+    { unit: "days", days: 1 });
+  assert.deepEqual(conferenceCountdown(new Date("2026-09-30T00:00:00+02:00")),
+    { unit: "hours", hours: 12, minutes: 0 });
+  assert.deepEqual(conferenceCountdown(new Date("2026-09-29T15:00:00-07:00")),
+    { unit: "hours", hours: 12, minutes: 0 });
   assert.deepEqual(conferenceCountdown(new Date("2026-09-30T11:59:30+02:00")),
-    { days: 0, hours: 0, minutes: 1 });
+    { unit: "hours", hours: 0, minutes: 1 });
   assert.equal(conferenceCountdown(new Date("2026-09-30T03:00:00-07:00")), null);
 });
 t("now: nach der Tagung", () => {

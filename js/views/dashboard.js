@@ -103,12 +103,11 @@ function changesNotice(model) {
     h("a", { class: "btn ghost", href: "#/aenderungen", text: "Änderungen ansehen" }));
 }
 
-function countdownText({ days, hours, minutes }) {
-  const parts = [];
-  if (days) parts.push(`${days} ${days === 1 ? "Tag" : "Tagen"}`);
-  if (hours) parts.push(`${hours} ${hours === 1 ? "Stunde" : "Stunden"}`);
-  if (minutes || !parts.length) parts.push(`${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`);
-  return parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(", ")} und ${parts.at(-1)}`;
+function countdownText({ unit, days, hours, minutes }) {
+  if (unit === "days") return `${days} ${days === 1 ? "Tag" : "Tagen"}`;
+  const h = hours ? `${hours} ${hours === 1 ? "Stunde" : "Stunden"}` : "";
+  const m = minutes ? `${minutes} ${minutes === 1 ? "Minute" : "Minuten"}` : "";
+  return [h, m].filter(Boolean).join(" und ");
 }
 
 function nowBody(model, now, ctx, countdown) {
