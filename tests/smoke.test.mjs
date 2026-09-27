@@ -83,6 +83,9 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.equal(resources.length, 4);
   assert.ok(resources.some((text) => text.includes("Lageplan")));
   assert.ok(resources.some((text) => text.includes("Book of Abstracts")));
+  const cityMap = [...document.querySelectorAll("#app .dashboard-resource")]
+    .find((link) => link.textContent.includes("Stadtplan"));
+  assert.ok(cityMap.href.endsWith("/Stadtplan%20Jena.pdf"));
   assert.equal(document.querySelector("#app .highlight-list"), null);
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Tage"), false);
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Schnellzugriff"), false);
