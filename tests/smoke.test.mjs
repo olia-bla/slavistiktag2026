@@ -704,6 +704,7 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.equal(info.querySelector("h1")?.textContent, "Orte");
   assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
   assert.ok(info.textContent.includes("HS 2"));
+  assert.ok(info.textContent.includes("Foyer und HS 2 (EG), HS 6–8 (1. OG), Seminarräume (1. und 2. OG)"));
   const mapLinks = [...info.querySelectorAll(".venue-card a")];
   assert.equal(mapLinks.length, 4);
   assert.ok(mapLinks.every((link) => link.textContent.includes("Auf Karte öffnen")));

@@ -74,6 +74,11 @@ t("HS 6–8 im 1. OG (amtliche Innen-Nummern)", () => {
   }
 });
 
+t("Foyer und HS 2 liegen im Erdgeschoss", () => {
+  assert.equal(roomMeta("Foyer CZS 3").floor, "EG");
+  assert.equal(roomMeta("HS 2").floor, "EG");
+});
+
 // 4. MMZ 220 → Ernst-Abbe-Platz 8
 t("MMZ 220 → Ernst-Abbe-Platz 8", () => {
   const mmz = roomMeta("MMZ 220");

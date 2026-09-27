@@ -32,9 +32,8 @@ export const ROOMS = {
   "SR 224":  { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: "2. OG", inner: "2.024", lat: 50.92879, lon: 11.58161 },
   "SR 226":  { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: "2. OG", inner: "2.026", lat: 50.92879, lon: 11.58161 },
   // Sonstige Tagungsorte
-  // HS 2: Programm-PDF nennt „CZS 3, HS 2“ (Podien); Etage/Innen-Nummer sind
-  // nicht amtlich dokumentiert → bewusst ohne floor/inner (kein Etagen-Streifen).
-  "HS 2":    { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: null, inner: null, lat: 50.92879, lon: 11.58161 },
+  // HS 2 und Foyer liegen im Erdgeschoss; für HS 2 ist keine Innen-Nummer angegeben.
+  "HS 2":    { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: "EG", inner: null, lat: 50.92879, lon: 11.58161 },
   "MMZ 220": { building: "MMZ",  address: "Ernst-Abbe-Platz 8",  floor: "2. OG", inner: "220",  lat: 50.9289611, lon: 11.5827306 },
   "Foyer CZS 3": { building: "CZS 3", address: "Carl-Zeiß-Straße 3", floor: "EG", inner: null, lat: 50.92879, lon: 11.58161 },
   "Aula UHG":    { building: "UHG",  address: "Fürstengraben 1",     floor: "EG", inner: "E008", lat: 50.92945, lon: 11.58944 },
