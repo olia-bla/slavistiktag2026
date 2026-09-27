@@ -277,6 +277,25 @@ t("Panel-Filter zeigt alle vier Teile, auch am Freitag", () => {
 });
 document.querySelector(".filter-options .btn").click();
 await sleep(100);
+t("Panel-Filter zeigt Gastarbajteri nur einmal", () => {
+  const options = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')]
+    .filter((option) => option.textContent.includes("gastarbajteri"));
+  assert.equal(options.length, 1);
+});
+const gastSelect = document.querySelector('select[aria-label="Panel/Sektion"]');
+gastSelect.value = [...gastSelect.options]
+  .find((option) => option.textContent.includes("gastarbajteri")).value;
+gastSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+await sleep(400);
+t("Gastarbajteri-Filter zeigt beide Teile mit sechs Beitraegen", () => {
+  const cards = [...document.querySelectorAll("#app .session-card")];
+  assert.equal(cards.length, 6);
+  assert.ok(cards.every((card) => card.textContent.includes("gastarbajteri")));
+  assert.ok(document.querySelector("#app .results").textContent.includes("09:00"));
+  assert.ok(document.querySelector("#app .results").textContent.includes("11:30"));
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
 t("Programm: Vortrag von Nadiya Kiss ist als Ukrainisch markiert", () => {
   const card = [...document.querySelectorAll(".session-card")]
     .find((el) => el.textContent.includes("Nadiya Kiss"));

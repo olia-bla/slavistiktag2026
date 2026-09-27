@@ -16,8 +16,15 @@ const DIDACTIC_PANEL_TITLES = new Set([
   "Didaktik der Herkunftssprachen",
 ]);
 
+// ConfTool hat im zweiten Teil desselben Panels ein zusaetzliches "r".
+// Die Rohdaten bleiben unveraendert; nur Anzeige, Suche und Filter werden vereinheitlicht.
+const PANEL_TITLE_CORRECTIONS = new Map([
+  ["gastarbajrteri", "gastarbajteri"],
+]);
+const canonicalPanelTitle = (title) => PANEL_TITLE_CORRECTIONS.get(normalize(title)) || title;
+
 export function panelGroupKey(panel) {
-  return panel?.title ? `name:${normalize(panel.title)}` : "";
+  return panel?.title ? `name:${normalize(canonicalPanelTitle(panel.title))}` : "";
 }
 
 export function panelDiscipline(panel, sourceTrack = "") {
@@ -91,7 +98,8 @@ export function buildModel(program, content) {
   // So bleiben Beiträge erhalten, die die öffentliche Tabellenansicht nur als
   // unstrukturierte Fußzeile ausliefert.
   const supplements = content.program_supplements || {};
-  const sourcePanels = [...(program.panels || []), ...(supplements.panels || [])];
+  const sourcePanels = [...(program.panels || []), ...(supplements.panels || [])]
+    .map((panel) => ({ ...panel, title: canonicalPanelTitle(panel.title) }));
   const panels = Object.fromEntries(sourcePanels.map((p) => [p.id, p]));
   const automaticSessions = program.sessions || [];
   // Falls ConfTool einen redaktionell ergänzten Beitrag später selbst liefert,

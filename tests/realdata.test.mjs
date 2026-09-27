@@ -54,6 +54,21 @@ t("Mehrteilige Panels bilden eine Gruppe über Slots und Tage", () => {
     "Quantitative und qualitative Methoden in der Forschung zu slavischen Heritage Languages in Deutschland");
   assert.equal(m.panelGroups.get(m.sessions.find((s) => s.panel_id === other[0].id).panel_group).length, 3);
 });
+t("Gastarbajteri: ConfTool-Tippfehler trennt das Panel nicht", () => {
+  const sourceParts = program.panels.filter((p) => /gastarbaj/i.test(p.title));
+  assert.equal(sourceParts.length, 2);
+  const partIds = new Set(sourceParts.map((p) => p.id));
+  const corrected = sourceParts.map((p) => m.panels[p.id]);
+  assert.ok(corrected.every((p) => p.title === "gastarbajteri"));
+  const key = m.sessions.find((s) => s.panel_id === sourceParts[0].id).panel_group;
+  assert.equal(m.panelGroups.get(key).length, 2);
+  const hits = filterSessions(m.sessions, { panel: key });
+  assert.equal(hits.length, 6);
+  assert.deepEqual(new Set(hits.map((s) => s.panel_id)), partIds);
+  assert.ok(hits.every((s) => s.panel_title === "gastarbajteri"));
+  assert.equal(filterSessions(m.sessions, { q: "gastarbajteri" })
+    .filter((s) => partIds.has(s.panel_id)).length, 6);
+});
 t("Model: Räume mit Venue", () => {
   assert.ok(m.rooms.includes("MMZ 220"));
   assert.ok(m.rooms.includes("HS 2"), "HS 2 fehlt im Raumfilter");
