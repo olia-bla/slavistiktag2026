@@ -105,6 +105,12 @@ t("LKW-Panel Exilliteraturen: Miriam Finkelstein ist um 10:30 Discussant", () =>
   assert.equal(person?.discussantOf.length, 1);
   assert.equal(person?.discussantOf[0].id, discussion.id);
 });
+t("Aktualisierter ConfTool-Abstract von Dimiter Peev ist in der App", () => {
+  const peev = m.sessions.find((s) => s.speakers?.includes("Dimiter Peev"));
+  assert.ok(peev, "Peev-Vortrag fehlt");
+  assert.match(peev.abstract, /Hristofor Žefarovićs „Stemmatographia“/);
+  assert.match(peev.abstract, /eigenständiges bulgarisches historisches Narrativ/);
+});
 t("Eröffnung/Festvortrag und musikalisches Buffet sind getrennte Formate", () => {
   const opening = m.events.find((e) => e.title.startsWith("Eröffnung des Slavistiktages"));
   assert.ok(opening, "Eröffnung fehlt");
