@@ -58,6 +58,24 @@
       "url_maps": "https://www.openstreetmap.org/search?query=Haus%20auf%20der%20Mauer%20Jena"
     }
   },
+  "quick_lunch": [
+    {
+      "name": "Mensa Ernst-Abbe-Platz",
+      "address": "Ernst-Abbe-Platz 8, 07743 Jena",
+      "note": "Mittagsversorgung Mo.–Fr. 11:00–14:00 Uhr",
+      "map_query": "Mensa Ernst-Abbe-Platz, Jena",
+      "url_info": "https://www.stw-thueringen.de/mensen/jena/mensa-ernst-abbe-platz.html",
+      "link_label": "Speiseplan ansehen"
+    },
+    {
+      "name": "Imbiss in der Goethe Galerie",
+      "address": "Goethestraße 3, 07743 Jena",
+      "note": "Öffnungszeiten der einzelnen Imbisse bitte online prüfen.",
+      "map_query": "Goethe Galerie, Goethestraße 3, Jena",
+      "url_info": "https://www.goethegalerie.de/branchen/imbiss",
+      "link_label": "Imbiss-Angebot ansehen"
+    }
+  ],
   "room_venue": {
     "SR": "CZS3",
     "HS": "CZS3",

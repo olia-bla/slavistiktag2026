@@ -548,9 +548,13 @@ select {
 
 /* ---------- Info ---------- */
 .venue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 0.7rem; margin-bottom: 0.8rem; }
-.venue-card { background: var(--card2); border: 1px solid var(--line); border-radius: 12px; padding: 0.75rem; min-width: 0; }
-.venue-card p { overflow-wrap: anywhere; }
+.venue-card, .lunch-place { background: var(--card2); border: 1px solid var(--line); border-radius: 12px; padding: 0.75rem; min-width: 0; }
+.venue-card p, .lunch-place p { overflow-wrap: anywhere; }
 .venue-map-links { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.55rem; }
+.lunch-card { margin-top: 0.9rem; }
+.lunch-grid { margin-bottom: 0; }
+.lunch-place .meta { margin: 0.3rem 0; }
+.lunch-place > .btn { margin-top: 0.3rem; }
 .podium { border-top: 1px solid var(--line); padding: 0.75rem 0; }
 .podium:first-of-type { border-top: 0; }
 .podium .body { font-size: 0.9rem; }

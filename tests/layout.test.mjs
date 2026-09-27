@@ -405,6 +405,7 @@ for (const vp of VIEWPORTS) {
   await page.waitForSelector("#app .view-info");
   await page.waitForTimeout(200);
   await t(`${vp.name}: Info ohne Überlauf`, async () => {
+    assert.equal(await page.locator("#app .lunch-place").count(), 2);
     assert.deepEqual(await overflowIssues(page), []);
   });
 

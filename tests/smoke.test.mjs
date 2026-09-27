@@ -749,10 +749,28 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
 });
 t("Orte: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
-  assert.deepEqual(headings, []);
+  assert.deepEqual(headings, ["Schnelles Mittagessen"]);
   assert.equal(document.querySelector("#app .downloads-card"), null);
   assert.equal(document.querySelector("#app .install-card"), null);
   assert.equal(document.querySelector("#app .view-info .podium"), null);
+});
+t("Orte: Mensa und Goethe Galerie mit korrekten Links", () => {
+  const places = [...document.querySelectorAll("#app .lunch-place")];
+  assert.equal(places.length, 2);
+  assert.ok(places[0].textContent.includes("Ernst-Abbe-Platz 8, 07743 Jena"));
+  assert.ok(places[0].textContent.includes("Mo.–Fr. 11:00–14:00 Uhr"));
+  assert.equal(places[0].querySelector("a.btn:not(.ghost)")?.href,
+    "https://www.stw-thueringen.de/mensen/jena/mensa-ernst-abbe-platz.html");
+  assert.ok(places[1].textContent.includes("Goethestraße 3, 07743 Jena"));
+  assert.equal(places[1].querySelector("a.btn:not(.ghost)")?.href,
+    "https://www.goethegalerie.de/branchen/imbiss");
+  for (const place of places) {
+    const links = [...place.querySelectorAll("a")];
+    assert.equal(links.length, 3);
+    assert.ok(links.some((link) => link.href.startsWith("https://www.openstreetmap.org/search?query=")));
+    assert.ok(links.some((link) => link.href.startsWith("https://www.google.com/maps/search/?api=1&query=")));
+    assert.ok(links.every((link) => link.target === "_blank" && link.rel.includes("noopener")));
+  }
 });
 
 // Deep-Link: Filter in URL
