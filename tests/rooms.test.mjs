@@ -76,7 +76,13 @@ t("HS 6–8 im 1. OG (amtliche Innen-Nummern)", () => {
 
 // 4. MMZ 220 → Ernst-Abbe-Platz 8
 t("MMZ 220 → Ernst-Abbe-Platz 8", () => {
-  assert.equal(roomMeta("MMZ 220").address, "Ernst-Abbe-Platz 8");
+  const mmz = roomMeta("MMZ 220");
+  assert.equal(mmz.address, "Ernst-Abbe-Platz 8");
+  assert.equal(mmz.lat, 50.9289611);
+  assert.equal(mmz.lon, 11.5827306);
+  const url = roomMapUrl("MMZ 220");
+  assert.ok(url.includes("mlat=50.9289611"));
+  assert.ok(url.includes("mlon=11.5827306"));
 });
 
 // 5. Deep-Link-Format valide
