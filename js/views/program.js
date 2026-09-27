@@ -31,13 +31,19 @@ const FORMAT_LABELS = {
 };
 const OPTIONAL_FORMATS = ["podium", "special", "rahmen", "pause"];
 
-// Filter-Reihenfolge: je Fach zuerst Panels, dann SEK-Sektionen; sonstige
-// ConfTool-Formate wie Poster und DFG stehen am Ende.
+// Filter-Reihenfolge: je Fach zuerst Panels, dann SEK-Sektionen; der Workshop
+// steht am Ende. Podien und andere Sonderformate gehoeren nicht in diese Liste.
 export function panelFilterRank(parts) {
   const section = parts.find((p) => /^SEK_/.test(p.code || ""));
   const discipline = panelDiscipline(section || parts[0]);
   const base = { SW: 0, DID: 2, LKW: 4 }[discipline];
   return base == null ? 6 : base + (section ? 1 : 0);
+}
+
+export function showInPanelFilter(parts) {
+  if (parts.some((p) => /^SEK_/.test(p.code || ""))) return true;
+  if (parts.some((p) => p.track !== "X")) return true;
+  return parts.some((p) => /sprachenlernen in bewegung/i.test(p.title || ""));
 }
 
 export function sortedPanelGroups(groups) {
@@ -164,6 +170,7 @@ function filterBar(model, ctx, state) {
   const roomOpts = model.rooms.map((r) => ({ value: r, text: r }));
   const slotOpts = TIME_SLOTS.map((slot) => ({ value: slot.value, text: slot.label }));
   const panelOpts = sortedPanelGroups(model.panelGroups)
+    .filter(([, parts]) => showInPanelFilter(parts))
     .map(([key, parts]) => {
       const p = parts[0];
       return { value: key, text: `${p.code ? p.code + " " : ""}${p.title || "?"}`.slice(0, 90) };

@@ -259,12 +259,21 @@ dom.window.location.hash = "#/programm?day=all";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
 t("Panel-Filter: alle Gruppen in Fach- und Format-Reihenfolge", async () => {
   const { buildModel } = await import("../js/data.js");
-  const { sortedPanelGroups } = await import("../js/views/program.js");
+  const { showInPanelFilter, sortedPanelGroups } = await import("../js/views/program.js");
   const program = JSON.parse(await readFile(new URL("../data/program.json", import.meta.url), "utf-8"));
   const content = JSON.parse(await readFile(new URL("../data/content.json", import.meta.url), "utf-8"));
-  const expected = sortedPanelGroups(buildModel(program, content).panelGroups).map(([key]) => key);
+  const expected = sortedPanelGroups(buildModel(program, content).panelGroups)
+    .filter(([, parts]) => showInPanelFilter(parts)).map(([key]) => key);
   const options = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')].slice(1);
   assert.deepEqual(options.map((option) => option.value), expected);
+});
+t("Panel/Sektion: keine Podien, Poster oder DFG; Workshop bleibt", () => {
+  const labels = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')]
+    .map((option) => option.textContent);
+  for (const title of ["Slavistik ohne Russland", "Zwischen Krise und Comeback", "Posterpr", "DFG-Antragstellung", "Book presentation"])
+    assert.ok(!labels.some((label) => label.includes(title)), `${title} steht noch im Panel-Filter`);
+  assert.ok(labels.some((label) => label.includes("Sprachenlernen in Bewegung")));
+  assert.ok(labels.some((label) => label.includes("Buch- und Mediengeschichte")));
 });
 t("Panel-Filter zeigt jeden Namen nur einmal", () => {
   const labels = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')]

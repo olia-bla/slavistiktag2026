@@ -1,7 +1,7 @@
 // Logik-Tests für die DOM-freien Module. Ausführen: node tests/logic.test.mjs
 import assert from "node:assert/strict";
 import { normalize, matchesQuery, filterSessions, formatOf, matchesTimeSlot, TIME_SLOTS } from "../js/search.js";
-import { matchesProgramCategories, panelFilterRank, sortedPanelGroups } from "../js/views/program.js";
+import { matchesProgramCategories, panelFilterRank, showInPanelFilter, sortedPanelGroups } from "../js/views/program.js";
 import { icsFor } from "../js/ics.js";
 import { conferenceCountdown, nowInfo } from "../js/now.js";
 import { buildModel, naturalRooms, panelDiscipline } from "../js/data.js";
@@ -64,6 +64,24 @@ t("Panel-Filter: SW, Didaktik, LKW, Sonstiges; jeweils Panel vor SEK", () => {
   assert.equal(rankOf("gastarbajteri"), 4);
   assert.equal(rankOf("Neue(re) utopische Diskurse"), 5);
   assert.equal(rankOf("Posterpr"), 6);
+});
+t("Panel/Sektion blendet Sonderformate aus, behält Workshop und echte Buch-Panels", () => {
+  const groups = [..._model.panelGroups];
+  const visible = groups.filter(([, parts]) => showInPanelFilter(parts));
+  const titles = (items) => items.map(([, parts]) => parts[0].title);
+  const excluded = titles(groups.filter(([, parts]) => !showInPanelFilter(parts)));
+  assert.equal(excluded.length, 4);
+  assert.ok(excluded.some((title) => title.includes("DFG-Antragstellung")));
+  assert.ok(excluded.some((title) => title.includes("Posterpr")));
+  assert.ok(excluded.some((title) => title.includes("Slavistik ohne Russland")));
+  assert.ok(excluded.some((title) => title.includes("Zwischen Krise und Comeback")));
+  const kept = titles(visible);
+  assert.ok(kept.some((title) => title.includes("Sprachenlernen in Bewegung")));
+  assert.ok(kept.some((title) => title.includes("Buch- und Mediengeschichte")));
+  assert.ok(kept.some((title) => title.includes("Ukrainische Sprache im Unterricht")));
+  assert.ok(kept.some((title) => title.includes("Sprachunterricht: einige praktische Aspekte")));
+  assert.equal(_model.events.filter((event) => event.type === "podium").length, 4);
+  assert.ok(_model.events.some((event) => event.title.includes("Book presentation")));
 });
 t("matchesQuery UND-Verknüpfung", () => {
   assert.equal(matchesQuery("polnisch herkunft russisch", "polnisch russisch"), true);
