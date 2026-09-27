@@ -110,13 +110,17 @@ t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
   assert.equal(contact.querySelector('a[href="mailto:slavistiktag2026@uni-jena.de"]')?.textContent,
     "✉ slavistiktag2026@uni-jena.de");
 });
-t("Startseite: Begrüßungen stehen zwischen Kontakt und App-Installation", () => {
+t("Startseite: Begrüßungen stehen vor der anklickbaren Installationsanleitung", () => {
   const contact = document.querySelector("#app .dashboard-contact");
   const welcome = document.querySelector("#app .welcome-wall");
   const install = document.querySelector("#app .dashboard-install");
   assert.equal(contact.nextElementSibling, welcome);
   assert.equal(welcome.nextElementSibling, install);
-  assert.equal(install.querySelector("h2")?.textContent, "App installieren");
+  const guide = install.querySelector("details.install-guide");
+  assert.ok(guide);
+  assert.equal(guide.open, false);
+  assert.ok(guide.querySelector("summary")?.textContent.includes("App installieren – Anleitung öffnen"));
+  assert.ok(guide.querySelector("summary")?.textContent.includes("iPhone, Android und Computer"));
   assert.ok(install.textContent.includes("iPhone / iPad"));
   assert.ok(install.textContent.includes("Android"));
   assert.ok(install.textContent.includes("Computer"));
@@ -388,7 +392,7 @@ t("Programmfilter: ohne Häkchen wird wieder alles angezeigt", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 300);
 });
 const categoryValues = ["podium", "special", "rahmen", "pause"];
-const categoryExpected = { podium: 4, special: 15, rahmen: 10, pause: 7 };
+const categoryExpected = { podium: 4, special: 15, rahmen: 12, pause: 7 };
 for (const value of categoryValues) {
   document.querySelector(`input[value="${value}"]`).click();
   await sleep(400);
@@ -667,6 +671,20 @@ t("Beide Eröffnungs-Einträge erscheinen ohne Häkchen wieder", () => {
   const titles = [...document.querySelectorAll("#app .event-card .card-title")].map((el) => el.textContent);
   assert.ok(titles.some((title) => title.includes("Eröffnung des Slavistiktages")));
   assert.ok(titles.includes("Buffet mit musikalischer Begleitung im Foyer"));
+});
+
+dom.window.location.hash = "#/programm?day=2026-10-02&slot=14%3A00-15%3A30&format=rahmen";
+await waitFor(() => {
+  const cards = [...document.querySelectorAll("#app .event-card.type-rahmen")];
+  return cards.length === 2 && cards.every((card) => card.querySelector(".time")?.textContent === "14:00–15:30");
+});
+t("Freitag: beide begleiteten Ausstellungen erscheinen im Rahmenprogramm-Filter", () => {
+  const cards = [...document.querySelectorAll("#app .event-card.type-rahmen")];
+  assert.equal(cards.length, 2);
+  assert.ok(cards.every((card) => card.querySelector(".time")?.textContent === "14:00–15:30"));
+  assert.ok(cards.every((card) => card.textContent.includes("Foyer CZS 3")));
+  assert.ok(cards.some((card) => card.textContent.includes("Christoph Giesel")));
+  assert.ok(cards.some((card) => card.textContent.includes("Dimiter Peev")));
 });
 
 // Podiumskarten tragen die ausführlichen Informationen nicht mehr auf der

@@ -86,9 +86,16 @@ t("Model: Räume mit Venue", () => {
     if (s.room && s.room.startsWith("SR")) assert.equal(s.venue, "CZS3");
   }
 });
-t("Model: Events inklusive 10 Einträgen im Rahmenprogramm", () => {
+t("Model: Events inklusive 12 Einträgen im Rahmenprogramm", () => {
   assert.ok(m.events.length >= 15, `nur ${m.events.length} Events`);
-  assert.equal(m.events.filter((e) => e.type === "rahmen").length, 10);
+  assert.equal(m.events.filter((e) => e.type === "rahmen").length, 12);
+  const guidedExhibitions = m.events.filter((e) =>
+    e.day === "2026-10-02" && e.start === "14:00" && e.end === "15:30"
+    && e.type === "rahmen" && e.title.toLowerCase().includes("ausstellung"));
+  assert.equal(guidedExhibitions.length, 2);
+  assert.ok(guidedExhibitions.every((e) => e.room === "Foyer CZS 3"));
+  assert.ok(guidedExhibitions.some((e) => e.note.includes("Christoph Giesel")));
+  assert.ok(guidedExhibitions.some((e) => e.note.includes("Dimiter Peev")));
   const podiums = m.events.filter((e) => e.type === "podium");
   assert.equal(podiums.length, 4, `${podiums.length} Podien`);
   assert.deepEqual(podiums.map((e) => `${e.day}|${e.start}|${e.room}`), [

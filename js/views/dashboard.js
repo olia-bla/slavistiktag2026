@@ -69,22 +69,19 @@ function holidayNotice() {
 }
 
 function installCard() {
-  return h("section", { class: "card install-card dashboard-install" },
-    h("h2", { text: "App installieren" }),
-    h("p", { text: "Die Seite funktioniert direkt im Browser. Als App öffnet sie sich im Vollbild und bleibt auch offline verfügbar." }),
-    h("h3", { text: "iPhone / iPad (Safari)" }),
-    h("ol", { class: "mini-list" },
-      h("li", { text: "Diese Seite in Safari öffnen." }),
-      h("li", { text: "Unten auf das Teilen-Symbol tippen (Quadrat mit Pfeil nach oben)." }),
-      h("li", { text: "„Zum Home-Bildschirm“ wählen." }),
-      h("li", { text: "Mit „Hinzufügen“ bestätigen." })),
-    h("h3", { text: "Android (Chrome)" }),
-    h("ol", { class: "mini-list" },
-      h("li", { text: "Diese Seite in Chrome öffnen." }),
-      h("li", { text: "Oben rechts auf die drei Punkte tippen." }),
-      h("li", { text: "„App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen und bestätigen." })),
-    h("h3", { text: "Computer" }),
-    h("p", { text: "Im Browser das Installationssymbol in der Adressleiste auswählen. Falls kein Symbol erscheint, kann die Seite weiterhin normal im Browser genutzt werden." }));
+  return h("section", { class: "card install-card dashboard-install", "aria-label": "App-Installationsanleitung" },
+    h("details", { class: "install-guide" },
+      h("summary", {},
+        h("span", { class: "install-guide-title", text: "App installieren – Anleitung öffnen" }),
+        h("span", { class: "install-guide-hint", text: "Für iPhone, Android und Computer" })),
+      h("div", { class: "install-guide-body" },
+        h("p", { text: "Die Seite funktioniert auch ohne Installation im Browser." }),
+        h("p", {}, h("strong", { text: "iPhone / iPad (Safari): " }),
+          "Teilen → „Zum Home-Bildschirm“ → „Hinzufügen“."),
+        h("p", {}, h("strong", { text: "Android (Chrome): " }),
+          "Menü ⋮ → „App installieren“ oder „Zum Startbildschirm hinzufügen“."),
+        h("p", {}, h("strong", { text: "Computer: " }),
+          "Installationssymbol in der Adressleiste wählen."))));
 }
 
 function changesNotice(model) {
