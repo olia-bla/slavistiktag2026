@@ -494,6 +494,7 @@ for (const [name, width, fixedTime, expected] of [
     const text = await page.locator(".now-card").textContent();
     assert.ok(text.includes(`Die Tagung beginnt in ${expected}`), text);
     assert.ok(text.includes("am Mittwoch, den 30. September 2026"), text);
+    assert.equal(await page.locator(".now-label.is-live").count(), 0);
     assert.deepEqual(await overflowIssues(page), []);
   });
   await ctx.close();
@@ -556,6 +557,11 @@ for (const [time, expectedItems] of [
     assert.ok(text.includes("Aktuell laufen mehrere Veranstaltungen"));
     assert.ok(text.includes("verschiedene Räume"));
     assert.equal(await page.locator('.now-card a[href="#/programm?day=2026-10-01"]').count() >= 1, true);
+    const liveLabel = page.locator(".now-label.is-live");
+    assert.equal(await liveLabel.count(), 1);
+    assert.equal(await liveLabel.evaluate((el) => getComputedStyle(el, "::before").animationName), "liveSoftPulse");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    assert.equal(await liveLabel.evaluate((el) => getComputedStyle(el, "::before").animationName), "none");
     assert.deepEqual(await overflowIssues(page), []);
   });
   await ctx.close();

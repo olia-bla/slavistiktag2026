@@ -111,13 +111,16 @@ function countdownText({ unit, days, hours, minutes }) {
 }
 
 function nowBody(model, now, ctx, countdown) {
+  const statusLabel = (label) => label
+    ? h("span", { class: label === "Läuft gerade" ? "now-label is-live" : "now-label", text: label })
+    : null;
   const openingDayBeforeOpening = now.day === model.conference.start && now.time < "18:00";
   const opening = model.events
     .filter((event) => event.day === model.conference.start && event.start)
     .sort((a, b) => a.start.localeCompare(b.start))[0];
   const openingHref = opening ? `#/programm?day=${opening.day}&format=special` : null;
   const scheduleItem = (label, title, meta, href = null) => h("div", { class: "now-item" },
-    label ? h("span", { class: "now-label", text: label }) : null,
+    statusLabel(label),
     href
       ? h("a", { class: "now-title", href, text: title })
       : h("span", { class: "now-title", text: title }),
@@ -166,7 +169,7 @@ function nowBody(model, now, ctx, countdown) {
   const card = (x, label) => {
     const isSession = x.type === "talk" || x.type === "break";
     return h("div", { class: "now-item" },
-      label ? h("span", { class: "now-label", text: label }) : null,
+      statusLabel(label),
       h("a", {
         class: "now-title", href: isSession ? `#/programm?q=${encodeURIComponent(x.title.slice(0, 40))}` : `#/programm?day=${x.day}`,
         onclick: x.id
@@ -182,7 +185,7 @@ function nowBody(model, now, ctx, countdown) {
   const parallelCard = (items, label, current) => {
     const first = items[0];
     return h("div", { class: "now-item" },
-      h("span", { class: "now-label", text: label }),
+      statusLabel(label),
       h("a", {
         class: "now-title",
         href: `#/programm?day=${first.day}`,
