@@ -1,6 +1,6 @@
 // Service Worker: Shell stale-while-revalidate, Daten network-first mit
 // Cache-Fallback. Der CACHE-Bump aktiviert die automatische App-Aktualisierung.
-const CACHE = "slavtag26-companion-v53";
+const CACHE = "slavtag26-companion-v54";
 const SHELL = [
   "./", "index.html", "css/style.css",
   "js/app.js", "js/util.js", "js/data.js", "js/mining.js", "js/lexicon.js", "js/languages.js",
@@ -11,7 +11,11 @@ const SHELL = [
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())
+    // GitHub Pages setzt max-age=600: eine neue Cache-Version darf keine
+    // alten JS-/CSS-Dateien aus dem HTTP-Cache erneut vorladen.
+    caches.open(CACHE)
+      .then((c) => c.addAll(SHELL.map((path) => new Request(path, { cache: "reload" }))))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -50,7 +54,7 @@ self.addEventListener("fetch", (e) => {
   // Shell: sofort aus dem Cache antworten, parallel im Hintergrund aktualisieren
   e.respondWith(
     caches.match(e.request).then((hit) => {
-      const refresh = fetch(e.request)
+      const refresh = fetch(e.request, { cache: "reload" })
         .then((res) => {
           if (res.ok) {
             const copy = res.clone();

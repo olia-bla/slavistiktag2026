@@ -77,6 +77,8 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
 t("App übernimmt neue Versionen automatisch", () => {
   assert.match(sw, /self\.skipWaiting\(\)/);
   assert.match(sw, /self\.clients\.claim\(\)/);
+  assert.match(sw, /SHELL\.map\(\(path\) => new Request\(path, \{ cache: "reload" \}\)\)/);
+  assert.equal((sw.match(/fetch\(e\.request, \{ cache: "reload" \}\)/g) || []).length, 2);
   assert.match(appJs, /updateViaCache:\s*"none"/);
   assert.match(appJs, /controllerchange/);
   assert.match(appJs, /reg\.update\(\)/);
