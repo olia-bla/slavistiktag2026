@@ -19,7 +19,7 @@ export function renderInfo(model) {
 
   const venueCards = Object.entries(c.venues).map(([id, venue]) => {
     const osmUrl = roomMapUrl(VENUE_ROOM[id]) || venue.url_maps;
-    const googleUrl = roomGoogleMapUrl(VENUE_ROOM[id]);
+    const googleUrl = venue.url_google_maps || roomGoogleMapUrl(VENUE_ROOM[id]);
     return h("article", { class: "venue-card" },
       h("h3", { text: venue.name }),
       venue.note ? h("p", { class: "meta", text: venue.note }) : null,

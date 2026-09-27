@@ -729,11 +729,19 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
   assert.ok(info.textContent.includes("HS 2"));
   assert.ok(info.textContent.includes("Foyer und HS 2 (EG), HS 6–8 (1. OG), Seminarräume (1. und 2. OG)"));
+  const institute = [...info.querySelectorAll(".venue-card")]
+    .find((card) => card.querySelector("h3")?.textContent === "Institut für Slawistik und Kaukasusstudien");
+  assert.ok(institute);
+  assert.ok(institute.textContent.includes("Ernst-Abbe-Platz 8, 3. OG"));
+  const instituteLinks = [...institute.querySelectorAll("a")];
+  assert.equal(instituteLinks.length, 2);
+  assert.ok(instituteLinks.every((link) =>
+    new URL(link.href).searchParams.get("query") === "Ernst-Abbe-Platz 8, Jena"));
   const mapLinks = [...info.querySelectorAll(".venue-card a")];
-  assert.equal(mapLinks.length, 8);
-  assert.equal(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap")).length, 4);
-  assert.equal(mapLinks.filter((link) => link.textContent.includes("Google Maps")).length, 4);
-  assert.ok(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap"))
+  assert.equal(mapLinks.length, 10);
+  assert.equal(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap")).length, 5);
+  assert.equal(mapLinks.filter((link) => link.textContent.includes("Google Maps")).length, 5);
+  assert.ok(mapLinks.filter((link) => link.textContent.includes("OpenStreetMap") && !institute.contains(link))
     .every((link) => link.href.includes("mlat=") && link.href.includes("mlon=")));
   assert.ok(mapLinks.filter((link) => link.textContent.includes("Google Maps"))
     .every((link) => link.href.startsWith("https://www.google.com/maps/search/?api=1&query=")));

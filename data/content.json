@@ -44,6 +44,13 @@
       "note": "Gebäude laut Lageplan ersehen (MMZ, Raum 220)",
       "url_maps": "https://www.openstreetmap.org/search?query=Jena%20Multimediazentrum"
     },
+    "ISKS": {
+      "name": "Institut für Slawistik und Kaukasusstudien",
+      "short": "Institut",
+      "note": "Ernst-Abbe-Platz 8, 3. OG",
+      "url_maps": "https://www.openstreetmap.org/search?query=Ernst-Abbe-Platz%208%2C%20Jena",
+      "url_google_maps": "https://www.google.com/maps/search/?api=1&query=Ernst-Abbe-Platz%208%2C%20Jena"
+    },
     "HaM": {
       "name": "Haus auf der Mauer",
       "short": "Haus auf der Mauer",
