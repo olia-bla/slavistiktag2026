@@ -81,8 +81,8 @@ export function renderSpeakers(model, ctx) {
   const people = buildSpeakerIndex(model);
   const wrap = h("div", { class: "view view-speakers" },
     h("header", { class: "hero compact" },
-      h("h1", { text: "Sprecher:innen A–Z" }),
-      h("p", { class: "meta", text: `${people.length} Personen, sortiert nach Nachname – Sprecher:innen und Chairs. Klick auf einen Namen zeigt die Vorträge im Detail.` })));
+      h("h1", { text: "Personen A–Z" }),
+      h("p", { class: "meta", text: `${people.length} Personen, sortiert nach Nachname – Vortragende und Chairs. Klick auf einen Namen zeigt die Vorträge im Detail.` })));
 
   const search = h("input", {
     type: "search", class: "search-input", placeholder: "Name suchen …",
@@ -137,7 +137,7 @@ export function renderPerson(model, ctx, rawName) {
     wrap.append(
       h("header", { class: "hero compact" },
         h("h1", { text: "Person nicht gefunden" }),
-        h("p", { class: "meta", text: `„${rawName}“ ist nicht im Sprecher:innen-Index. Eventuell hat sich das Programm geändert.` })),
+        h("p", { class: "meta", text: `„${rawName}“ ist nicht in der Personenübersicht. Eventuell hat sich das Programm geändert.` })),
       h("a", { class: "btn ghost", href: "#/sprecher", text: "← Zurück zur Übersicht" }));
     return wrap;
   }
@@ -156,7 +156,7 @@ export function renderPerson(model, ctx, rawName) {
   }
 
   const hero = h("header", { class: "hero compact" },
-    h("p", { class: "kicker" }, h("a", { href: "#/sprecher", text: "← Sprecher:innen" })),
+    h("p", { class: "kicker" }, h("a", { href: "#/sprecher", text: "← Personen" })),
     h("h1", { text: p.display }),
     h("p", { class: "meta", text:
       [`${p.talks.length} Vortrag${p.talks.length === 1 ? "" : "e"}`,

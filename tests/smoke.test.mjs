@@ -136,14 +136,14 @@ t("Startseite zeigt Tagungstitel, Datum und Ort zweizeilig", () => {
   assert.equal(document.querySelector("#forward-button"), null);
   assert.equal(document.querySelector(".history-bar"), null);
 });
-t("Nav mit 6 Einträgen (inkl. Themen + Sprecher:innen)", () => {
+t("Nav mit 6 Einträgen (inkl. Themen + Personen)", () => {
   const labels = [...document.querySelectorAll("#main-nav .nav-link")].map((a) => a.textContent.trim());
   assert.equal(labels.length, 6);
   assert.equal(labels[0], "Startseite");
   assert.equal(document.querySelector("#main-nav .nav-link")?.getAttribute("href"), "#/startseite");
   assert.equal(document.querySelector(".brand")?.getAttribute("href"), "#/startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
-  assert.ok(labels.some((l) => l.includes("Sprecher:innen")));
+  assert.ok(labels.includes("Personen"));
   assert.ok(labels.includes("Orte"));
   assert.equal(document.querySelector(".fav-count").textContent, "");
 });
@@ -618,6 +618,7 @@ await waitFor(() => !document.querySelector(".drawer"));
 dom.window.location.hash = "#/sprecher";
 await waitFor(() => document.querySelector("#app .view-speakers"));
 t("Sprecher-Index gerendert (≥200 Personen, Buchstaben-Gruppierung)", () => {
+  assert.equal(document.querySelector("#app .view-speakers h1")?.textContent, "Personen A–Z");
   const rows = document.querySelectorAll("#app .speaker-row");
   assert.ok(rows.length >= 200, `nur ${rows.length} Personen`);
   assert.ok(document.querySelectorAll("#app .speaker-letter").length >= 10);
@@ -637,6 +638,7 @@ t("Sprecher-Suche filtert live", () => {
 dom.window.location.hash = "#/sprecher/Gerta%20Monakhova";
 await waitFor(() => document.querySelector("#app .view-person"));
 t("Personen-Ansicht: Vorträge + Affiliation + Chair-Rollen", () => {
+  assert.equal(document.querySelector("#app .view-person .kicker a")?.textContent, "← Personen");
   const h1 = document.querySelector("#app .view-person h1");
   assert.ok(h1.textContent.includes("Monakhova"), h1.textContent);
   assert.ok(document.querySelectorAll("#app .view-person .session-card").length >= 1, "keine Vortragskarten");
@@ -646,7 +648,7 @@ dom.window.location.hash = "#/sprecher/Does%20Not%20Exist";
 await waitFor(() => document.querySelector("#app .view-person") &&
   document.querySelector("#app .view-person h1").textContent.includes("nicht gefunden"));
 t("Personen-Ansicht: unbekannter Name → ehrlicher Leerzustand", () => {
-  assert.ok(document.body.textContent.includes("nicht im Sprecher:innen-Index"));
+  assert.ok(document.body.textContent.includes("nicht in der Personenübersicht"));
 });
 
 // Änderungs-Ansicht (Was ist neu? / data/changes.json)

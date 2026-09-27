@@ -101,7 +101,7 @@ function renderNav() {
     link("#/programm", "Programm"),
     link("#/mein", "Mein Programm", h("span", { class: "fav-count pill", text: String(favs.all().length || "") })),
     link("#/themen", "Sprachen & Themen", null, route.startsWith("/themen")),
-    link("#/sprecher", "Sprecher:innen"),
+    link("#/sprecher", "Personen"),
     link("#/info", "Orte"));
 }
 
