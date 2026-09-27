@@ -19,6 +19,7 @@
   --lightblue: #648bc7;
   --faculty: #8b1878;
   --warn: #ae9a63;
+  --cancel: #a8323b;
   --did: #648bc7;
   --sw: #9b7fc4;
   --lkw: #dc9800;
@@ -51,6 +52,7 @@ html[data-theme="dark"] {
   --lightblue: #8fa8be;
   --faculty: #a8789f;
   --warn: #bba66f;
+  --cancel: #ff9299;
   --did: #8fa8be;
   --sw: #ab99bd;
   --lkw: #bd9467;
@@ -213,6 +215,23 @@ a.pill.room:hover { background: color-mix(in srgb, var(--accent) 30%, transparen
 .pill.floor-room.current { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 700; }
 /* „Läuft gerade“: Karten mit laufendem Vortrag hervorheben */
 .session-card.is-now, .event-card.is-now { border-color: var(--accent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent); }
+.session-card.is-cancelled {
+  background: color-mix(in srgb, var(--card2) 82%, var(--card));
+  border-left-color: var(--line-strong);
+  box-shadow: none;
+}
+.session-card.is-cancelled .card-title,
+.session-card.is-cancelled .card-speakers,
+.session-card.is-cancelled .card-panel { color: var(--ink-dim); }
+.pill.cancel-badge, .cancel-note, .cancel-label {
+  color: var(--cancel);
+  font-weight: 800;
+}
+.pill.cancel-badge {
+  background: color-mix(in srgb, var(--cancel) 12%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--cancel) 46%, transparent);
+}
+.cancel-note { border-left: 3px solid var(--cancel); padding-left: 0.7rem; }
 .pill.now { background: var(--warn); color: var(--bg); font-weight: 700; animation: nowPulse 2s ease-in-out infinite; }
 @keyframes nowPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.65; } }
 @media (prefers-reduced-motion: reduce) { .pill.now { animation: none; } }

@@ -103,7 +103,9 @@ export function filterSessions(sessions, state) {
     if (state.day && s.day !== state.day) return false;
     if (state.room && s.room !== state.room) return false;
     if (state.slot && !matchesTimeSlot(s.start, state.slot, s.day)) return false;
-    if (state.panel && s.panel_id !== state.panel) return false;
+    // One named panel can span several ConfTool sessions and days.
+    // Accept old deep links containing a single panel ID as well.
+    if (state.panel && s.panel_group !== state.panel && s.panel_id !== state.panel) return false;
     if (state.type && s.type !== state.type) return false;
     if (state.tracks && state.tracks.length) {
       if (!s.track) return false;

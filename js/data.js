@@ -16,6 +16,10 @@ const DIDACTIC_PANEL_TITLES = new Set([
   "Didaktik der Herkunftssprachen",
 ]);
 
+export function panelGroupKey(panel) {
+  return panel?.title ? `name:${normalize(panel.title)}` : "";
+}
+
 export function panelDiscipline(panel, sourceTrack = "") {
   const codeDiscipline = panel?.code?.match(/^SEK_(LKW|SW|DID)(?:_|$)/)?.[1];
   if (codeDiscipline) return codeDiscipline;
@@ -88,14 +92,25 @@ export function buildModel(program, content) {
   // unstrukturierte Fußzeile ausliefert.
   const supplements = content.program_supplements || {};
   const sourcePanels = [...(program.panels || []), ...(supplements.panels || [])];
+  const panels = Object.fromEntries(sourcePanels.map((p) => [p.id, p]));
   const automaticSessions = program.sessions || [];
   // Falls ConfTool einen redaktionell ergänzten Beitrag später selbst liefert,
   // gewinnt die automatische Quelle und es entsteht keine Dublette.
   const supplementalSessions = (supplements.sessions || []).filter((supplement) =>
     !automaticSessions.some((session) =>
       session.day === supplement.day && session.start === supplement.start && session.room === supplement.room));
-  const sourceSessions = [...automaticSessions, ...supplementalSessions];
-  const panels = Object.fromEntries(sourcePanels.map((p) => [p.id, p]));
+  // ConfTool sometimes exports a speakerless copy of a panel title as a talk.
+  // It remains in older JSON files but must not appear in the app.
+  const sourceSessions = [...automaticSessions, ...supplementalSessions].filter((s) =>
+    !(s.type === "talk" && !s.speakers?.length && panels[s.panel_id] &&
+      normalize(s.title) === normalize(panels[s.panel_id].title)));
+  const panelGroups = new Map();
+  for (const panel of sourcePanels) {
+    const key = panelGroupKey(panel);
+    if (!key) continue;
+    if (!panelGroups.has(key)) panelGroups.set(key, []);
+    panelGroups.get(key).push(panel);
+  }
 
   const sessions = sourceSessions.map((s) => {
     const panel = panels[s.panel_id] || null;
@@ -109,6 +124,7 @@ export function buildModel(program, content) {
       track: normalizedTrack,
       venue: roomVenue(s.room),
       panel_code: panel ? panel.code : null,
+      panel_group: panelGroupKey(panel),
       panel_title: panel ? panel.title : null,
       chair: panel ? panel.chair : null,
       discipline,
@@ -211,6 +227,7 @@ export function buildModel(program, content) {
     byDay,
     byId,
     panels,
+    panelGroups,
     events,
     eventByDay,
     // Der Raumfilter muss auch Räume von Podien/Sonderformaten und von
@@ -261,6 +278,7 @@ export async function loadData(fetchFn = fetch) {
   const program = await progRes.json();
   const content = await contRes.json();
   const model = buildModel(program, content);
+  model.programEtag = progRes.headers?.get?.("etag") || null;
 
   // LLM-Tagging nachladen (nicht-kritisch): bei Fehler/Feilen bleibt das
   // Lexikon-Tagging aktiv.

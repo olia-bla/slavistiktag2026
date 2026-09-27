@@ -95,7 +95,7 @@ function changesNotice(model) {
   const parts = [
     counts.new ? `${counts.new} neu` : null,
     counts.changed ? `${counts.changed} geändert` : null,
-    counts.removed ? `${counts.removed} entfallen` : null,
+    counts.removed ? `${counts.removed} abgesagt` : null,
   ].filter(Boolean).join(", ");
   return h("section", { class: "card dashboard-notice" },
     h("h2", { text: "Aktuelle Hinweise" }),

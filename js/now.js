@@ -33,7 +33,7 @@ export function nowInfo(model, now = new Date()) {
   // Pausen gehören auch auf die Startseite: sonst wirkt das Programm während
   // der Kaffee- und Mittagspausen fälschlich leer.
   const items = [
-    ...(model.byDay[day] || []).filter((s) => s.start && s.end),
+    ...(model.byDay[day] || []).filter((s) => s.start && s.end && s.status !== "cancelled"),
     ...(model.eventByDay?.[day] || []).filter((e) => e.start && e.end),
   ].sort((a, b) => itemStart(a) - itemStart(b));
 

@@ -9,7 +9,7 @@ import { stripTitles } from "./speakers.js";
 // Läuft diese Veranstaltung „jetzt“? Nur während der Konferenztage; der
 // Zeitpunkt ist per ctx.now injizierbar (Tests).
 export function isRunningNow(model, x, now = new Date()) {
-  if (!x || !x.day || !x.start || !x.end) return false;
+  if (!x || x.status === "cancelled" || !x.day || !x.start || !x.end) return false;
   const d = new Date(now);
   const p = (n) => String(n).padStart(2, "0");
   const today = `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
@@ -57,7 +57,9 @@ function readState(model, params) {
     day: dayParam === "all" ? "" : (dayParam ?? (q ? "" : browseDefault)),
     room: params.get("room") || "",
     slot: params.get("slot") || "",
-    panel: params.get("panel") || "",
+    panel: model.panels[params.get("panel")]
+      ? model.sessions.find((s) => s.panel_id === params.get("panel"))?.panel_group || params.get("panel")
+      : params.get("panel") || "",
     tracks: params.getAll("track"),
     // Einheitliche positive Filterlogik: keine Auswahl zeigt alles; gesetzte
     // Häkchen schränken auf die gewählten Veranstaltungsarten ein.
@@ -132,15 +134,25 @@ function filterBar(model, ctx, state) {
     const sel = h("select", { "aria-label": label },
       h("option", { value: "", text: label }),
       options.map((o) => h("option", { value: o.value, selected: state[key] === o.value, text: o.text })));
-    sel.addEventListener("change", () => { state[key] = sel.value; sync(); });
+    sel.addEventListener("change", () => {
+      state[key] = sel.value;
+      if (onChange) onChange();
+      sync();
+    });
     return sel;
   };
 
   const roomOpts = model.rooms.map((r) => ({ value: r, text: r }));
   const slotOpts = TIME_SLOTS.map((slot) => ({ value: slot.value, text: slot.label }));
-  const panelOpts = Object.values(model.panels)
-    .sort((a, b) => (a.day + a.block_start).localeCompare(b.day + b.block_start))
-    .map((p) => ({ value: p.id, text: `${p.code ? p.code + " " : ""}${p.title || "?"}`.slice(0, 90) }));
+  const panelOpts = [...model.panelGroups]
+    .sort((a, b) => {
+      const pa = a[1][0], pb = b[1][0];
+      return (pa.day + pa.block_start).localeCompare(pb.day + pb.block_start);
+    })
+    .map(([key, parts]) => {
+      const p = parts[0];
+      return { value: key, text: `${p.code ? p.code + " " : ""}${p.title || "?"}`.slice(0, 90) };
+    });
 
   // „Nur Vorträge": erscheint nur bei aktiver Suche (ohne Suche ohne Bedeutung);
   // blendet Treffer aus, die NUR über das Chair-Feld passen.
@@ -159,7 +171,12 @@ function filterBar(model, ctx, state) {
     h("div", { class: "filter-row filter-selects" },
       select("Raum", roomOpts, "room"),
       select("Zeit", slotOpts, "slot"),
-      select("Panel/Sektion", panelOpts, "panel")),
+      select("Panel/Sektion", panelOpts, "panel", () => {
+        if (state.panel) {
+          state.day = "";
+          state.dayExplicit = true;
+        }
+      })),
     h("div", { class: "filter-row filter-options" },
       checks("Disziplin", [
         { value: "DID", text: TRACK_LABELS.DID },
@@ -433,6 +450,7 @@ function listView(model, ctx, sessions, events, q, allDays) {
 
 export function sessionCard(model, ctx, s, state) {
   const isFav = favs.has(s.id);
+  const isCancelled = s.status === "cancelled";
   const isSpecial = formatOf(s) === "special";
   const titleHtml = state.q ? highlight(s.title, state.q) : null;
   // Treffer-Snippet aus dem Abstract (nur bei aktiver Suche)
@@ -441,7 +459,7 @@ export function sessionCard(model, ctx, s, state) {
   const now = ctx.now instanceof Date ? ctx.now : new Date();
   const isNow = isRunningNow(model, s, now);
   return h("article", {
-    class: `card session-card track-${(s.discipline || "x").toLowerCase()} ${isSpecial ? "type-special" : ""} ${isFav ? "is-fav" : ""} ${isNow ? "is-now" : ""}`,
+    class: `card session-card track-${(s.discipline || "x").toLowerCase()} ${isSpecial ? "type-special" : ""} ${isFav ? "is-fav" : ""} ${isNow ? "is-now" : ""} ${isCancelled ? "is-cancelled" : ""}`,
     "data-id": s.id,
     onclick: () => ctx.openSession(s.id),
     tabindex: "0",
@@ -450,7 +468,8 @@ export function sessionCard(model, ctx, s, state) {
     h("div", { class: "card-top" },
       h("span", { class: "time", text: `${s.start}–${s.end}` }),
       isNow ? h("span", { class: "pill now", text: "jetzt" }) : null,
-      h("button", {
+      isCancelled ? h("span", { class: "pill cancel-badge", text: "Abgesagt" }) : null,
+      (!isCancelled || isFav) ? h("button", {
         class: `fav ${isFav ? "active" : ""}`, "aria-label": "Merken",
         text: isFav ? "★" : "☆",
         onclick: (e) => {
@@ -460,7 +479,7 @@ export function sessionCard(model, ctx, s, state) {
           e.target.closest(".session-card").classList.toggle("is-fav", on);
           ctx.refreshFavIndicators?.();
         },
-      })),
+      }) : null),
     h("div", { class: "card-title", html: titleHtml || undefined, text: titleHtml ? undefined : s.title }),
     s.speakers?.length ? h("div", { class: "card-speakers",
       text: `${s.speakers.join(", ")}${s.role ? ` (${s.role})` : ""}` }) : null,

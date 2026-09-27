@@ -18,11 +18,12 @@ export function conflictsByDay(model, ids) {
   }
   const conflicts = {};
   for (const [day, list] of Object.entries(byDay)) {
-    for (let i = 0; i < list.length; i++) {
-      for (let j = i + 1; j < list.length; j++) {
-        if (overlapping(list[i], list[j])) {
-          (conflicts[list[i].id] ||= []).push(list[j].id);
-          (conflicts[list[j].id] ||= []).push(list[i].id);
+    const active = list.filter((s) => s.status !== "cancelled");
+    for (let i = 0; i < active.length; i++) {
+      for (let j = i + 1; j < active.length; j++) {
+        if (overlapping(active[i], active[j])) {
+          (conflicts[active[i].id] ||= []).push(active[j].id);
+          (conflicts[active[j].id] ||= []).push(active[i].id);
         }
       }
     }
@@ -53,7 +54,7 @@ export function renderMine(model, ctx) {
       onclick: () => {
         const events = ids
           .map((id) => model.sessions.find((x) => x.id === id))
-          .filter(Boolean)
+          .filter((s) => s && s.status !== "cancelled")
           .map((s) => ({ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room || "" }));
         downloadIcs("mein-slavistiktag.ics", icsFor(events));
       },
@@ -71,11 +72,12 @@ export function renderMine(model, ctx) {
             .filter(Boolean)
             .map((x) => `${x.start} ${x.title.slice(0, 40)}`);
           return h("article", {
-            class: `card session-card track-${(s.discipline || "x").toLowerCase()} is-fav ${clash.length ? "has-conflict" : ""}`,
+            class: `card session-card track-${(s.discipline || "x").toLowerCase()} is-fav ${clash.length ? "has-conflict" : ""} ${s.status === "cancelled" ? "is-cancelled" : ""}`,
             onclick: () => ctx.openSession(s.id), tabindex: "0", role: "button",
           },
             h("div", { class: "card-top" },
               h("span", { class: "time", text: timeRange(s.start, s.end) }),
+              s.status === "cancelled" ? h("span", { class: "pill cancel-badge", text: "Abgesagt" }) : null,
               h("button", {
                 class: "fav active", "aria-label": "Entfernen", text: "★",
                 onclick: (e) => { e.stopPropagation(); favs.toggle(s.id); ctx.render(); },

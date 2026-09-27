@@ -21,8 +21,8 @@ installierbar als PWA (Offline-Nutzung über Service Worker).
 
 ```
 ConfTool der Tagung (slavistiktag2026)
-   │  GitHub Action update.yml (Cron alle 6 h): Fetch → Parser →
-   │  Validierungs-Gate → bei Änderung: Commit → Pages-Neubau
+   │  GitHub Action update.yml (Cron alle 30 min): Fetch → Parser →
+   │  Validierungs-Gate → bei Änderung: Commit → Pages-Deploy auslösen
    ▼
 data/program.json   (generiert, committed)
 data/changes.json   (Diff des letzten Syncs, optional)
@@ -35,6 +35,15 @@ App (buildModel beim Laden: Venues, Panels, Suche, Mining-Tags, Cluster)
 
 Validierung schlägt fehl → kein Commit, alte Daten bleiben online, die Action
 scheitert sichtbar.
+
+Wird ein akzeptierter Beitrag in ConfTool auf "offen" gesetzt und verschwindet
+dadurch aus der öffentlichen Programmansicht, bleibt er in der App grau mit
+rotem Hinweis "Abgesagt" stehen. Raum-, Titel- und Namensänderungen werden
+über die ConfTool-Beitrags-ID demselben Eintrag zugeordnet; Favoriten bleiben
+erhalten. Für dringende Änderungen kann die Action "Programm-Update prüfen"
+auf GitHub zusätzlich manuell gestartet werden. Nach der Veröffentlichung
+bemerkt die geöffnete App neue Programmdaten automatisch. ConfTool wird bei
+allen Schritten nur gelesen.
 
 ## Struktur
 
@@ -64,7 +73,7 @@ repo/
 ├── tools/verify_lexicon.mjs  Lexikon gegen echte Titel verifizieren
 ├── tests/                    mining, logic, realdata, rooms, shell, smoke
 │                             (jsdom), layout (Playwright)
-└── .github/workflows/        deploy.yml (Pages), update.yml (Cron 6 h),
+└── .github/workflows/        deploy.yml (Pages), update.yml (Cron 30 min),
                               test.yml (Tests bei Push/PR)
 ```
 

@@ -359,6 +359,10 @@ def build(days_data: dict, details: dict, code_map: dict, warnings: list) -> dic
             block_span[key].append((det["start"], det["end"]))
             used_ids: dict[str, int] = {}
             for pp in det["papers"]:
+                # A speakerless copy of the panel title is not a talk.
+                if not pp["speakers"] and one_line(pp["title"]).casefold() == one_line(det["title"]).casefold():
+                    warn(warnings, f"Sitzung {sid}: Paneltitel nicht als Vortrag uebernommen")
+                    continue
                 base = f"{det['day']}-{det['start']}-{(det['room'] or '').replace(' ', '')}-{pp['start'] or det['start']}"
                 # Eindeutigkeit: mehrere Vorträge im selben Slot (parallele
                 # Kurzvorträge, Panel-Intro + erster Vortrag) bekommen -2, -3 …
@@ -366,6 +370,7 @@ def build(days_data: dict, details: dict, code_map: dict, warnings: list) -> dic
                 used_ids[base] = n
                 sessions.append({
                     "id": base if n == 1 else f"{base}-{n}",
+                    "conftool_paper_id": pp["pid"],
                     "day": det["day"],
                     "start": pp["start"] or det["start"],
                     "end": pp["end"] or det["end"],
@@ -452,7 +457,7 @@ def _talk_key(t: dict) -> tuple:
 
 
 def _mini(t: dict) -> dict:
-    return {k: t.get(k) for k in ("id", "title", "speakers", "day", "start", "end", "room")}
+    return {k: t.get(k) for k in ("id", "title", "speakers", "day", "start", "end", "room", "status")}
 
 
 def _slot(t: dict) -> dict:
@@ -460,21 +465,23 @@ def _slot(t: dict) -> dict:
 
 
 def diff_programs(old: dict, new: dict) -> dict:
-    """Änderungen zwischen zwei Programmständen (nur Vorträge).
-    Titel-Änderungen erscheinen als entfallen+neu (gleiche Slots wären Zufall)."""
-    old_talks = {_talk_key(s): s for s in old.get("sessions", []) if s.get("type") == "talk"}
-    new_talks = {_talk_key(s): s for s in new.get("sessions", []) if s.get("type") == "talk"}
+    """Changed names/titles/slots and newly cancelled talks in one diff."""
+    old_talks = {s["id"]: s for s in old.get("sessions", []) if s.get("type") == "talk"}
+    new_talks = {s["id"]: s for s in new.get("sessions", []) if s.get("type") == "talk"}
 
     added, changed, removed = [], [], []
-    for k, s in new_talks.items():
-        o = old_talks.get(k)
+    for ident, s in new_talks.items():
+        o = old_talks.get(ident)
+        if s.get("status") == "cancelled":
+            if o and o.get("status") != "cancelled":
+                removed.append(_mini(s))
+            continue
         if o is None:
             added.append(_mini(s))
-        elif _slot(o) != _slot(s):
-            changed.append({**_mini(s), "old": _slot(o)})
-    for k, s in old_talks.items():
-        if k not in new_talks:
-            removed.append(_mini(s))
+        elif o.get("status") == "cancelled":
+            added.append(_mini(s))
+        elif any(o.get(k) != s.get(k) for k in ("title", "speakers", "day", "start", "end", "room")):
+            changed.append({**_mini(s), "old": _mini(o)})
 
     added.sort(key=lambda t: (t.get("day") or "", t.get("start") or "", t.get("room") or ""))
     changed.sort(key=lambda t: (t.get("day") or "", t.get("start") or "", t.get("room") or ""))
@@ -485,6 +492,74 @@ def diff_programs(old: dict, new: dict) -> dict:
         "changed": changed,
         "removed": removed,
     }
+
+
+def _real_talks(data: dict) -> list[dict]:
+    panels = {p["id"]: p for p in data.get("panels", [])}
+    return [s for s in data.get("sessions", []) if s.get("type") == "talk" and not (
+        not s.get("speakers") and
+        one_line(s.get("title", "")).casefold() ==
+        one_line(panels.get(s.get("panel_id"), {}).get("title", "")).casefold())]
+
+
+def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
+    """Keep vanished talks as cancelled and preserve IDs across edits/moves."""
+    available = {s["id"]: s for s in _real_talks(old)}
+    current = [s for s in fresh["sessions"] if s.get("type") == "talk"]
+    for s in current:
+        candidates = list(available.values())
+        rules = [
+            lambda o: bool(s.get("conftool_paper_id") and o.get("conftool_paper_id") == s["conftool_paper_id"]),
+            lambda o: _talk_key(o) == _talk_key(s),
+            lambda o: bool(s.get("title") and o.get("title", "").casefold() == s["title"].casefold()),
+            lambda o: bool(s.get("speakers") and _talk_key(o)[1] == _talk_key(s)[1] and
+                           o.get("day") == s.get("day") and o.get("start") == s.get("start")),
+            lambda o: bool(s.get("speakers") and _talk_key(o)[1] == _talk_key(s)[1]),
+        ]
+        match = None
+        for rule in rules:
+            hits = [o for o in candidates if rule(o)]
+            if len(hits) == 1:
+                match = hits[0]
+                break
+        if match:
+            s["id"] = match["id"]
+            available.pop(match["id"])
+        elif s.get("conftool_paper_id"):
+            s["id"] = f"ct-paper-{s['conftool_paper_id']}"
+
+    used = {s["id"] for s in current}
+    if len(used) != len(current):
+        raise ValueError("Doppelte Vortrags-IDs nach ConfTool-Abgleich")
+    old_panels = {p["id"]: p for p in old.get("panels", [])}
+    new_panels = {p["id"]: p for p in fresh["panels"]}
+    newly_cancelled = 0
+    for o in available.values():
+        cancelled = dict(o)
+        if cancelled.get("status") != "cancelled":
+            newly_cancelled += 1
+            cancelled["cancelled_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        cancelled["status"] = "cancelled"
+        if cancelled["id"] in used:
+            raise ValueError(f"Doppelte ID eines abgesagten Vortrags: {cancelled['id']}")
+        used.add(cancelled["id"])
+        old_panel = old_panels.get(cancelled.get("panel_id"))
+        if old_panel and (old_panel["id"] not in new_panels or
+                          new_panels[old_panel["id"]]["title"] != old_panel["title"]):
+            panel = dict(old_panel)
+            if panel["id"] in new_panels:
+                panel["id"] += "|cancelled"
+                cancelled["panel_id"] = panel["id"]
+            fresh["panels"].append(panel)
+            new_panels[panel["id"]] = panel
+        fresh["sessions"].append(cancelled)
+    if newly_cancelled > 8:
+        raise ValueError(f"{newly_cancelled} Beitraege verschwunden: moeglicher Importfehler")
+    if newly_cancelled:
+        warn(warnings, f"{newly_cancelled} nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar")
+    fresh["sessions"].sort(key=lambda s: (s.get("day") or "", s.get("start") or "", s.get("room") or ""))
+    fresh["panels"].sort(key=lambda p: (p.get("day") or "", p.get("block_start") or "", p.get("title") or ""))
+    return fresh
 
 
 # ---------------------------------------------------------------- io
@@ -501,11 +576,12 @@ def write_out(data: dict, out_path, warnings: list) -> None:
         "source_sha256": hashlib.sha256(canonical(data).encode("utf-8")).hexdigest()[:16],
         "generated_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
         "stats": {
-            "sessions": sum(1 for s in data["sessions"] if s["type"] == "talk"),
+            "sessions": sum(1 for s in data["sessions"] if s["type"] == "talk" and s.get("status") != "cancelled"),
+            "cancelled": sum(1 for s in data["sessions"] if s.get("status") == "cancelled"),
             "breaks": sum(1 for s in data["sessions"] if s["type"] == "break"),
             "panels": len(data["panels"]),
             "footer_events": len(data["events"]),
-            "abstracts": sum(1 for s in data["sessions"] if s.get("abstract")),
+            "abstracts": sum(1 for s in data["sessions"] if s.get("abstract") and s.get("status") != "cancelled"),
         },
         "warnings": warnings,
     }
@@ -548,17 +624,33 @@ def main() -> int:
     warnings2: list = []
     problems = validate(data, warnings2)
     warnings.extend(warnings2)
+    try:
+        old = json.load(open(args.codes, encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        old = None
+    if not problems and old is not None:
+        try:
+            data = reconcile_programs(old, data, warnings)
+        except ValueError as e:
+            problems.append(str(e))
     stats = {
-        "talks": sum(1 for s in data["sessions"] if s["type"] == "talk"),
+        "talks": sum(1 for s in data["sessions"] if s["type"] == "talk" and s.get("status") != "cancelled"),
+        "cancelled": sum(1 for s in data["sessions"] if s.get("status") == "cancelled"),
         "breaks": sum(1 for s in data["sessions"] if s["type"] == "break"),
         "panels": len(data["panels"]),
         "events": len(data["events"]),
-        "abstracts": sum(1 for s in data["sessions"] if s.get("abstract")),
+        "abstracts": sum(1 for s in data["sessions"] if s.get("abstract") and s.get("status") != "cancelled"),
     }
     print(f"stats: {stats}")
     print(f"warnings: {len(warnings)}")
     for w in warnings[:40]:
         print("  -", w)
+
+    if problems:
+        print("\nVALIDIERUNG FEHLGESCHLAGEN - keine Ausgabe:")
+        for p in problems:
+            print("  !", p)
+        return 1
 
     if args.compare:
         try:
@@ -570,18 +662,8 @@ def main() -> int:
         print(f"COMPARE: {'GEÄNDERT' if changed else 'unverändert'}")
         return 1 if changed else 0
 
-    if problems:
-        print("\nVALIDIERUNG FEHLGESCHLAGEN – keine Ausgabe:")
-        for p in problems:
-            print("  !", p)
-        return 1
-
     out = Path(args.out)
     if args.changes:
-        try:
-            old = json.load(open(args.codes, encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            old = None
         if old is None:
             print("DIFF: kein alter Stand (--codes) – changes.json wird nicht geschrieben")
         else:
@@ -591,7 +673,7 @@ def main() -> int:
             cpath.write_text(json.dumps(changes, ensure_ascii=False, indent=1), encoding="utf-8")
             print(f"Diff: +{changes['counts']['new']} neu, "
                   f"{changes['counts']['changed']} geändert, "
-                  f"{changes['counts']['removed']} entfallen → {cpath}")
+                  f"{changes['counts']['removed']} abgesagt → {cpath}")
     write_out(data, out, warnings)
     print(f"\nwrote {out} ({out.stat().st_size} bytes)")
     print("VALIDIERUNG OK")

@@ -182,6 +182,21 @@ t("Programmfilter: alle Auswahlfilter starten leer; Panel- und Sektionsfilter fe
 t("Programm: Vortragskarten vorhanden", () => {
   assert.ok(document.querySelectorAll("#app .session-card").length > 10);
 });
+t("Abgesagter Beitrag bleibt grau markierbar, aber nicht als laufend", async () => {
+  const { sessionCard } = await import("../js/views/program.js");
+  const card = sessionCard(null, {
+    now: new NativeDate("2026-10-01T09:10:00"),
+    openSession: () => {},
+  }, {
+    id: "test-cancelled", day: "2026-10-01", start: "09:00", end: "09:30",
+    type: "talk", status: "cancelled", discipline: "SW",
+    title: "Abgesagter Testbeitrag", speakers: ["Test Person"],
+  }, { q: "" });
+  assert.ok(card.classList.contains("is-cancelled"));
+  assert.equal(card.querySelector(".cancel-badge")?.textContent, "Abgesagt");
+  assert.equal(card.classList.contains("is-now"), false);
+  assert.equal(card.querySelector(".fav"), null);
+});
 t("Programm: Tagesregister enthält alle Tage ohne Scroll-Steuerung", () => {
   const tabs = [...document.querySelectorAll("#app .day-tabs .chip")];
   assert.equal(tabs.length, 5);
@@ -242,6 +257,26 @@ t("Programmfilter: Zurücksetzen leert Fachfilter und blendet alle Kategorien ei
 });
 dom.window.location.hash = "#/programm?day=all";
 await waitFor(() => [...document.querySelectorAll(".day-tabs .chip.active")].some((el) => el.textContent === "Alle Tage"));
+t("Panel-Filter zeigt jeden Namen nur einmal", () => {
+  const labels = [...document.querySelectorAll('select[aria-label="Panel/Sektion"] option')]
+    .filter((option) => option.textContent.includes("Fremdsprachendidaktik slavischer Sprachen"));
+  assert.equal(labels.length, 1);
+});
+const panelSelect = document.querySelector('select[aria-label="Panel/Sektion"]');
+panelSelect.value = [...panelSelect.options]
+  .find((option) => option.textContent.includes("Fremdsprachendidaktik slavischer Sprachen")).value;
+panelSelect.dispatchEvent(new dom.window.Event("change", { bubbles: true }));
+await sleep(400);
+t("Panel-Filter zeigt alle vier Teile, auch am Freitag", () => {
+  const cards = [...document.querySelectorAll("#app .session-card")];
+  assert.ok(cards.length > 5);
+  assert.ok(cards.every((card) => card.textContent.includes("Fremdsprachendidaktik slavischer Sprachen")));
+  assert.ok(document.querySelector("#app .results").textContent.includes("Freitag, 02.10."));
+  assert.ok(!cards.some((card) => card.querySelector(".card-title")?.textContent ===
+    "Fremdsprachendidaktik slavischer Sprachen"));
+});
+document.querySelector(".filter-options .btn").click();
+await sleep(100);
 t("Programm: Vortrag von Nadiya Kiss ist als Ukrainisch markiert", () => {
   const card = [...document.querySelectorAll(".session-card")]
     .find((el) => el.textContent.includes("Nadiya Kiss"));
@@ -672,6 +707,28 @@ await waitFor(() => document.querySelector("#app .view-changes"));
 t("Änderungs-Ansicht: leerer Stand ohne Fehler", () => {
   assert.ok(document.querySelector("#app .view-changes h1").textContent.includes("Programm-Änderungen"));
   assert.ok(document.body.textContent.includes("keine Änderungen"));
+});
+t("Änderungs-Ansicht: Titel/Name und Absage sind verständlich markiert", async () => {
+  const { renderChanges } = await import("../js/views/changes.js");
+  const changed = {
+    id: "changed", day: "2026-10-01", start: "09:00", end: "09:30", room: "SR 206",
+    title: "Neuer Titel", speakers: ["Neuer Name"],
+    old: { day: "2026-10-01", start: "09:00", end: "09:30", room: "SR 113",
+      title: "Alter Titel", speakers: ["Alter Name"] },
+  };
+  const cancelled = {
+    id: "cancelled", day: "2026-10-01", start: "09:30", end: "10:00",
+    room: "SR 113", title: "Abgesagter Beitrag", speakers: ["Test Person"],
+  };
+  const view = renderChanges({ changes: {
+    counts: { new: 0, changed: 1, removed: 1 },
+    generated_at: "2026-09-27T10:00:00+02:00",
+    new: [], changed: [changed], removed: [cancelled],
+  } }, { byId: { changed, cancelled }, openSession: () => {} });
+  assert.ok(view.textContent.includes("Titel zuvor: Alter Titel"));
+  assert.ok(view.textContent.includes("Name zuvor: Alter Name"));
+  assert.ok(view.textContent.includes("Abgesagt"));
+  assert.equal(view.querySelectorAll("li li").length, 0);
 });
 
 // Feature 2: „Läuft gerade" – beim Testlauf (Sept. 2026) vor der Tagung: keine „jetzt"-Pills

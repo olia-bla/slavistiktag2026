@@ -120,8 +120,8 @@ function speakerLineEl(s) {
 
 function sessionBody(ctx, s, close) {
   const languageBadge = nonGermanLanguageBadge(s._lang);
-  const panelTalks = s.panel_id
-    ? ctx.model.byDay[s.day].filter((x) => x.panel_id === s.panel_id && x.type !== "break")
+  const panelTalks = s.panel_group
+    ? ctx.model.sessions.filter((x) => x.panel_group === s.panel_group && x.type !== "break")
     : [];
   const parallel = ctx.model.byDay[s.day]
     .filter((x) => x.type !== "break" && x.day === s.day && x.start === s.start && x.id !== s.id);
@@ -131,6 +131,9 @@ function sessionBody(ctx, s, close) {
     h("p", { class: "kicker", text: `${dateLabel(s.day)} · ${timeRange(s.start, s.end)}` }),
     h("h2", { text: s.title },
       languageBadge ? h("span", { class: "pill lang", text: languageBadge.label, title: languageBadge.title }) : null),
+    s.status === "cancelled"
+      ? h("p", { class: "cancel-note", role: "status", text: "Abgesagt – dieser Beitrag findet nicht statt." })
+      : null,
     speakerLineEl(s),
     h("p", { class: "meta" },
       roomLink(s.room), " ",
@@ -151,14 +154,17 @@ function sessionBody(ctx, s, close) {
             ? h("p", { class: "abstract", html: highlight(s.abstract, s._q) })
             : h("p", { class: "abstract", text: s.abstract }))
       : null,
-    h("div", { class: "btn-row" }, favBtn(ctx, s), icsBtn(s), shareBtn(s)),
+    h("div", { class: "btn-row" },
+      s.status !== "cancelled" || favs.has(s.id) ? favBtn(ctx, s) : null,
+      s.status !== "cancelled" ? icsBtn(s) : null,
+      shareBtn(s)),
     panelTalks.length > 1
       ? h("section", {},
           h("h3", { text: `Im Panel (${panelTalks.length} Beiträge)` }),
           h("ul", { class: "mini-list" },
             panelTalks.map((x) => h("li", {},
               h("a", { href: "#", onclick: (e) => { e.preventDefault(); ctx.openSession(x.id); } },
-                `${x.start} – ${x.speakers.join(", ")}${x.role ? ` (${x.role})` : ""}: ${x.title}`)))))
+                `${dateLabel(x.day)} ${x.start} – ${x.speakers.join(", ")}${x.role ? ` (${x.role})` : ""}: ${x.title}${x.status === "cancelled" ? " (abgesagt)" : ""}`)))))
       : null,
     parallel.length
       ? h("section", {},

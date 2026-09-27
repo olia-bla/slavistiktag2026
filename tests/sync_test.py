@@ -1,0 +1,77 @@
+"""Offline regression tests for the read-only ConfTool import/reconciliation."""
+import copy
+import sys
+import unittest
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+import fetch_conftool as sync  # noqa: E402
+
+
+def talk(ident, paper_id, title, speaker, room="SR 113", status=None):
+    item = {
+        "id": ident, "conftool_paper_id": paper_id, "type": "talk",
+        "day": "2026-10-01", "start": "09:00", "end": "09:30",
+        "room": room, "panel_id": "panel-1", "title": title,
+        "speakers": [speaker], "abstract": None,
+    }
+    if status:
+        item["status"] = status
+    return item
+
+
+def program(sessions):
+    return {"sessions": sessions, "panels": [
+        {"id": "panel-1", "title": "Langes Panel", "day": "2026-10-01",
+         "block_start": "09:00", "room": "SR 113"}], "events": [], "blocks": []}
+
+
+class SyncTests(unittest.TestCase):
+    def test_name_title_room_cancellation_and_reinstatement(self):
+        old = program([
+            talk("stable-a", "101", "Alter Titel", "Alice", status=None),
+            talk("stable-b", "102", "Beitrag B", "Bob"),
+            talk("stable-c", "103", "Beitrag C", "Carol"),
+        ])
+        fresh = program([
+            talk("moving-a", "101", "Neuer Titel", "Alicia", room="SR 206"),
+            talk("moving-b", "102", "Beitrag B", "Bobby"),
+        ])
+        merged = sync.reconcile_programs(old, copy.deepcopy(fresh), [])
+        by_id = {s["id"]: s for s in merged["sessions"]}
+        self.assertEqual(by_id["stable-a"]["room"], "SR 206")
+        self.assertEqual(by_id["stable-a"]["title"], "Neuer Titel")
+        self.assertEqual(by_id["stable-a"]["speakers"], ["Alicia"])
+        self.assertEqual(by_id["stable-b"]["speakers"], ["Bobby"])
+        self.assertEqual(by_id["stable-c"]["status"], "cancelled")
+        diff = sync.diff_programs(old, merged)
+        self.assertEqual(diff["counts"], {"new": 0, "changed": 2, "removed": 1})
+
+        restored = copy.deepcopy(fresh)
+        restored["sessions"].append(talk("new-c", "103", "Beitrag C", "Carol"))
+        revived = sync.reconcile_programs(merged, restored, [])
+        self.assertNotIn("status", next(s for s in revived["sessions"] if s["id"] == "stable-c"))
+        self.assertEqual(sync.diff_programs(merged, revived)["counts"]["new"], 1)
+
+    def test_legacy_title_match_keeps_favorites_id(self):
+        old = program([talk("old-slot-id", None, "Unveraenderter Titel", "Alice")])
+        fresh = program([talk("new-slot-id", "901", "Unveraenderter Titel", "Alice", room="SR 206")])
+        merged = sync.reconcile_programs(old, fresh, [])
+        self.assertEqual(merged["sessions"][0]["id"], "old-slot-id")
+        self.assertEqual(merged["sessions"][0]["conftool_paper_id"], "901")
+
+    def test_speakerless_panel_copy_is_not_preserved(self):
+        ghost = talk("ghost", None, "Langes Panel", "")
+        ghost["speakers"] = []
+        old = program([ghost])
+        merged = sync.reconcile_programs(old, program([]), [])
+        self.assertEqual(merged["sessions"], [])
+
+    def test_mass_disappearance_stops_publication(self):
+        old = program([talk(f"old-{n}", str(n), f"Beitrag {n}", f"Name {n}") for n in range(9)])
+        with self.assertRaisesRegex(ValueError, "9 Beitraege"):
+            sync.reconcile_programs(old, program([]), [])
+
+
+if __name__ == "__main__":
+    unittest.main()

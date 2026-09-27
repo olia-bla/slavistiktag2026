@@ -34,6 +34,9 @@ jobs:
       - name: Tests (7 Suiten)
         run: npm run test
 
+      - name: ConfTool-Abgleich ohne Netzwerk testen
+        run: python3 tests/sync_test.py
+
       - name: Konfig validieren
         run: |
           python3 - <<'EOF'

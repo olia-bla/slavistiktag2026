@@ -6,7 +6,7 @@ import { languageName, nonGermanLanguageBadge } from "../languages.js";
 
 export function renderTopics(model, ctx, params) {
   const wrap = h("div", { class: "view view-topics" });
-  const sessions = model.sessions.filter((s) => s.type === "talk");
+  const sessions = model.sessions.filter((s) => s.type === "talk" && s.status !== "cancelled");
   const stats = tagStats(sessions);
   const assigned = sessions.filter((s) => s._tags?.length).length;
 

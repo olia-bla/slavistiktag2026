@@ -30,11 +30,29 @@ const m = buildModel(program, content);
 t("Model: 3 Programmtage + Eröffnungstag", () => {
   assert.deepEqual(m.days, ["2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03"]);
 });
-t("Model: 313 Vorträge, ein Diskussionsbeitrag, 103 Panels", () => {
-  assert.equal(m.sessions.length, 321); // 311 ConfTool-Vorträge + 2 PDF-Ergänzungen + Diskussion + 7 Pausen
-  assert.equal(m.sessions.filter((s) => s.type === "talk").length, 313);
+t("Model: Panel-Überschrift ist kein Vortrag; Ergänzungen bleiben erhalten", () => {
+  const sourceTalks = program.sessions.filter((s) => s.type === "talk");
+  const placeholders = sourceTalks.filter((s) => !s.speakers?.length &&
+    s.title === program.panels.find((p) => p.id === s.panel_id)?.title);
+  assert.equal(m.sessions.filter((s) => s.type === "talk").length,
+    sourceTalks.length - placeholders.length + content.program_supplements.sessions.filter((s) => s.type === "talk").length);
+  assert.ok(!m.sessions.some((s) => s.type === "talk" && !s.speakers?.length && s.title === s.panel_title));
   assert.equal(m.sessions.filter((s) => s.type === "discussion").length, 1);
-  assert.equal(Object.keys(m.panels).length, 103);
+  assert.equal(Object.keys(m.panels).length, program.panels.length + content.program_supplements.panels.length);
+});
+t("Mehrteilige Panels bilden eine Gruppe über Slots und Tage", () => {
+  const title = "Fremdsprachendidaktik slavischer Sprachen";
+  const parts = Object.values(m.panels).filter((p) => p.title === title);
+  assert.equal(parts.length, 4);
+  const key = m.sessions.find((s) => s.panel_id === parts[0].id).panel_group;
+  assert.equal(m.panelGroups.get(key).length, 4);
+  const hits = filterSessions(m.sessions, { panel: key });
+  assert.deepEqual([...new Set(hits.map((s) => s.day))], ["2026-10-01", "2026-10-02"]);
+  assert.deepEqual(new Set(hits.map((s) => s.panel_id)), new Set(parts.map((p) => p.id)));
+  assert.ok(!hits.some((s) => !s.speakers?.length && s.title === title));
+  const other = Object.values(m.panels).filter((p) => p.title ===
+    "Quantitative und qualitative Methoden in der Forschung zu slavischen Heritage Languages in Deutschland");
+  assert.equal(m.panelGroups.get(m.sessions.find((s) => s.panel_id === other[0].id).panel_group).length, 3);
 });
 t("Model: Räume mit Venue", () => {
   assert.ok(m.rooms.includes("MMZ 220"));

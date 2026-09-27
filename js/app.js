@@ -106,7 +106,7 @@ function renderNav() {
 }
 
 function buildClusterModel(model) {
-  const talks = model.sessions.filter((s) => s.type === "talk");
+  const talks = model.sessions.filter((s) => s.type === "talk" && s.status !== "cancelled");
   const clusters = clusterSessions(talks);
   // Charakteristische Begriffe je Cluster (TF-IDF über Cluster-Titel)
   const clusterTerms = {};
@@ -208,6 +208,25 @@ export function boot() {
         try { localStorage.setItem("slavtag26.view", ctx.viewMode); } catch { /* ignore */ }
       }
       render();
+      // Scheduled ConfTool syncs change only program.json, not sw.js.
+      // A lightweight HEAD check notices those updates without manual reload.
+      if (model.programEtag) {
+        let checking = false;
+        const checkProgramData = async () => {
+          if (checking || document.visibilityState === "hidden") return;
+          checking = true;
+          try {
+            const response = await fetch("data/program.json", { method: "HEAD", cache: "no-store" });
+            const latest = response.ok ? response.headers.get("etag") : null;
+            if (latest && latest !== ctx.model.programEtag) location.reload();
+          } catch { /* offline: keep the cached program */ }
+          finally { checking = false; }
+        };
+        setInterval(checkProgramData, 5 * 60_000);
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") checkProgramData();
+        });
+      }
       // Änderungs-Hinweis: wenn der letzte Programm-Sync Änderungen brachte und
       // dieser Stand noch nicht gesehen wurde, Toast mit Sprung zur Übersicht.
       const ch = model.changes;
@@ -218,7 +237,7 @@ export function boot() {
         try { seen = localStorage.getItem("slavtag26.changes.seen"); } catch { /* ignore */ }
         if (total > 0 && seen !== ch.generated_at) {
           try { localStorage.setItem("slavtag26.changes.seen", ch.generated_at); } catch { /* ignore */ }
-          toast(`Programm aktualisiert: ${c.new || 0} neu, ${c.changed || 0} geändert, ${c.removed || 0} entfallen`, {
+          toast(`Programm aktualisiert: ${c.new || 0} neu, ${c.changed || 0} geändert, ${c.removed || 0} abgesagt`, {
             action: { label: "Ansehen", onclick: () => { location.hash = "#/aenderungen"; } },
             duration: 10000,
           });
