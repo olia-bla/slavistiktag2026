@@ -74,6 +74,23 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
   assert.ok(!shell.includes("Stadtplan Jena.pdf"));
 });
 
+t("Seitentitel, Link-Vorschau und App-Name sind konsistent", async () => {
+  const html = await readFile(join(ROOT, "index.html"), "utf-8");
+  const manifest = JSON.parse(await readFile(join(ROOT, "manifest.json"), "utf-8"));
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
+  const meta = (attribute, key) => html.match(
+    new RegExp(`<meta ${attribute}="${key}" content="([^"]+)"`))?.[1].replaceAll("&amp;", "&");
+  assert.equal(title, "15. Deutscher Slavistiktag 2026 · Konferenz-App");
+  assert.equal(manifest.name, title);
+  assert.equal(meta("name", "description"), manifest.description);
+  assert.equal(meta("property", "og:title"), title);
+  assert.equal(meta("property", "og:description"), manifest.description);
+  assert.equal(meta("property", "og:url"), "https://olia-bla.github.io/slavistiktag2026/");
+  assert.equal(meta("name", "twitter:title"), title);
+  assert.equal(meta("name", "twitter:description"), manifest.description);
+  assert.equal(meta("name", "twitter:card"), "summary");
+});
+
 t("Home-Screen-Icons haben einen deckend weißen Hintergrund", async () => {
   const manifest = JSON.parse(await readFile(join(ROOT, "manifest.json"), "utf-8"));
   const html = await readFile(join(ROOT, "index.html"), "utf-8");
