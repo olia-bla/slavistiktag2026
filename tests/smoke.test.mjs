@@ -477,13 +477,11 @@ await waitFor(() => document.querySelector("#app .view-mine"));
 t("Mein Programm zeigt Favorit", () => {
   assert.ok(document.querySelector("#app .view-mine .session-card"));
 });
-t("Mein Programm: Sicherung ist optional eingeklappt", () => {
+t("Mein Programm: Kalenderexport ohne JSON-Sicherung", () => {
   const mine = document.querySelector("#app .view-mine");
-  const backup = mine.querySelector(".backup-options");
-  assert.ok(backup);
-  assert.equal(backup.hasAttribute("open"), false);
+  assert.equal(mine.querySelector(".backup-options"), null);
   assert.equal(mine.querySelectorAll(":scope > .btn-row button").length, 1);
-  assert.equal(backup.querySelectorAll("button").length, 2);
+  assert.ok(mine.querySelector(":scope > .btn-row button")?.textContent.includes("Kalender"));
 });
 
 // Feature 1: Konflikt-Warnung (zweiter Favorit im selben Slot)
@@ -505,19 +503,6 @@ if (second) {
 } else {
   console.log("  (kein gleicher Slot gefunden – Konflikt-Test übersprungen)");
 }
-
-// Feature 5: Backup-Roundtrip (export -> clear -> import)
-t("Backup: Export-Button erzeugt valide JSON", async () => {
-  const favsNow = JSON.parse(localStorage.getItem("slavtag26.favs"));
-  assert.ok(favsNow.length >= 1);
-  // Export-Schema prüfen (direkt, ohne Download-Mechanik)
-  const payload = { app: "slavtag26", version: 1, favs: favsNow, exported: new Date().toISOString() };
-  assert.equal(payload.app, "slavtag26");
-  // Import-Validierung: unbekannte IDs werden gefiltert
-  const known = new Set([...document.querySelectorAll("#app .session-card")].map((c) => c.getAttribute("data-id")));
-  const merged = [...new Set([...favsNow, ...payload.favs.filter((x) => known.has(x))])];
-  assert.ok(merged.length >= favsNow.length);
-});
 
 // Feature 3: Teilen-Button im Drawer
 dom.window.location.hash = "#/programm";
@@ -678,12 +663,14 @@ t("Kein 'jetzt' vor Tagungsbeginn", () => {
   assert.equal(document.querySelectorAll("#app .pill.now").length, 0);
 });
 
-// Themen-Kompass
+// Sprachen- und Themenkompass
 dom.window.location.hash = "#/themen";
 await waitFor(() => document.querySelector("#app .cluster-card"));
-t("Themen-Kompass: Cluster-Karten gerendert", () => {
+t("Sprachen- und Themenkompass: Cluster-Karten gerendert", () => {
   assert.ok(document.querySelectorAll("#app .cluster-card").length >= 15);
-  assert.ok(document.querySelector("#app .topics-intro h1").textContent.includes("Themen"));
+  assert.equal(document.querySelector("#app .topics-intro h1").textContent, "Sprachen- und Themenkompass");
+  assert.match(document.querySelector("#app .topics-intro").textContent, /\d+ Beiträge in \d+ Sprach- und Themenfeldern/);
+  assert.equal(document.querySelector('a[href="#/themen"]')?.textContent, "Sprachen & Themen");
 });
 t("Cluster-Karte: Zähler + charakteristische Begriffe + Sprachinfo", () => {
   const card = document.querySelector("#app .cluster-card");
@@ -709,6 +696,12 @@ t("Drawer aus Themen-Ansicht geöffnet", () => {
 });
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
+
+dom.window.location.hash = "#/themen/suedslavisch";
+await waitFor(() => document.querySelector("#app .view-cluster h1")?.textContent === "Südslavisch");
+t("Serbischer Protest-Vortrag ist Südslavisch zugeordnet", () => {
+  assert.ok(document.querySelector("#app .view-cluster").textContent.includes("Die Ästhetik des Protests: Ironie und Performativität"));
+});
 
 // Orte: bewusst nur Tagungsorte und Karten
 dom.window.location.hash = "#/info";
@@ -744,12 +737,11 @@ t("Deep-Link: Sa + SR 206 gefiltert", () => {
 localStorage.setItem("slavtag26.favs", "[]");
 dom.window.location.hash = "#/mein";
 await waitFor(() => document.querySelector("#app .view-mine"));
-t("Mein Programm: Sicherung laden ist auch ohne Favoriten erreichbar", () => {
-  const backup = document.querySelector("#app .view-mine .backup-options");
-  assert.ok(backup);
-  assert.equal(backup.hasAttribute("open"), false);
-  assert.equal(backup.querySelectorAll("button").length, 1);
-  assert.equal(backup.querySelector("button")?.textContent, "Favoriten laden");
+t("Mein Programm: leerer Zustand ohne JSON-Sicherung", () => {
+  const mine = document.querySelector("#app .view-mine");
+  assert.equal(mine.querySelector(".backup-options"), null);
+  assert.equal(mine.querySelector(".btn-row"), null);
+  assert.ok(mine.textContent.includes("Noch nichts gemerkt"));
 });
 
 await Promise.allSettled(pending);

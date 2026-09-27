@@ -1,4 +1,4 @@
-# Slavistiktag 2026 – Programm-App mit Themen-Kompass
+# Slavistiktag 2026 – Konferenz-App mit Sprachen- und Themenkompass
 
 Konferenz-App zum 15. Deutschen Slavistiktag 2026 in Jena (30.09.–03.10.2026).
 Eine Anwendung, zwei Ebenen:
@@ -8,10 +8,10 @@ Eine Anwendung, zwei Ebenen:
   Disziplin, Format), Favoriten (★, localStorage), ICS-Export, „Jetzt läuft“-
   Ansicht, Sprecher:innen-Ansichten, Sync-Diff („Was ist neu?“) und
   Detail-Drawer pro Vortrag.
-- **Themen-Kompass** (Data Mining) – alle Vorträge automatisch nach 27
-  Themenfeldern gruppiert: kuratiertes Keyword-Lexikon über Titel und
-  Sprechernamen, ergänzt durch eine LLM-Zuordnung, die automatisch gegen die
-  Themenliste validiert wird; dazu charakteristische Begriffe (TF-IDF) und
+- **Sprachen- und Themenkompass** (Data Mining) – Beiträge nach 27
+  Sprach- und Themenfeldern gruppiert: kuratiertes Keyword-Lexikon über Titel und
+  Sprechernamen, ergänzt durch eine LLM-Zuordnung und redaktionelle Ausnahmen;
+  dazu charakteristische Begriffe (TF-IDF) und
   heuristische Sprachverteilung pro Cluster. Kein ML-Backend, alles im Browser.
 
 Vanilla JS, kein Framework, kein Build-Step. Statisch auf GitHub Pages,

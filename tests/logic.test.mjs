@@ -295,6 +295,13 @@ t("applyLlmTags: ohne llm_tags.json-Objekt bleibt Lexikon aktiv", () => {
   assert.equal(m.llmTagsMeta, null);
   assert.ok(m.sessions.every((s) => s._tagSource === "lexikon"));
 });
+t("Kuratierte Sprachfelder bleiben bei LLM-Zuordnung erhalten", () => {
+  const m = buildModel(program, { ...content, theme_tags: { x: ["suedslavisch", "unbekannt"] } });
+  assert.ok(m.byId.x._tags.includes("suedslavisch"));
+  applyLlmTags(m, { tags: { x: ["krieg"] } });
+  assert.deepEqual(m.byId.x._tags, ["krieg", "suedslavisch"]);
+  assert.equal(m.byId.x._tagSource, "llm+curated");
+});
 t("llm_tags.json: alle Vorträge vorhanden, alle tags ⊆ Taxonomie", () => {
   const llm = JSON.parse(fs.readFileSync(new URL("../data/llm_tags.json", import.meta.url), "utf8"));
   assert.ok(llm.meta && llm.meta.model, "Meta-Block fehlt");

@@ -75,6 +75,11 @@ export function naturalRooms(rooms) {
   return seen;
 }
 
+function curatedTags(content, id) {
+  const tags = content.theme_tags?.[id];
+  return Array.isArray(tags) ? tags.filter((tag) => TAG_BY_ID[tag]) : [];
+}
+
 export function buildModel(program, content) {
   const roomVenue = ROOM_VENUE_RE(content);
   // Redaktionelle Ergänzungen aus dem offiziellen Tagungsprogramm werden
@@ -112,7 +117,7 @@ export function buildModel(program, content) {
     // Suchtext ohne Chair-Feld: für die „Nur Vorträge"-Suche (Checkbox im Filter),
     // damit Chair-Treffer die Personensuche nicht fluten.
     out._searchTalks = makeSearchText({ ...out, chair: null }, out.panel_title);
-    out._tags = tagsFor({ title: s.title, speakers: s.speakers });
+    out._tags = [...new Set([...tagsFor({ title: s.title, speakers: s.speakers }), ...curatedTags(content, s.id)])];
     // Explizite Angaben aus dem Book of Abstracts ergänzen die öffentlichen
     // ConfTool-Daten, ohne die generierte program.json manuell zu verändern.
     const presentationLanguage = presentationLanguageInfo({
@@ -221,22 +226,24 @@ export function buildModel(program, content) {
 }
 
 // LLM-Tags (data/llm_tags.json) auf das Modell anwenden. Überschreibt die
-// Lexikon-Tags pro Session, wenn LLM-Tags vorliegen (Seam: s._tags wird von
+// Lexikon-Tags pro Session, wenn LLM-Tags vorliegen; redaktionelle Tags bleiben
+// zusätzlich erhalten (Seam: s._tags wird von
 // mining.clusterSessions/tagStats gelesen). Unbekannte tag-ids werden
-// verworfen, Sessions ohne LLM-Tags behalten das Lexikon-Tagging.
+// verworfen, Sessions ohne LLM-Tags behalten Lexikon- und redaktionelle Tags.
 // model.llmTagsMeta/llmTagsApplied dokumentieren Quelle + Umfang.
 export function applyLlmTags(model, llm) {
   const tags = llm?.tags || {};
   let applied = 0;
   for (const s of model.sessions) {
     const llmTags = (tags[s.id] || []).filter((t) => TAG_BY_ID[t]);
+    const manualTags = curatedTags(model.content, s.id);
     if (llmTags.length) {
       s._llm_tags = llmTags;
-      s._tags = llmTags;
-      s._tagSource = "llm";
+      s._tags = [...new Set([...llmTags, ...manualTags])];
+      s._tagSource = manualTags.length ? "llm+curated" : "llm";
       applied++;
     } else {
-      s._tagSource = "lexikon";
+      s._tagSource = manualTags.length ? "curated" : "lexikon";
     }
   }
   model.llmTagsMeta = llm?.meta || null;

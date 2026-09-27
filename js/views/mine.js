@@ -1,5 +1,5 @@
-// views/mine.js – Mein Programm (Favoriten) mit ICS-Export, Konflikt-Warnung, Backup
-import { h, dateLabel, timeRange, minutes, toast } from "../util.js";
+// views/mine.js – Mein Programm (Favoriten) mit ICS-Export und Konflikt-Warnung
+import { h, dateLabel, timeRange, minutes } from "../util.js";
 import { favs } from "../favorites.js";
 import { icsFor, downloadIcs } from "../ics.js";
 
@@ -44,56 +44,20 @@ export function renderMine(model, ctx) {
     wrap.append(h("div", { class: "card" },
       h("p", { text: "Tippe in der Programmansicht auf ☆, um Vorträge zu merken. Sie erscheinen hier und lassen sich als Kalenderdatei exportieren." }),
       h("a", { class: "btn", href: "#/programm", text: "Zum Programm" })));
-  } else {
-    wrap.append(h("div", { class: "btn-row" },
-      h("button", {
-        class: "btn", text: "⤓ Alle als Kalender (.ics)",
-        onclick: () => {
-          const events = ids
-            .map((id) => model.sessions.find((x) => x.id === id))
-            .filter(Boolean)
-            .map((s) => ({ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room || "" }));
-          downloadIcs("mein-slavistiktag.ics", icsFor(events));
-        },
-      })));
+    return wrap;
   }
-  wrap.append(h("details", { class: "backup-options" },
-    h("summary", { text: "Favoriten sichern oder übertragen (optional)" }),
-    h("p", { class: "meta", text: "Nur nötig, wenn du deine Favoriten als Datei sichern oder auf einem anderen Gerät nutzen möchtest." }),
-    h("div", { class: "btn-row" },
-    ids.length ? h("button", {
-      class: "btn ghost", text: "Favoriten speichern (.json)",
-      onclick: () => {
-        const payload = JSON.stringify({ app: "slavtag26", version: 1, favs: ids, exported: new Date().toISOString() }, null, 2);
-        const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
-        const a = h("a", { href: url, download: "slavtag26-favoriten.json" });
-        document.body.append(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-      },
-    }) : null,
+
+  wrap.append(h("div", { class: "btn-row" },
     h("button", {
-      class: "btn ghost", text: "Favoriten laden",
+      class: "btn", text: "⤓ Alle als Kalender (.ics)",
       onclick: () => {
-        const inp = h("input", { type: "file", accept: "application/json,.json", style: "display:none" });
-        inp.addEventListener("change", async () => {
-          const file = inp.files?.[0];
-          if (!file) return;
-          try {
-            const data = JSON.parse(await file.text());
-            if (data?.app !== "slavtag26" || !Array.isArray(data.favs)) throw new Error("kein slavtag26-Backup");
-            const known = new Set(model.sessions.map((s) => s.id));
-            const merged = [...new Set([...favs.all(), ...data.favs.filter((x) => known.has(x))])];
-            favs.set ? favs.set(merged) : localStorage.setItem("slavtag26.favs", JSON.stringify(merged));
-            const skipped = data.favs.filter((x) => !known.has(x)).length;
-            toast(skipped ? `Backup geladen – ${merged.length} Favoriten, ${skipped} unbekannte übersprungen.` : `Backup geladen – ${merged.length} Favoriten.`);
-            ctx.render();
-          } catch (err) {
-            toast(`Backup konnte nicht geladen werden: ${err.message}`);
-          }
-        });
-        inp.click();
+        const events = ids
+          .map((id) => model.sessions.find((x) => x.id === id))
+          .filter(Boolean)
+          .map((s) => ({ day: s.day, start: s.start, end: s.end, title: s.title, room: s.room || "" }));
+        downloadIcs("mein-slavistiktag.ics", icsFor(events));
       },
-    }))));
+    })));
 
   for (const day of days) {
     const list = byDay[day].sort((a, b) => (a.start || "").localeCompare(b.start || ""));

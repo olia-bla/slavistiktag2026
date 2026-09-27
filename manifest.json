@@ -2,7 +2,7 @@
   "name": "Slavistiktag 2026 – Programm & Themen",
   "short_name": "SlavTag 26",
   "id": "/slavistiktag2026/",
-  "description": "Konferenz-App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten, ICS – plus Themen-Kompass (Data Mining)",
+  "description": "Konferenz-App zum 15. Deutschen Slavistiktag 2026 in Jena: Programm mit Suche, Filter, Favoriten, ICS – plus Sprachen- und Themenkompass",
   "start_url": "./index.html#/startseite",
   "scope": "./",
   "display": "standalone",

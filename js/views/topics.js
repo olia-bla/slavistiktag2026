@@ -1,4 +1,4 @@
-// views/topics.js – Themen-Kompass: Cluster-Übersicht + Cluster-Detail
+// views/topics.js – Sprachen- und Themenkompass: Cluster-Übersicht + Detail
 import { h, dateLabel } from "../util.js";
 import { TAGS, TAG_BY_ID } from "../lexicon.js";
 import { tagStats, languageStats } from "../mining.js";
@@ -8,13 +8,14 @@ export function renderTopics(model, ctx, params) {
   const wrap = h("div", { class: "view view-topics" });
   const sessions = model.sessions.filter((s) => s.type === "talk");
   const stats = tagStats(sessions);
+  const assigned = sessions.filter((s) => s._tags?.length).length;
 
   wrap.append(h("div", { class: "topics-intro" },
-    h("h1", { text: "Themen-Kompass" }),
+    h("h1", { text: "Sprachen- und Themenkompass" }),
     h("p", { class: "dim", text:
-      `${sessions.length} Vorträge, automatisch nach 27 Themenfeldern gruppiert ` +
-      `(Keyword-Matching über Titel und Sprecher). ` +
-      "Klick auf ein Cluster zeigt die Vorträge." })));
+      `${assigned} Beiträge in ${TAGS.length} Sprach- und Themenfeldern. ` +
+      "Die Zuordnung ist automatisch erstellt und redaktionell ergänzt; ein Vortrag kann mehrfach erscheinen. " +
+      "Klick auf ein Feld zeigt die zugehörigen Vorträge." })));
 
   const groups = {};
   for (const tag of TAGS) (groups[tag.group] ||= []).push(tag);
@@ -68,7 +69,7 @@ export function renderCluster(model, ctx, params, tagId) {
   const days = Object.keys(byDay).sort();
 
   wrap.append(
-    h("a", { class: "back-link", href: "#/themen", text: "← Themen-Kompass" }),
+    h("a", { class: "back-link", href: "#/themen", text: "← Sprachen- und Themenkompass" }),
     h("h1", { text: tag.label }),
     h("p", { class: "dim", text: `${cluster.length} Vorträge, nach Tagen gruppiert. Klick öffnet den Vortrag im Drawer.` }));
 

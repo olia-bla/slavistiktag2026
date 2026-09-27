@@ -1,4 +1,4 @@
-// app.js – Router, State, Boot (Programm-App + Themen-Kompass in einer App)
+// app.js – Router, State, Boot (Programm-App + Sprachen- und Themenkompass)
 import { h, toast } from "./util.js";
 import { loadData } from "./data.js";
 import { clusterSessions, tfidf } from "./mining.js";
@@ -100,7 +100,7 @@ function renderNav() {
     link("#/startseite", "Startseite"),
     link("#/programm", "Programm"),
     link("#/mein", "Mein Programm", h("span", { class: "fav-count pill", text: String(favs.all().length || "") })),
-    link("#/themen", "Themen", null, route.startsWith("/themen")),
+    link("#/themen", "Sprachen & Themen", null, route.startsWith("/themen")),
     link("#/sprecher", "Sprecher:innen"),
     link("#/info", "Orte"));
 }

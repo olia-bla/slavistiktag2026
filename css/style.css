@@ -182,10 +182,6 @@ p { overflow-wrap: anywhere; }
 .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
 .btn.small { padding: 0.28rem 0.65rem; font-size: 0.8rem; }
 .btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 0.6rem 0; }
-.backup-options { margin: 0.15rem 0 1rem; }
-.backup-options summary { cursor: pointer; color: var(--ink-dim); font-size: 0.85rem; }
-.backup-options summary:hover { color: var(--heading); }
-.backup-options > p { margin: 0.65rem 0 0; }
 
 .chip-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .chip {
@@ -358,7 +354,7 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
 /* ---------- Tages-Tabs ---------- */
 .day-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.7rem; }
 
-/* ---------- Themen-Kompass (Companion) ---------- */
+/* ---------- Sprachen- und Themenkompass ---------- */
 .topics-intro { margin: 0.4rem 0 1rem; }
 .topics-intro h1 { margin: 0.2rem 0; }
 .dim { color: var(--ink-dim); }
