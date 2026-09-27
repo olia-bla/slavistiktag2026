@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { inflateSync } from "node:zlib";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sw = await readFile(join(ROOT, "sw.js"), "utf-8");
@@ -71,6 +72,34 @@ t("data/program.json + data/content.json + manifest + icon in SHELL", () => {
   assert.ok(shell.includes("manifest.json"));
   assert.ok(shell.includes("icons/slavistiktag-icon.svg"));
   assert.ok(!shell.includes("Stadtplan Jena.pdf"));
+});
+
+t("Home-Screen-Icons haben einen deckend weißen Hintergrund", async () => {
+  const manifest = JSON.parse(await readFile(join(ROOT, "manifest.json"), "utf-8"));
+  const html = await readFile(join(ROOT, "index.html"), "utf-8");
+  const iconSvg = await readFile(join(ROOT, "icons/slavistiktag-icon.svg"), "utf-8");
+  const maskableSvg = await readFile(join(ROOT, "icons/icon-maskable.svg"), "utf-8");
+  assert.match(iconSvg, /<rect[^>]+fill="#ffffff"/);
+  assert.match(maskableSvg, /<rect[^>]+fill="#ffffff"/);
+  assert.match(html, /rel="apple-touch-icon" href="icons\/slavistiktag-icon-192\.png\?v=white1"/);
+  for (const icon of manifest.icons) {
+    assert.ok(icon.src.endsWith("?v=white1"), `Icon ohne neue URL: ${icon.src}`);
+    if (icon.type !== "image/png") continue;
+    const png = await readFile(join(ROOT, icon.src.split("?")[0]));
+    assert.equal(png.toString("ascii", 12, 16), "IHDR");
+    assert.equal(png[24], 8, `${icon.src}: Farbtiefe`);
+    assert.equal(png[25], 2, `${icon.src}: PNG muss RGB ohne Alphakanal sein`);
+    const idat = [];
+    for (let offset = 8; offset < png.length;) {
+      const length = png.readUInt32BE(offset);
+      const type = png.toString("ascii", offset + 4, offset + 8);
+      if (type === "tRNS") assert.fail(`${icon.src}: Transparenz-Chunk vorhanden`);
+      if (type === "IDAT") idat.push(png.subarray(offset + 8, offset + 8 + length));
+      offset += length + 12;
+    }
+    const pixels = inflateSync(Buffer.concat(idat));
+    assert.deepEqual([...pixels.subarray(1, 4)], [255, 255, 255], `${icon.src}: Ecke ist nicht weiß`);
+  }
 });
 
 // 5. Updates werden ohne Benutzereingriff gesucht und nach Aktivierung geladen.

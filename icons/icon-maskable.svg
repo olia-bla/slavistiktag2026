@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- Maskable-Variante: Hausblau vollflächig, das neue Motiv innerhalb der Safe-Zone. -->
-  <rect x="0" y="0" width="512" height="512" fill="#002f5d"/>
+  <!-- Maskable-Variante: weißer Hintergrund, das Motiv innerhalb der Safe-Zone. -->
+  <rect x="0" y="0" width="512" height="512" fill="#ffffff"/>
   <rect x="58" y="58" width="396" height="396" rx="54" fill="#ffffff"/>
   <svg x="58" y="58" width="396" height="396" viewBox="0 0 512 512">
     <path d="M 417.08298,140.06668 V 64.355121 H 66.917024 V 447.64488 H 417.08298 v -75.71156"
