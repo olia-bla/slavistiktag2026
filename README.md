@@ -92,4 +92,4 @@ Beitragstitel, danach die Sprache des Abstracts und erst zuletzt eine
 Titelheuristik ausgewertet. So werden fremdsprachige Werkzitate nicht mehr mit
 der tatsächlichen Vortragssprache verwechselt.
 
-Lizenz: MIT (siehe LICENSE). App-Adaption: Olia Blacher. Mit herzlichem Dank an Prof. Dr. Achim Rabus für die Idee und den ersten Entwurf.
+Lizenz: MIT (siehe LICENSE). App-Adaption: Olia Blacher. Diese App basiert auf einer von Prof. Dr. Achim Rabus entwickelten Vorlage. Dafür danken wir ihm herzlich.

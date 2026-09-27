@@ -69,6 +69,8 @@ t("Dashboard gerendert (Titel + Motto)", () => {
   assert.match(update, /^Aktualisiert: \d{2}\.\d{2}\.\d{4}, \d{2}:\d{2} Uhr$/);
   assert.equal(update.includes("Programmstand"), false);
   assert.equal(document.querySelector(".site-footer").textContent.includes("Mitmachen auf GitHub"), false);
+  assert.ok(document.querySelector(".site-footer").textContent.includes(
+    "Diese App basiert auf einer von Prof. Dr. Achim Rabus entwickelten Vorlage. Dafür danken wir ihm herzlich."));
 });
 t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
