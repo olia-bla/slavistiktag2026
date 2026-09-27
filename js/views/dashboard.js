@@ -33,6 +33,7 @@ export function renderDashboard(model, ctx) {
         h("h2", { text: "Jetzt / Als Nächstes" }),
         nowBody(model, now, ctx)),
       importantLinks(model)),
+    now.day === "2026-10-02" ? holidayNotice() : null,
     h("aside", { class: "card dashboard-contact", "aria-label": "Kontakt während der Tagung" },
       h("strong", { text: "Notfälle während der Tagung: " }),
       h("a", { href: "tel:+4915125881153", text: "☎ +49 151 25881153" }),
@@ -58,6 +59,12 @@ function importantLinks(model) {
       resource("Programm", links.program_pdf),
       resource("Book of Abstracts", links.abstracts_pdf)),
     h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte →" }));
+}
+
+function holidayNotice() {
+  return h("aside", { class: "card dashboard-holiday", "aria-label": "Hinweis für internationale Gäste" },
+    h("strong", { text: "Hinweis für internationale Gäste" }),
+    h("p", { text: "Bitte beachten Sie: Samstag, 3. Oktober, ist in Deutschland ein gesetzlicher Feiertag. Die meisten Geschäfte bleiben geschlossen." }));
 }
 
 function installCard() {
@@ -136,6 +143,12 @@ function nowBody(model, now, ctx) {
   }
   if (now.status === "after") {
     return h("p", { text: "Die Tagung ist vorbei. Vielen Dank für Ihre Teilnahme!" });
+  }
+  if (now.day === model.conference.end && now.time >= "15:30") {
+    return h("div", { class: "dashboard-status" },
+      h("p", {}, h("strong", { text: "Vielen Dank für die Teilnahme an der Konferenz!" })),
+      h("p", { text: "Unser herzlicher Dank gilt allen Beteiligten für ihre Beiträge, ihre Unterstützung und die schönen Begegnungen in Jena." }),
+      h("a", { class: "btn ghost", href: "#/programm", text: "Gesamtes Programm ansehen" }));
   }
   if (now.status === "done") {
     return h("div", { class: "dashboard-status" },

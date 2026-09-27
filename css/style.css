@@ -321,6 +321,11 @@ mark { background: var(--warn); color: var(--bg); border-radius: 3px; padding: 0
   margin-top: 0.9rem; padding: 0.7rem 0.85rem;
   font-size: 0.86rem; overflow-wrap: anywhere;
 }
+.dashboard-holiday {
+  margin-top: 0.9rem; padding: 0.75rem 0.85rem;
+  border-left: 4px solid var(--gold);
+}
+.dashboard-holiday p { margin: 0.35rem 0 0; }
 .dashboard-contact a:first-of-type { white-space: nowrap; }
 .dashboard-install { margin-top: 0.9rem; }
 .dashboard-notice { border-left: 5px solid var(--gold); }

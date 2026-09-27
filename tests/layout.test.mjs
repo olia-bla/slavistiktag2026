@@ -573,6 +573,7 @@ for (const [day, time, expectedTitles] of [
   ["2026-10-03", "11:05", ["Kaffeepause am Vormittag", "Wenn die Welt brennt"]],
   ["2026-10-03", "13:05", ["Abschlussveranstaltung", "Stadtführung durch Jena"]],
   ["2026-10-03", "14:05", ["Stadtführung durch Jena"]],
+  ["2026-10-03", "15:29", ["Stadtführung durch Jena"]],
 ]) {
   const ctx = await browser.newContext({
     viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
@@ -593,6 +594,40 @@ for (const [day, time, expectedTitles] of [
     for (const title of expectedTitles) {
       assert.ok(titles.some((shown) => shown.includes(title)), `${title} fehlt: ${titles.join(" | ")}`);
     }
+    const holiday = page.locator(".dashboard-holiday");
+    if (day === "2026-10-02") {
+      assert.equal(await holiday.count(), 1);
+      assert.ok((await holiday.textContent()).includes("Die meisten Geschäfte bleiben geschlossen."));
+      assert.equal(await page.locator(".dashboard-holiday + .dashboard-contact").count(), 1);
+    } else {
+      assert.equal(await holiday.count(), 0);
+    }
+    assert.deepEqual(await overflowIssues(page), []);
+  });
+  await ctx.close();
+}
+
+// Erst nach dem Ende der Stadtführung erscheint die Dankesbotschaft.
+for (const width of [360, 390]) {
+  const ctx = await browser.newContext({
+    viewport: { width, height: 844 }, isMobile: true, hasTouch: true,
+    timezoneId: "Europe/Berlin",
+  });
+  const page = await ctx.newPage();
+  await page.addInitScript(({ fixedNow }) => {
+    const NativeDate = Date;
+    window.Date = class extends NativeDate {
+      constructor(...args) { super(...(args.length ? args : [fixedNow])); }
+      static now() { return fixedNow; }
+    };
+  }, { fixedNow: new Date("2026-10-03T15:30:00+02:00").getTime() });
+  await page.goto(BASE + "#/startseite");
+  await page.waitForSelector("#app .now-card");
+  await t(`Samstag 15:30 auf ${width}px: herzlicher Dank statt Programmende`, async () => {
+    const text = await page.locator(".now-card").textContent();
+    assert.ok(text.includes("Vielen Dank für die Teilnahme an der Konferenz!"));
+    assert.ok(text.includes("allen Beteiligten"));
+    assert.equal(text.includes("Für heute ist das Programm zu Ende."), false);
     assert.deepEqual(await overflowIssues(page), []);
   });
   await ctx.close();
