@@ -26,8 +26,8 @@ export function renderInfo(model) {
   const wrap = h("div", { class: "view view-info" });
 
   wrap.append(h("header", { class: "hero compact" },
-    h("h1", { text: "Tagungsorte & Karten" }),
-    h("p", { class: "meta", text: "Der Haupttagungsort ist die Carl-Zeiss-Straße 3. Im Programm und hier können die Tagungsorte in OpenStreetMap oder Google Maps geöffnet werden." })));
+    h("h1", { text: "Orte & Adressen" }),
+    h("p", { class: "meta", text: "Der Haupttagungsort ist die Carl-Zeiss-Straße 3. Hier finden Sie Tagungsorte, Karten und Möglichkeiten für ein schnelles Mittagessen." })));
 
   const venueCards = Object.entries(c.venues).map(([id, venue]) => {
     const osmUrl = roomMapUrl(VENUE_ROOM[id]) || venue.url_maps;
@@ -38,6 +38,7 @@ export function renderInfo(model) {
       mapLinks(osmUrl, googleUrl));
   });
   wrap.append(h("section", { class: "card venues-card" },
+    h("h2", { text: "Tagungsorte" }),
     h("div", { class: "venue-grid" }, venueCards)));
 
   const lunchCards = (c.quick_lunch || []).map((place) => {

@@ -84,6 +84,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   const actions = [...document.querySelectorAll("#app .dashboard-actions .btn")].map((el) => el.textContent);
   const resources = [...document.querySelectorAll("#app .dashboard-resource")].map((el) => el.textContent);
   assert.equal(document.querySelector("#app .dashboard-important h2")?.textContent, "Downloads");
+  assert.equal(document.querySelector("#app .dashboard-info-link")?.textContent, "Orte & Adressen →");
   assert.deepEqual(actions, []);
   assert.equal(document.querySelector("#app .now-card h2").textContent, "Auf einen Blick");
   const nowText = document.querySelector("#app .now-card").textContent;
@@ -151,7 +152,7 @@ t("Nav mit 6 Einträgen (inkl. Themen + Personen)", () => {
   assert.equal(document.querySelector(".brand")?.getAttribute("href"), "#/startseite");
   assert.ok(labels.some((l) => l.includes("Themen")));
   assert.ok(labels.includes("Personen"));
-  assert.ok(labels.includes("Orte"));
+  assert.ok(labels.includes("Orte & Adressen"));
   assert.equal(document.querySelector(".fav-count").textContent, "");
 });
 dom.window.location.hash = "#/heute";
@@ -725,7 +726,7 @@ await waitFor(() => document.querySelector("#app .view-info"));
 t("Orte: kompakte Tagungsorte mit Karten", () => {
   assert.ok(document.querySelector("#app .venue-grid"));
   const info = document.querySelector("#app .view-info");
-  assert.equal(info.querySelector("h1")?.textContent, "Tagungsorte & Karten");
+  assert.equal(info.querySelector("h1")?.textContent, "Orte & Adressen");
   assert.ok(info.textContent.includes("Carl-Zeiss-Straße 3"));
   assert.ok(info.textContent.includes("HS 2"));
   assert.ok(info.textContent.includes("Foyer und HS 2 (EG), HS 6–8 (1. OG), Seminarräume (1. und 2. OG)"));
@@ -749,7 +750,7 @@ t("Orte: kompakte Tagungsorte mit Karten", () => {
 });
 t("Orte: keine redundanten Programm- und Downloadinhalte", () => {
   const headings = [...document.querySelectorAll("#app .view-info h2")].map((el) => el.textContent);
-  assert.deepEqual(headings, ["Schnelles Mittagessen"]);
+  assert.deepEqual(headings, ["Tagungsorte", "Schnelles Mittagessen"]);
   assert.equal(document.querySelector("#app .downloads-card"), null);
   assert.equal(document.querySelector("#app .install-card"), null);
   assert.equal(document.querySelector("#app .view-info .podium"), null);

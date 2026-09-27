@@ -59,7 +59,7 @@ function importantLinks(model) {
       resource("Stadtplan", links.city_map_pdf),
       resource("Programm", links.program_pdf),
       resource("Book of Abstracts", links.abstracts_pdf)),
-    h("a", { class: "dashboard-info-link", href: "#/info", text: "Tagungsorte →" }));
+    h("a", { class: "dashboard-info-link", href: "#/info", text: "Orte & Adressen →" }));
 }
 
 function holidayNotice() {
