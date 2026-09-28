@@ -30,6 +30,14 @@ const m = buildModel(program, content);
 t("Model: 3 Programmtage + Eröffnungstag", () => {
   assert.deepEqual(m.days, ["2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03"]);
 });
+t("ConfTool-Titeländerung von Fabian Erlenmaier ist im Programm", () => {
+  const talk = m.sessions.find((s) => s.id === "2026-10-02-09:00-SR125-10:00");
+  assert.equal(talk?.title,
+    "Einblicke in den Fernseh-Strudel: Dekonstruktionen der Surkovschen Propaganda im russischen Theater");
+  assert.deepEqual(talk.speakers, ["Fabian Erlenmaier"]);
+  assert.equal(talk.start, "10:00");
+  assert.equal(talk.room, "SR 125");
+});
 t("Model: Panel-Überschrift ist kein Vortrag; Ergänzungen bleiben erhalten", () => {
   const sourceTalks = program.sessions.filter((s) => s.type === "talk");
   const placeholders = sourceTalks.filter((s) => !s.speakers?.length &&

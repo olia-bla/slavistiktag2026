@@ -27,6 +27,15 @@ def program(sessions):
 
 
 class SyncTests(unittest.TestCase):
+    def test_obfuscated_footer_id_is_not_a_program_change(self):
+        old = program([])
+        old["events"] = [{"id": "event-1", "people": "Kontakt ctmail5de5c4bc"}]
+        fresh = copy.deepcopy(old)
+        fresh["events"][0]["people"] = "Kontakt ctmail7a359e2c"
+        self.assertEqual(sync.canonical(old), sync.canonical(fresh))
+        fresh["events"][0]["people"] = "Neuer Kontakt ctmail7a359e2c"
+        self.assertNotEqual(sync.canonical(old), sync.canonical(fresh))
+
     def test_name_title_room_cancellation_and_reinstatement(self):
         old = program([
             talk("stable-a", "101", "Alter Titel", "Alice", status=None),

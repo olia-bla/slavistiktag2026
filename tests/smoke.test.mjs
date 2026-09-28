@@ -4,6 +4,8 @@ import { readFile } from "node:fs/promises";
 import { JSDOM } from "jsdom";
 
 const indexHtml = await readFile(new URL("../index.html", import.meta.url), "utf-8");
+const currentChanges = JSON.parse(await readFile(new URL("../data/changes.json", import.meta.url), "utf-8"));
+const currentChangeCount = Object.values(currentChanges.counts || {}).reduce((sum, count) => sum + count, 0);
 const dom = new JSDOM(indexHtml, { url: "https://example.org/", pretendToBeVisual: true });
 
 globalThis.window = dom.window;
@@ -18,6 +20,7 @@ globalThis.URL = dom.window.URL;
 globalThis.URLSearchParams = dom.window.URLSearchParams;
 globalThis.Blob = dom.window.Blob;
 globalThis.getComputedStyle = dom.window.getComputedStyle;
+globalThis.requestAnimationFrame = dom.window.requestAnimationFrame.bind(dom.window);
 // Die Startseite bleibt auch nach der Tagung reproduzierbar testbar.
 const NativeDate = Date;
 const fixedNow = NativeDate.parse("2026-09-27T10:30:00+02:00");
@@ -101,7 +104,8 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.equal(document.querySelector("#app .highlight-list"), null);
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Tage"), false);
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Schnellzugriff"), false);
-  assert.equal(document.querySelector("#app .dashboard-notice"), null, "leerer Änderungshinweis wird angezeigt");
+  assert.equal(Boolean(document.querySelector("#app .dashboard-notice")), currentChangeCount > 0,
+    "Änderungshinweis passt nicht zum letzten Programmabgleich");
 });
 t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
   const contact = document.querySelector("#app .dashboard-contact");
@@ -762,9 +766,14 @@ t("Personen-Ansicht: unbekannter Name → ehrlicher Leerzustand", () => {
 // Änderungs-Ansicht (Was ist neu? / data/changes.json)
 dom.window.location.hash = "#/aenderungen";
 await waitFor(() => document.querySelector("#app .view-changes"));
-t("Änderungs-Ansicht: leerer Stand ohne Fehler", () => {
+t("Änderungs-Ansicht: letzter Abgleich wird passend angezeigt", () => {
   assert.ok(document.querySelector("#app .view-changes h1").textContent.includes("Programm-Änderungen"));
-  assert.ok(document.body.textContent.includes("keine Änderungen"));
+  if (currentChangeCount) {
+    const firstChange = [...currentChanges.new, ...currentChanges.changed, ...currentChanges.removed][0];
+    assert.ok(document.querySelector("#app .view-changes").textContent.includes(firstChange.title));
+  } else {
+    assert.ok(document.body.textContent.includes("keine Änderungen"));
+  }
 });
 t("Änderungs-Ansicht: Titel/Name und Absage sind verständlich markiert", async () => {
   const { renderChanges } = await import("../js/views/changes.js");

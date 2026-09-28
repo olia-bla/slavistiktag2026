@@ -566,7 +566,11 @@ def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
 
 def canonical(data: dict) -> str:
     core = {k: v for k, v in data.items() if k != "meta"}
-    return json.dumps(core, ensure_ascii=False, sort_keys=True, indent=1)
+    serialized = json.dumps(core, ensure_ascii=False, sort_keys=True, indent=1)
+    # ConfTool setzt bei jedem Abruf neue IDs in das verschleierte Kontakt-
+    # Skript im Footer. Sie sind kein Programminhalt und dürfen allein keinen
+    # Programm-Commit oder ein leeres Änderungsverzeichnis auslösen.
+    return re.sub(r"ctmail[0-9a-f]+", "ctmail", serialized)
 
 
 def write_out(data: dict, out_path, warnings: list) -> None:
