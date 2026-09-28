@@ -235,25 +235,56 @@
       "day": "2026-10-01", "start": "16:00", "end": "17:30", "room": "HS 2",
       "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
       "body": "Die Krise der Philologien trifft auch die Slavistik: sinkende Studierendenzahlen sowie abnehmende finanzielle Spielräume der Universitäten führen zu erheblichem Reformdruck – bei gleichzeitig unbestreitbar gestiegener gesellschaftlicher und politischer Relevanz unserer Fächer. Der Scoping Workshop „Zukunftsperspektiven für die deutschsprachige Slavistik“, der im Juli 2023 in Hannover stattfand, hat den Russland-Ukraine-Krieg zum Anlass genommen, aktuelle Herausforderungen des Faches zu diskutieren und dessen Profil und Perspektiven grundsätzlich zu reflektieren.",
-      "people": "Organisatoren: Dr. Annelie Bachmaier (TU Dresden), Jun.-Prof. Dr. Christina Clasmeier (Universität Münster), Prof. Dr. Katrin Bente Karl (Universität Bern), Prof. Dr. Ruprecht von Waldenfels (FSU Jena), Prof. Dr. Christian Zehnder (Universität Bamberg). Externe Gäste: Prof. Dr. Kornelia Freitag (Ruhr-Universität Bochum), Dr. Ulrich Heublein (ehem. DZHW Leipzig)"
+      "people": "Organisatoren: Dr. Annelie Bachmaier (TU Dresden), Jun.-Prof. Dr. Christina Clasmeier (Universität Münster), Prof. Dr. Katrin Bente Karl (Universität Bern), Prof. Dr. Ruprecht von Waldenfels (FSU Jena), Prof. Dr. Christian Zehnder (Universität Bamberg). Externe Gäste: Prof. Dr. Kornelia Freitag (Ruhr-Universität Bochum), Dr. Ulrich Heublein (ehem. DZHW Leipzig)",
+      "participants": [
+        { "name": "Annelie Bachmaier", "role": "Organisation" },
+        { "name": "Christina Clasmeier", "role": "Organisation" },
+        { "name": "Katrin Bente Karl", "role": "Organisation" },
+        { "name": "Ruprecht von Waldenfels", "role": "Organisation" },
+        { "name": "Christian Zehnder", "role": "Organisation" },
+        { "name": "Kornelia Freitag", "role": "Gast" },
+        { "name": "Ulrich Heublein", "role": "Gast" }
+      ]
     },
     {
       "day": "2026-10-02", "start": "16:00", "end": "17:30", "room": "HS 8",
       "title": "„Zwischen Krise und Comeback?“: Zur Bedeutung slawischer Sprachen im deutschen (Hochschul-)Bildungssystem",
       "body": "Welche Rolle spielt der Unterricht bzw. das Studium slawischer Sprachen in Schulen und Universität heute – in einer Zeit geopolitischer Krisen, gesellschaftlicher Umbrüche und rasanter Entwicklungen digitaler Technologien? Diskutiert werden Herausforderungen und Perspektiven des Lernens slawischer Sprachen im (post-)digitalen Zeitalter, neue inhaltliche Anforderungen wie Medien- und Demokratiebildung und das aktuelle „Comeback“ der Area Studies.",
-      "people": "Moderation: Prof. Dr. Grit Mehlhorn (Universität Leipzig). Teilnehmer: Astrid Sessinghaus (Russischlehrerin, Gymnasium Delitzsch), Dr. Maria Sulimova (Universität Leipzig), Dorothea Wendt und Lilija Sagorodski (Studierende Slavistik), Dr. Ulrike Schult (MDR Osteuroparedaktion), Dr. Jule Böhmer (Universität Hamburg)"
+      "people": "Moderation: Prof. Dr. Grit Mehlhorn (Universität Leipzig). Teilnehmer: Astrid Sessinghaus (Russischlehrerin, Gymnasium Delitzsch), Dr. Maria Sulimova (Universität Leipzig), Dorothea Wendt und Lilija Sagorodski (Studierende Slavistik), Dr. Ulrike Schult (MDR Osteuroparedaktion), Dr. Jule Böhmer (Universität Hamburg)",
+      "participants": [
+        { "name": "Grit Mehlhorn", "role": "Moderation" },
+        { "name": "Astrid Sessinghaus", "role": "Teilnahme" },
+        { "name": "Maria Sulimova", "role": "Teilnahme" },
+        { "name": "Dorothea Wendt", "role": "Teilnahme" },
+        { "name": "Lilija Sagorodski", "role": "Teilnahme" },
+        { "name": "Ulrike Schult", "role": "Teilnahme" },
+        { "name": "Jule Böhmer", "role": "Teilnahme" }
+      ]
     },
     {
       "day": "2026-10-02", "start": "16:00", "end": "17:30", "room": "HS 2",
       "title": "Slavistik ohne Russland? – Perspektiven unserer Fächer nach dem Angriff auf die Ukraine",
       "body": "Der russische Angriffskrieg auf die Ukraine hat die Slavistik im deutschsprachigen Raum vor grundlegende Herausforderungen gestellt: Etablierte Kooperationen mit russischen Institutionen sind weitgehend zum Erliegen gekommen, Feldforschung und Datenerhebung vor Ort gestalten sich zunehmend schwierig, und Studierende können für Sprachpraxis und Forschungsaufenthalte nicht nach Russland geschickt werden. Zur Debatte stehen die strukturellen, methodischen und institutionellen Folgen für Lehre, Forschung und Nachwuchsförderung sowie die Frage, wie die Fächer mittelfristig neu aufgestellt werden können.",
-      "people": "Moderation: Prof. Dr. Holt Meyer (Universität Erfurt). Teilnehmer: Dr. Nina Frieß (ZOiS Berlin), Prof. Dr. Ulrich Schmid (Universität St. Gallen), Prof. Dr. Jan Patrick Zeller (Universität Oldenburg), Emilia Nowak (Studierende, FSU Jena)"
+      "people": "Moderation: Prof. Dr. Holt Meyer (Universität Erfurt). Teilnehmer: Dr. Nina Frieß (ZOiS Berlin), Prof. Dr. Ulrich Schmid (Universität St. Gallen), Prof. Dr. Jan Patrick Zeller (Universität Oldenburg), Emilia Nowak (Studierende, FSU Jena)",
+      "participants": [
+        { "name": "Holt Meyer", "role": "Moderation" },
+        { "name": "Nina Frieß", "role": "Teilnahme" },
+        { "name": "Ulrich Schmid", "role": "Teilnahme" },
+        { "name": "Jan Patrick Zeller", "role": "Teilnahme" },
+        { "name": "Emilia Nowak", "role": "Teilnahme" }
+      ]
     },
     {
       "day": "2026-10-03", "start": "11:30", "end": "13:00", "room": "HS 2",
       "title": "Wenn die Welt brennt – was geschieht mit Sprache? Slawistische Perspektiven auf Konflikt, Klimawandel und gesellschaftliche Umbrüche",
       "body": "Wie globale Krisen – Kriege, Migration, autoritäre Systeme, ökologische Veränderungen und Digitalisierung – Sprachgemeinschaften und kulturelle Praktiken in der Slavia verändern: Sind Sprachen primär Opfer globaler Krisen – oder auch Akteure gesellschaftlicher Transformation? Anhand von Fallstudien werden Prozesse wie Dialektwandel, neue Standardisierungen, Wissensverlust und digitale Sprachpflege sichtbar gemacht.",
-      "people": "Moderation: Dr. Christoph Giesel (FSU Jena). Teilnehmer: Prof. Dr. Thede Kahl (FSU Jena), PD Dr. habil. Martin Henzelmann (Universität Wien), Prof. Dr. Katrin Schlund (MLU Halle-Wittenberg)"
+      "people": "Moderation: Dr. Christoph Giesel (FSU Jena). Teilnehmer: Prof. Dr. Thede Kahl (FSU Jena), PD Dr. habil. Martin Henzelmann (Universität Wien), Prof. Dr. Katrin Schlund (MLU Halle-Wittenberg)",
+      "participants": [
+        { "name": "Christoph Giesel", "role": "Moderation" },
+        { "name": "Thede Kahl", "role": "Teilnahme" },
+        { "name": "Martin Henzelmann", "role": "Teilnahme" },
+        { "name": "Katrin Schlund", "role": "Teilnahme" }
+      ]
     }
   ],
   "grussworte": [

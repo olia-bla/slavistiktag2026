@@ -138,6 +138,25 @@ t("Model: Events inklusive 12 Einträgen im Rahmenprogramm", () => {
   assert.equal(helden.some((s) => s.start === "11:30"), false, "SR 125 muss bis 12:00 leer bleiben");
   assert.equal(m.events.some((e) => e.type === "event"), false);
 });
+t("Alle 23 Podiumsbeteiligten sind einzeln dem richtigen Podium zugeordnet", () => {
+  const podiums = m.events.filter((e) => e.type === "podium");
+  assert.deepEqual(podiums.map((e) => e.participants?.length), [7, 7, 5, 4]);
+  const people = new Map(buildSpeakerIndex(m).map((person) => [person.raw, person]));
+  for (const podium of podiums) {
+    assert.equal(new Set(podium.participants.map((person) => person.name)).size,
+      podium.participants.length, `doppelte Namen in ${podium.title}`);
+    for (const participant of podium.participants) {
+      assert.ok(podium.people.includes(participant.name),
+        `${participant.name} fehlt im Beschreibungstext von ${podium.title}`);
+      const person = people.get(participant.name);
+      assert.ok(person, `${participant.name} fehlt in Personen A–Z`);
+      assert.ok(person.podiumOf.some(({ event, role }) =>
+        event.id === podium.id && role === participant.role),
+      `${participant.name} ist nicht ${podium.title} zugeordnet`);
+    }
+  }
+  assert.equal([...people.values()].reduce((sum, person) => sum + person.podiumOf.length, 0), 23);
+});
 t("LKW-Panel Exilliteraturen: Miriam Finkelstein ist um 10:30 Discussant", () => {
   const discussion = m.sessions.find((s) => s.id === "curated-2026-10-02-SR223-10:30-discussant");
   assert.ok(discussion, "Diskussionsbeitrag fehlt");

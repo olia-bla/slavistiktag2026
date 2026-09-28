@@ -745,10 +745,34 @@ t("Sprecher-Suche filtert live", () => {
   s.value = "";
   s.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
 });
+const podiumSearch = document.querySelector("#app .view-speakers .search-input");
+podiumSearch.value = "sessinghaus";
+podiumSearch.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+const podiumPersonRow = document.querySelector("#app .speaker-row");
+t("Podiumsgast ist in Personen A–Z suchbar", () => {
+  assert.equal(document.querySelectorAll("#app .speaker-row").length, 1);
+  assert.ok(podiumPersonRow.textContent.includes("1 Podium"));
+});
+podiumPersonRow.click();
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Sessinghaus"));
+t("Personenseite zeigt Podium, Rolle und Raum", () => {
+  const person = document.querySelector("#app .view-person");
+  assert.ok(person.textContent.includes("Teilnahme"));
+  const podium = person.querySelector(".event-card.type-podium");
+  assert.ok(podium?.textContent.includes("Zwischen Krise und Comeback"));
+  assert.ok(podium.textContent.includes("HS 8"));
+});
+document.querySelector("#app .view-person .event-card.type-podium").click();
+await waitFor(() => document.querySelector(".drawer .event-people"));
+t("Podium auf Personenseite öffnet seine Beschreibung und Beteiligten", () => {
+  assert.ok(document.querySelector(".drawer").textContent.includes("Astrid Sessinghaus"));
+});
+document.querySelector(".drawer-backdrop").click();
+await waitFor(() => !document.querySelector(".drawer"));
 
 // Personen-Detailansicht (#/sprecher/<Name>) — Regression: Route unbekannt → Dashboard
 dom.window.location.hash = "#/sprecher/Gerta%20Monakhova";
-await waitFor(() => document.querySelector("#app .view-person"));
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Monakhova"));
 t("Personen-Ansicht: Vorträge + Affiliation + Chair-Rollen", () => {
   assert.equal(document.querySelector("#app .view-person .kicker a")?.textContent, "← Personen");
   const h1 = document.querySelector("#app .view-person h1");

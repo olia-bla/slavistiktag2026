@@ -212,6 +212,13 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
   });
 
+  await page.evaluate(() => { location.hash = "#/sprecher/Astrid%20Sessinghaus"; });
+  await page.waitForSelector("#app .view-person .event-card.type-podium");
+  await t(`${vp.name}: Podium auf Personenseite ohne Überlauf`, async () => {
+    assert.deepEqual(await overflowIssues(page), []);
+    assert.ok((await page.locator("#app .view-person").innerText()).includes("Zwischen Krise und Comeback"));
+  });
+
   // Programm
   await page.evaluate(() => { location.hash = "#/programm"; });
   await page.waitForSelector("#app .results");
