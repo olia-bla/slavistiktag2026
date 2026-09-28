@@ -2,21 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "3574ab9920746503",
-  "generated_at": "2026-09-28T12:02:42+02:00",
+  "source_sha256": "9e773be9419c918a",
+  "generated_at": "2026-09-28T15:59:48+00:00",
   "stats": {
-   "sessions": 310,
-   "cancelled": 0,
+   "sessions": 309,
+   "cancelled": 1,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 308
+   "abstracts": 307
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
-   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen"
+   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
+   "1 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -1689,6 +1690,25 @@
    ]
   },
   {
+   "id": "2026-10-01-09:00-SR209-10:00",
+   "conftool_paper_id": "339",
+   "day": "2026-10-01",
+   "start": "09:30",
+   "end": "10:00",
+   "room": "SR 209",
+   "track": "LKW",
+   "panel_id": "2026-10-01|09:00|ct35",
+   "speakers": [
+    "Ulyana Veryna"
+   ],
+   "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
+   "type": "talk",
+   "abstract": "Pseudonymity and anonymity in Belarusian literature have historically emerged in waves rather than continuously. This paper examines their current forms from a historical perspective, arguing that the post-2020 context marks a decisive shift. After 2020, metropolitan and émigré literature diverged, each developing distinct models of name modification, anonymity, and pseudonymity.\n\nThese practices reflect the accumulation and reconfiguration of functions associated with anonymity: from erasing the author’s name or self-positioning as a scribe to using the authorial name as a mask, a tool to evade censorship, or to separate multiple personas.\n\nFollowing the mass displacement of writers after 2020, anonymity acquired new features. Works with empty or encrypted authorial positions have won awards, and exiled publishers release bestsellers under unresolved pseudonyms (e.g., Kamila Cień, Kliok Štučny). Traditional uses, as strategies of positioning or markers of creative hypostases, persist.\n\n“Anonymous star status” describes books recognized symbolically under a name but not tied to an individual. Undisclosed pseudonyms may become functionally anonymous or produce multiple authorships, echoing nineteenth-century rewriting, disputed Soviet-era authorship, and digital anonymity. In Belarus, labeling works as extremist often increases their visibility.\n\nThe paper asks whether these developments constitute a new wave of pseudonymity shaped by censorship, exile, and symbolic recognition, reproducing historical models while creating a qualitatively new authorial configuration.",
+   "affiliations": [
+    "Universität Bremen, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-01-09:00-SR209-09:30",
    "conftool_paper_id": "346",
    "day": "2026-10-01",
@@ -1705,7 +1725,9 @@
    "abstract": "This paper examines Ukrainian Eurovision performers as culturally significant role models in Eastern European popular culture. It argues that Eurovision functions as a valuable archive for cultural history: a transnational media event where national visibility is staged not only through music, but also through costume and performance. Rather than treating stage aesthetics as secondary decoration, the paper frames costume and staging as historically significant practices through which audiences negotiate questions of identity, belonging, and cultural legitimacy. Ukraine offers a particularly revealing case: since entering the contest in 2003, it has won three times and has repeatedly placed in the top three, making Eurovision an important platform for both international recognition and domestic discussion.\n\nThe paper focuses on four well-known Ukrainian entries: Ruslana (2004), Verka Serdiuchka (2007), Jamala (2016), and Kalush Orchestra (2022). Each case demonstrates a unique form of popular cultural authority influenced by the public’s expectations and the historical context. Ruslana’s performance transforms “national” themes into an affirming image of strength and internationaly readable pop spectacle. In contrast, Serdiuchka’s camp excess uses parody and purposeful disruptions of standards of taste and respectability to turn misfitting into a strategy of visibility, producing both admiration and discomfort. The Eurovision star is reframed as a testimonial figure by Jamala’s restrained staging, where cultural memory and emotional intensity become crucial to the meaning of the performance. Finally, Kalush Orchestra demonstrates how wartime representation can generate globally circulating visual symbols, highlighting the growing representational load placed on performers under conditions of war.",
    "affiliations": [
     "Leibniz-Zentrum für Zeithistorische Forschung Potsdam (ZZF), Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-09-28T15:59:48+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-01-09:00-SR223-09:30",
@@ -1959,8 +1981,8 @@
    ]
   },
   {
-   "id": "2026-10-01-09:00-SR209-10:00",
-   "conftool_paper_id": "339",
+   "id": "2026-10-01-09:00-SR209-10:30",
+   "conftool_paper_id": "451",
    "day": "2026-10-01",
    "start": "10:00",
    "end": "10:30",
@@ -1968,13 +1990,13 @@
    "track": "LKW",
    "panel_id": "2026-10-01|09:00|ct35",
    "speakers": [
-    "Ulyana Veryna"
+    "Nina Weller"
    ],
-   "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
+   "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
    "type": "talk",
-   "abstract": "Pseudonymity and anonymity in Belarusian literature have historically emerged in waves rather than continuously. This paper examines their current forms from a historical perspective, arguing that the post-2020 context marks a decisive shift. After 2020, metropolitan and émigré literature diverged, each developing distinct models of name modification, anonymity, and pseudonymity.\n\nThese practices reflect the accumulation and reconfiguration of functions associated with anonymity: from erasing the author’s name or self-positioning as a scribe to using the authorial name as a mask, a tool to evade censorship, or to separate multiple personas.\n\nFollowing the mass displacement of writers after 2020, anonymity acquired new features. Works with empty or encrypted authorial positions have won awards, and exiled publishers release bestsellers under unresolved pseudonyms (e.g., Kamila Cień, Kliok Štučny). Traditional uses, as strategies of positioning or markers of creative hypostases, persist.\n\n“Anonymous star status” describes books recognized symbolically under a name but not tied to an individual. Undisclosed pseudonyms may become functionally anonymous or produce multiple authorships, echoing nineteenth-century rewriting, disputed Soviet-era authorship, and digital anonymity. In Belarus, labeling works as extremist often increases their visibility.\n\nThe paper asks whether these developments constitute a new wave of pseudonymity shaped by censorship, exile, and symbolic recognition, reproducing historical models while creating a qualitatively new authorial configuration.",
+   "abstract": "Der Kosakenmythos durchläuft in der ukrainischen Populärkultur von den 1970er-Jahren bis in die 2020er Jahre eine markante Transformation: Angefangen von den unterschiedlichen sowjetischen Aneignungen des Kosakenmythos, der ihre Volksnähe und den antiwestlichen Befreiungskampf, später auch die romantisch-exotisierenden Elemente betonte, über die folkloristisch überhöhte Wiederaneignung des Kosaken als Symbolfigur ukrainischer Eigenstaatlichkeit und Innbegriff nationaler Identität bis hin zur radikalisierten, identitätsstiftenden Widerstands- und Heldenfigur im Selbstverteidigungskampf gegen Tatareneinfälle, polnische Adelswillkür, osmanische Macht und russischen Imperialismus sichert er sich einen festen, politisch wandelbaren Platz im Kanon ukrainischer Nationalmythen. Visuelle Stereotype wie der freie Reiter, der listenreiche Krieger oder der Hetman selbstverwalteter Kollektive vermitteln diese wechselnden Aneignungen und Projektionen des kosakischen Freiheitskampfs. Anhand ausgewählter Fallbeispiele–der Animationsserie. Wie die Kosaken ( Як Козаки/Как казаки,1967–1987 ) sowie der Parodie dieser Serie in Selenskijs Musical-Film Wie die Kosaken... “(2009), des Superhelden-Comics Buiviter (1995), des Action-Fantasy-Films Maksym Osa. Das Gold des Werwolfs (2022) u.a. –analysiert der Vortrag, wie die Kosakenfigur als Projektionsfläche des ukrainischen Nationalmythos durch das affektive Potential visueller und medialer Darstellungen transformiert und vor dem Hintergrund desrussischen Angriffskriegs gegen die Ukraine zum hochgradig politisierten, umstrittenen Träger und Vorbild dekolonialer Selbstbehauptung avanciert.",
    "affiliations": [
-    "Universität Bremen, Deutschland"
+    "ZfL Berlin, Deutschland"
    ]
   },
   {
@@ -2127,25 +2149,6 @@
    "abstract": "Wh -words with the interrogative k - formant are well described for Old East Slavic (Krys’ko et al. 2020; Pen’kova & Rabus 2021), but multiple wh -words in OES as a construction have received little attention (cf. mention in Apresjan & Kopotev 2022 on Russian). This study asks where these clusters occur, which wh -lexemes they recruit, and how their order and functions change after OES.\n\nData come from the Old East Slavic subcorpus of the Russian National Corpus (RNC), compared with the Middle Russian RNC corpus (1400–1700) and the DiaUk corpus of Ruthenian/Middle Ukrainian (same period). I code tokens for construction type, internal order, and lexical makeup, and compare distributions.\n\nInterrogative readings, often the cross-linguistic source of standalone indefinites (Haspelmath 1997), are not attested for multiple wh -forms in early OES texts, likely due to genre bias. Instead three uses dominate and already look grammaticalized: indirect questions with indefinite interpretation; conditional free-choice clauses where wh -words fill participant roles and may co-occur with the dedicated free-choice marker - ljubo ; and autonomous distributives. All three have Greek parallels and occur in translated OES texts, consistent with contact support.\n\nOrdering correlates with “weight”: wh -forms with distributive/free-choice marking ( ko-ždo ‘every’, later k-to-ni-budi ‘somebody’) prefer the rightmost slot, while lighter items are more flexible; the asymmetry strengthens later. The lexeme kotoryj ‘which’ appears in wh -clusters in the 14th century but disappears in Early Modern Russian as it grammaticalizes as a relative (Apresjan & Kopotev 2022: 123). Post-OES, order becomes more fixed ( kto čto > čto kto ), matching a shift from free wh -fronting to subject-first asymmetries (Rudin 1988: 472–476). A further split is areal: - koli ‘when’ sequences grammaticalize as free-choice markers in Southeastern OES and later Middle Ukrainian (cf. Polish - kolwiek ), but remain freer in Middle Russian.",
    "affiliations": [
     "Universität Potsdam, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-01-09:00-SR209-10:30",
-   "conftool_paper_id": "451",
-   "day": "2026-10-01",
-   "start": "10:30",
-   "end": "11:00",
-   "room": "SR 209",
-   "track": "LKW",
-   "panel_id": "2026-10-01|09:00|ct35",
-   "speakers": [
-    "Nina Weller"
-   ],
-   "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
-   "type": "talk",
-   "abstract": "Der Kosakenmythos durchläuft in der ukrainischen Populärkultur von den 1970er-Jahren bis in die 2020er Jahre eine markante Transformation: Angefangen von den unterschiedlichen sowjetischen Aneignungen des Kosakenmythos, der ihre Volksnähe und den antiwestlichen Befreiungskampf, später auch die romantisch-exotisierenden Elemente betonte, über die folkloristisch überhöhte Wiederaneignung des Kosaken als Symbolfigur ukrainischer Eigenstaatlichkeit und Innbegriff nationaler Identität bis hin zur radikalisierten, identitätsstiftenden Widerstands- und Heldenfigur im Selbstverteidigungskampf gegen Tatareneinfälle, polnische Adelswillkür, osmanische Macht und russischen Imperialismus sichert er sich einen festen, politisch wandelbaren Platz im Kanon ukrainischer Nationalmythen. Visuelle Stereotype wie der freie Reiter, der listenreiche Krieger oder der Hetman selbstverwalteter Kollektive vermitteln diese wechselnden Aneignungen und Projektionen des kosakischen Freiheitskampfs. Anhand ausgewählter Fallbeispiele–der Animationsserie. Wie die Kosaken ( Як Козаки/Как казаки,1967–1987 ) sowie der Parodie dieser Serie in Selenskijs Musical-Film Wie die Kosaken... “(2009), des Superhelden-Comics Buiviter (1995), des Action-Fantasy-Films Maksym Osa. Das Gold des Werwolfs (2022) u.a. –analysiert der Vortrag, wie die Kosakenfigur als Projektionsfläche des ukrainischen Nationalmythos durch das affektive Potential visueller und medialer Darstellungen transformiert und vor dem Hintergrund desrussischen Angriffskriegs gegen die Ukraine zum hochgradig politisierten, umstrittenen Träger und Vorbild dekolonialer Selbstbehauptung avanciert.",
-   "affiliations": [
-    "ZfL Berlin, Deutschland"
    ]
   },
   {
@@ -7336,7 +7339,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail5de5c4bc\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail8873ffe2\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7360,7 +7363,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail45272e2e\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail01a1f9bd\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
