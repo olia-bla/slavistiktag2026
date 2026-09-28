@@ -157,6 +157,42 @@ t("Alle 23 Podiumsbeteiligten sind einzeln dem richtigen Podium zugeordnet", () 
   }
   assert.equal([...people.values()].reduce((sum, person) => sum + person.podiumOf.length, 0), 23);
 });
+t("Sonderformate: alle 17 Mitwirkungen sind in Personen A–Z verknüpft", () => {
+  const specials = m.events.filter((event) => event.type === "special");
+  assert.deepEqual(specials.map((event) => event.participants?.length), [6, 5, 2, 2, 1, 1]);
+  const people = new Map(buildSpeakerIndex(m).map((person) => [person.raw, person]));
+  const names = new Set();
+  for (const event of specials) {
+    assert.equal(new Set(event.participants.map((person) => person.name)).size,
+      event.participants.length, `doppelte Namen in ${event.title}`);
+    for (const participant of event.participants) {
+      names.add(participant.name);
+      const person = people.get(participant.name);
+      assert.ok(person, `${participant.name} fehlt in Personen A–Z`);
+      assert.ok(person.specialOf.some(({ event: listed, participant: listedPerson }) =>
+        listed.id === event.id && listedPerson.role === participant.role),
+      `${participant.name} ist ${event.title} nicht zugeordnet`);
+    }
+  }
+  assert.equal(names.size, 16);
+  assert.equal([...people.values()].reduce((sum, person) => sum + person.specialOf.length, 0), 17);
+  assert.equal(people.get("Andreas Umland").specialOf.length, 2);
+  assert.equal(people.get("Helene Jessula Wczesniak").talks.length, 0,
+    "derselbe DFG-Auftritt erscheint doppelt als Vortrag und Sonderformat");
+  assert.equal(specials.find((event) => event.title.includes("Russia’s War"))
+    .participants.find((person) => person.name === "Tamara Hunderova").location, "München/Kyjiw");
+});
+t("Bekannte Einrichtungen aus der Anmeldeliste gelten in der App, nicht in der ConfTool-Datei", () => {
+  assert.equal(content.person_affiliations["Florian Wandl"], "Universität Tübingen");
+  assert.equal(content.person_affiliations["Björn Hansen"], "Universität Regensburg");
+  assert.equal(content.person_affiliations["Dennis Dierks"], "Universität Leipzig");
+  assert.ok(buildSpeakerIndex(m).some((person) => person.raw === "Florian Wandl"));
+  assert.ok(buildSpeakerIndex(m).some((person) => person.raw === "Björn Hansen"));
+  const florian = m.sessions.find((session) => session.speakers?.includes("Florian Wandl"));
+  const florianSource = program.sessions.find((session) => session.id === florian.id);
+  assert.ok(florian.affiliations.includes("Universität Tübingen"));
+  assert.ok(florianSource.affiliations.includes("Universität Zürich, Schweiz"));
+});
 t("LKW-Panel Exilliteraturen: Miriam Finkelstein ist um 10:30 Discussant", () => {
   const discussion = m.sessions.find((s) => s.id === "curated-2026-10-02-SR223-10:30-discussant");
   assert.ok(discussion, "Diskussionsbeitrag fehlt");

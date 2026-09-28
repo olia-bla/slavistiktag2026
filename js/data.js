@@ -126,8 +126,13 @@ export function buildModel(program, content) {
     const normalizedTrack = s.type === "talk" && panel && ["LKW", "SW", "DID"].includes(discipline)
       ? discipline
       : s.track;
+    // Angaben der Organisatorin korrigieren nur die App-Anzeige; die
+    // automatisch synchronisierte ConfTool-Datei bleibt unverändert.
+    const affiliations = s.affiliations?.map((value, index) =>
+      content.person_affiliations?.[s.speakers?.[index]] || value);
     const out = {
       ...s,
+      ...(affiliations ? { affiliations } : {}),
       source_track: s.track,
       track: normalizedTrack,
       venue: roomVenue(s.room),

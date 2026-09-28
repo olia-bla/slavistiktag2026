@@ -770,6 +770,49 @@ t("Podium auf Personenseite öffnet seine Beschreibung und Beteiligten", () => {
 document.querySelector(".drawer-backdrop").click();
 await waitFor(() => !document.querySelector(".drawer"));
 
+dom.window.location.hash = "#/sprecher/Andreas%20Umland";
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Umland"));
+t("Festredner: zwei Sonderformate und bekannte Einrichtung", () => {
+  const person = document.querySelector("#app .view-person");
+  assert.ok(person.textContent.includes("2 Sonderformate"));
+  assert.ok(person.textContent.includes("Nationale Universität Kyjiw-Mohyla-Akademie"));
+  assert.equal(person.querySelectorAll(".event-card.type-special").length, 2);
+});
+dom.window.location.hash = "#/sprecher/Dennis%20Dierks";
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Dierks"));
+t("Buchgespräch: Personenseite zeigt Einrichtung und Programmpunkt", () => {
+  const person = document.querySelector("#app .view-person");
+  assert.ok(person.textContent.includes("Universität Leipzig"));
+  assert.ok(person.textContent.includes("Russia’s War on Ukraine"));
+  assert.ok(person.textContent.includes("SR 222"));
+});
+document.querySelector("#app .view-person .event-card.type-special").click();
+await waitFor(() => document.querySelector(".drawer .event-people"));
+t("Buchgespräch-Drawer: alle Beteiligten mit verfügbaren Angaben", () => {
+  const list = document.querySelector(".drawer .event-people .mini-list");
+  assert.equal(list.querySelectorAll("li").length, 5);
+  assert.ok(list.textContent.includes("Tamara Hunderova · Teilnahme · München/Kyjiw"));
+  assert.ok(list.textContent.includes("Lena Dallywater · Teilnahme · Friedrich-Schiller-Universität Jena"));
+  assert.equal(list.querySelector('a[href="#/sprecher/Dennis%20Dierks"]')?.textContent, "Dennis Dierks");
+});
+document.querySelector(".drawer-backdrop").click();
+await waitFor(() => !document.querySelector(".drawer"));
+dom.window.location.hash = "#/sprecher/Steffen%20Teichert";
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Teichert"));
+t("Grußwort: Ministerium und Funktion sind angegeben", () => {
+  const person = document.querySelector("#app .view-person");
+  assert.ok(person.textContent.includes("Thüringer Ministerium für Bildung, Wissenschaft und Kultur"));
+  assert.ok(person.textContent.includes("Staatssekretär für Wissenschaft und Kultur"));
+  assert.ok(person.textContent.includes("Grußwort"));
+});
+dom.window.location.hash = "#/sprecher/Florian%20Wandl";
+await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Wandl"));
+t("Anmeldeliste: Florian Wandls aktuelle Einrichtung ist Tübingen", () => {
+  const person = document.querySelector("#app .view-person header");
+  assert.ok(person.textContent.includes("Universität Tübingen"));
+  assert.equal(person.textContent.includes("Universität Zürich"), false);
+});
+
 // Personen-Detailansicht (#/sprecher/<Name>) — Regression: Route unbekannt → Dashboard
 dom.window.location.hash = "#/sprecher/Gerta%20Monakhova";
 await waitFor(() => document.querySelector("#app .view-person h1")?.textContent.includes("Monakhova"));

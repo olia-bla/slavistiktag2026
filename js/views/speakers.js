@@ -1,4 +1,4 @@
-// views/speakers.js – Personen-Index A–Z (Vorträge, Chairs und Podien)
+// views/speakers.js – Personen-Index A–Z (Vorträge, Chairs und Veranstaltungen)
 // Indexformat „Nachname, Vorname" (wissenschaftliche Konvention); Karten und
 // Drawer zeigen weiterhin „Vorname Nachname".
 import { h, dateLabel } from "../util.js";
@@ -54,35 +54,46 @@ export function splitPeople(raw) {
 }
 
 const podiumCount = (count) => `${count} ${count === 1 ? "Podium" : "Podien"}`;
+const specialCount = (count) => `${count} Sonderformat${count === 1 ? "" : "e"}`;
 
-// Eintrag: { name, sortKey, talks, discussantOf, chairOf, podiumOf }
+// Eintrag: { name, sortKey, talks, discussantOf, chairOf, podiumOf, specialOf }
 export function buildSpeakerIndex(model) {
   const map = new Map();
-  const add = (raw, role, session, podiumRole = "") => {
+  const specialParticipantSlots = new Set((model.events || [])
+    .filter((event) => event.type === "special")
+    .flatMap((event) => (event.participants || []).map((participant) =>
+      `${event.day}|${event.start}|${event.room}|${stripTitles(participant.name)}`)));
+  const add = (raw, role, session, eventPerson = null) => {
     for (const one of splitPeople(raw)) {
       // Identität = Name OHNE akademische Titel: Chairs stehen im ConfTool
       // mit „Prof. Dr.", Sprecher:innen ohne — dieselbe Person sonst doppelt.
       const key = stripTitles(one.trim());
       if (!key) continue;
       if (!map.has(key)) map.set(key, {
-        raw: key, ...nameParts(key), talks: [], discussantOf: [], chairOf: [], podiumOf: [],
+        raw: key, ...nameParts(key), talks: [], discussantOf: [], chairOf: [], podiumOf: [], specialOf: [],
       });
       const entry = map.get(key);
       if (role === "chair") entry.chairOf.push(session);
       else if (role === "discussant") entry.discussantOf.push(session);
-      else if (role === "podium") entry.podiumOf.push({ event: session, role: podiumRole });
+      else if (role === "podium") entry.podiumOf.push({ event: session, role: eventPerson.role });
+      else if (role === "special") entry.specialOf.push({ event: session, participant: eventPerson });
       else entry.talks.push(session);
     }
   };
   for (const s of model.sessions) {
     if (s.type !== "talk" && s.type !== "discussion") continue;
-    for (const sp of s.speakers || []) add(sp, s.type === "discussion" ? "discussant" : "speaker", s);
+    for (const sp of s.speakers || []) {
+      // Ein Sonderformat kann in ConfTool zusätzlich als Vortrag stehen.
+      // Auf der Personenseite soll derselbe Auftritt nur einmal erscheinen.
+      if (s.type === "talk" && specialParticipantSlots.has(`${s.day}|${s.start}|${s.room}|${stripTitles(sp)}`)) continue;
+      add(sp, s.type === "discussion" ? "discussant" : "speaker", s);
+    }
     if (s.type === "talk" && s.chair) add(s.chair, "chair", s);
   }
   for (const event of model.events || []) {
-    if (event.type !== "podium") continue;
+    if (event.type !== "podium" && event.type !== "special") continue;
     for (const participant of event.participants || []) {
-      add(participant.name, "podium", event, participant.role);
+      add(participant.name, event.type, event, participant);
     }
   }
   return [...map.values()].sort((a, b) => a.sortKey.localeCompare(b.sortKey, "de"));
@@ -93,7 +104,7 @@ export function renderSpeakers(model, ctx) {
   const wrap = h("div", { class: "view view-speakers" },
     h("header", { class: "hero compact" },
       h("h1", { text: "Personen A–Z" }),
-      h("p", { class: "meta", text: `${people.length} Personen, sortiert nach Nachname – Vortragende, Chairs und Podiumsbeteiligte. Klick auf einen Namen zeigt die zugehörigen Programmpunkte.` })));
+      h("p", { class: "meta", text: `${people.length} Personen, sortiert nach Nachname – Vortragende, Chairs und Beteiligte an Podien und Sonderformaten. Klick auf einen Namen zeigt die zugehörigen Programmpunkte.` })));
 
   const search = h("input", {
     type: "search", class: "search-input", placeholder: "Name suchen …",
@@ -123,6 +134,7 @@ export function renderSpeakers(model, ctx) {
            p.discussantOf.length ? `${p.discussantOf.length}× Discussant` : "",
            p.chairOf.length ? `${p.chairOf.length}× Chair` : "",
            p.podiumOf.length ? podiumCount(p.podiumOf.length) : "",
+           p.specialOf.length ? specialCount(p.specialOf.length) : "",
           ].filter(Boolean).join(" · ")));
       list.append(btn);
     }
@@ -134,7 +146,7 @@ export function renderSpeakers(model, ctx) {
   return wrap;
 }
 
-// Personen-Detailansicht: Vorträge, Chair-Rollen und Podien einer Person.
+// Personen-Detailansicht: Vorträge, Chair-Rollen, Podien und Sonderformate.
 // Route: #/sprecher/<encodeURIComponent(raw)>
 export function renderPerson(model, ctx, rawName) {
   const people = buildSpeakerIndex(model);
@@ -155,13 +167,24 @@ export function renderPerson(model, ctx, rawName) {
     ...p.discussantOf.map((s) => ({ s, role: "Discussant" })),
     ...p.chairOf.map((s) => ({ s, role: "Chair" })),
     ...p.podiumOf.map(({ event, role }) => ({ s: event, role: "podium", podiumRole: role })),
+    ...p.specialOf.map(({ event, participant }) => ({ s: event, role: "special", eventPerson: participant })),
   ].sort((a, b) => (a.s.day + a.s.start).localeCompare(b.s.day + b.s.start));
 
   const affis = new Set();
-  for (const s of p.talks) {
-    // Identität = gestrippter Name (gleiche Regel wie buildSpeakerIndex)
-    const i = (s.speakers || []).findIndex((sp) => stripTitles(sp) === p.raw);
-    if (i >= 0 && s.affiliations?.[i]) affis.add(s.affiliations[i]);
+  const curatedAffiliation = model.content?.person_affiliations?.[p.raw];
+  if (curatedAffiliation) {
+    affis.add(curatedAffiliation);
+  } else {
+    for (const s of p.talks) {
+      // Identität = gestrippter Name (gleiche Regel wie buildSpeakerIndex)
+      const i = (s.speakers || []).findIndex((sp) => stripTitles(sp) === p.raw);
+      if (i >= 0 && s.affiliations?.[i]) affis.add(s.affiliations[i]);
+    }
+  }
+  for (const { participant } of p.specialOf) {
+    if (participant.affiliation && !curatedAffiliation) affis.add(participant.affiliation);
+    if (participant.location) affis.add(participant.location);
+    if (participant.info) affis.add(participant.info);
   }
 
   const hero = h("header", { class: "hero compact" },
@@ -172,20 +195,21 @@ export function renderPerson(model, ctx, rawName) {
        p.discussantOf.length ? `${p.discussantOf.length}× Discussant` : "",
        p.chairOf.length ? `${p.chairOf.length}× Chair` : "",
        p.podiumOf.length ? podiumCount(p.podiumOf.length) : "",
+       p.specialOf.length ? specialCount(p.specialOf.length) : "",
        [...affis].join(" · ")].filter(Boolean).join(" · ") }));
 
   wrap.append(hero);
 
   let lastDay = "";
-  for (const { s, role, podiumRole } of items) {
+  for (const { s, role, podiumRole, eventPerson } of items) {
     if (s.day !== lastDay) {
       lastDay = s.day;
       wrap.append(h("div", { class: "day-divider" },
         h("span", { class: "day-name", text: dateLabel(s.day) })));
     }
-    if (role === "podium") {
+    if (role === "podium" || role === "special") {
       wrap.append(h("div", { class: "slot-block" },
-        h("div", { class: "slot-head" }, h("span", { text: podiumRole })),
+        h("div", { class: "slot-head" }, h("span", { text: podiumRole || eventPerson?.role || "Mitwirkung" })),
         eventCard(model, ctx, s)));
     } else if (role === "Chair") {
       wrap.append(h("div", { class: "slot-block" },

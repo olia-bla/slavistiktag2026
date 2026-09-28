@@ -9,6 +9,15 @@
     "contact": "slavistiktag2026@uni-jena.de",
     "program_stand": "ConfTool (laufend aktualisiert), Stand 25.09.2026"
   },
+  "person_affiliations": {
+    "Florian Wandl": "Universität Tübingen",
+    "Steffen Teichert": "Thüringer Ministerium für Bildung, Wissenschaft und Kultur",
+    "Björn Hansen": "Universität Regensburg",
+    "Dennis Dierks": "Universität Leipzig",
+    "Lena Dallywater": "Friedrich-Schiller-Universität Jena · Exzellenzcluster Imaginamics",
+    "Stefan Rohdewald": "Universität Leipzig · Historisches Seminar",
+    "Andreas Umland": "Nationale Universität Kyjiw-Mohyla-Akademie"
+  },
   "welcome": [
     "Ласкаво просимо до Єни!",
     "Serdecznie witamy w Jenie!",
@@ -171,6 +180,14 @@
         "Univ.-Prof. Dr. Bärbel Kracke, Vizepräsidentin für Universitätsgemeinschaft und Engagement, FSU Jena",
         "Univ.-Prof. Dr. Joachim von Puttkamer, Dekan der Philosophischen Fakultät, FSU Jena",
         "Prof. Dr. Steffen Teichert, Staatssekretär TMBWK"
+      ],
+      "participants": [
+        { "name": "Andreas Umland", "role": "Festvortrag" },
+        { "name": "Thede Kahl", "role": "Grußwort", "affiliation": "Friedrich-Schiller-Universität Jena", "info": "Direktor des Instituts für Slawistik und Kaukasusstudien" },
+        { "name": "Barbara Sonnenhauser", "role": "Grußwort", "info": "Vorsitzende des Verbandes der deutschen Slavistik" },
+        { "name": "Bärbel Kracke", "role": "Grußwort", "affiliation": "Friedrich-Schiller-Universität Jena", "info": "Vizepräsidentin für Universitätsgemeinschaft und Engagement" },
+        { "name": "Joachim von Puttkamer", "role": "Grußwort", "affiliation": "Friedrich-Schiller-Universität Jena", "info": "Dekan der Philosophischen Fakultät" },
+        { "name": "Steffen Teichert", "role": "Grußwort", "info": "Staatssekretär für Wissenschaft und Kultur" }
       ]
     },
     {
@@ -210,10 +227,48 @@
     }
   ],
   "special": [
-    { "day": "2026-10-01", "start": "11:30", "end": "13:00", "room": "SR 222", "title": "Russia’s War on Ukraine and the Crisis of World Order — Book presentation and roundtable", "people": "Chair: Andreas Umland (Stockholm/Kyiv); Participants: Dennis Dierks (Leipzig), Tamara Hunderova (Munich/Kyiv), Lena Dallywater (Jena), Stefan Rohdewald (Leipzig)" },
-    { "day": "2026-10-01", "start": "14:00", "end": "15:30", "room": "SR 222", "title": "Prof. Dr. Liliia Bezugla: „Wenn ich Heimweh sage…“ – Mascha Kaléko auf Ukrainisch", "people": "Literarische Lesung und Präsentation der ersten zweibändigen ukrainischen Ausgabe der Lyrik Mascha Kalékos mit Originalaufnahmen der Autorin (Moderation: Dorothea Spaniel-Weise)" },
-    { "day": "2026-10-02", "start": "09:00", "end": "11:00", "room": "SR 127", "title": "Helene Jessula Wczesniak: Die Fördermöglichkeiten bei der DFG", "people": null },
-    { "day": "2026-10-03", "start": "09:00", "end": "11:00", "room": "SR 223", "title": "Impulsvortrag von Olaf Hamann (Staatsbibliothek zu Berlin, FID Slawistik): „Alles rechtens – alles bestens? Der Fachinformationsdienst Slawistik im Spannungsfeld zwischen Informationsfreiheit, Sanktionspolitik, Zensur und Propaganda“", "people": null }
+    {
+      "day": "2026-10-01", "start": "11:30", "end": "13:00", "room": "SR 222",
+      "title": "Russia’s War on Ukraine and the Crisis of World Order — Book presentation and roundtable",
+      "people": "Chair: Andreas Umland (Stockholm/Kyiv); Participants: Dennis Dierks (Leipzig), Tamara Hunderova (Munich/Kyiv), Lena Dallywater (Jena), Stefan Rohdewald (Leipzig)",
+      "participants": [
+        { "name": "Andreas Umland", "role": "Chair" },
+        { "name": "Dennis Dierks", "role": "Teilnahme" },
+        { "name": "Tamara Hunderova", "role": "Teilnahme", "location": "München/Kyjiw" },
+        { "name": "Lena Dallywater", "role": "Teilnahme" },
+        { "name": "Stefan Rohdewald", "role": "Teilnahme" }
+      ]
+    },
+    {
+      "day": "2026-10-01", "start": "14:00", "end": "15:30", "room": "SR 121",
+      "title": "Präsentation des Buchs „Russische Schockwellen. Der Krieg in der Ukraine und die Lage in den angrenzenden Regionen\" (Hg. Olaf Leiße)",
+      "people": "Dr. Christoph Giesel und Prof. Dr. Olaf Leiße",
+      "participants": [
+        { "name": "Christoph Giesel", "role": "Buchpräsentation", "affiliation": "Friedrich-Schiller-Universität Jena" },
+        { "name": "Olaf Leiße", "role": "Buchpräsentation", "info": "Herausgeber des vorgestellten Buchs" }
+      ]
+    },
+    {
+      "day": "2026-10-01", "start": "14:00", "end": "15:30", "room": "SR 222",
+      "title": "Prof. Dr. Liliia Bezugla: „Wenn ich Heimweh sage…“ – Mascha Kaléko auf Ukrainisch",
+      "body": "Literarische Lesung und Präsentation der ersten zweibändigen ukrainischen Ausgabe der Lyrik Mascha Kalékos mit Originalaufnahmen der Autorin.",
+      "participants": [
+        { "name": "Liliia Bezugla", "role": "Lesung und Präsentation" },
+        { "name": "Dorothea Spaniel-Weise", "role": "Moderation" }
+      ]
+    },
+    {
+      "day": "2026-10-02", "start": "09:00", "end": "11:00", "room": "SR 127",
+      "title": "Helene Jessula Wczesniak: Die Fördermöglichkeiten bei der DFG",
+      "people": null,
+      "participants": [{ "name": "Helene Jessula Wczesniak", "role": "Präsentation", "info": "DFG-Fördermöglichkeiten" }]
+    },
+    {
+      "day": "2026-10-03", "start": "09:00", "end": "11:00", "room": "SR 223",
+      "title": "Impulsvortrag von Olaf Hamann (Staatsbibliothek zu Berlin, FID Slawistik): „Alles rechtens – alles bestens? Der Fachinformationsdienst Slawistik im Spannungsfeld zwischen Informationsfreiheit, Sanktionspolitik, Zensur und Propaganda“",
+      "people": null,
+      "participants": [{ "name": "Olaf Hamann", "role": "Impulsvortrag", "affiliation": "Staatsbibliothek zu Berlin · FID Slawistik" }]
+    }
   ],
   "posters": [
     { "authors": ["Svetlana Ahlborn", "Wojciech Sosnowski"], "title": "Das Projekt SIPORUS – Slavische Interkomprehension Polnisch-Russisch" },

@@ -218,6 +218,12 @@ for (const vp of VIEWPORTS) {
     assert.deepEqual(await overflowIssues(page), []);
     assert.ok((await page.locator("#app .view-person").innerText()).includes("Zwischen Krise und Comeback"));
   });
+  await page.evaluate(() => { location.hash = "#/sprecher/Lena%20Dallywater"; });
+  await page.waitForSelector("#app .view-person .event-card.type-special");
+  await t(`${vp.name}: Sonderformat und lange Einrichtung ohne Überlauf`, async () => {
+    assert.deepEqual(await overflowIssues(page), []);
+    assert.ok((await page.locator("#app .view-person").innerText()).includes("Exzellenzcluster Imaginamics"));
+  });
 
   // Programm
   await page.evaluate(() => { location.hash = "#/programm"; });

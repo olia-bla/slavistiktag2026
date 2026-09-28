@@ -29,7 +29,7 @@ export function openDrawer(ctx, id) {
     session._q = ctx.programState?.q || "";
     drawer.append(sessionBody(ctx, session, close));
   } else if (event) {
-    drawer.append(eventBody(event, close));
+    drawer.append(eventBody(ctx, event, close));
   } else {
     drawer.append(h("p", { text: "Nicht gefunden." }, ), closeBtn(close));
   }
@@ -177,7 +177,23 @@ function sessionBody(ctx, s, close) {
   return out;
 }
 
-function eventBody(e, close) {
+function eventBody(ctx, e, close) {
+  const namedSpecial = e.type === "special" && e.participants?.length;
+  const otherParticipants = namedSpecial ? e.participants.filter((person) => person.role !== "Grußwort") : [];
+  const greetingParticipants = namedSpecial ? e.participants.filter((person) => person.role === "Grußwort") : [];
+  const personItem = (person) => {
+    const affiliation = ctx.model.content?.person_affiliations?.[person.name] || person.affiliation;
+    return h("li", {},
+      h("a", {
+        href: `#/sprecher/${encodeURIComponent(person.name)}`,
+        onclick: close,
+        text: person.name,
+      }),
+      person.role ? ` · ${person.role}` : "",
+      affiliation ? ` · ${affiliation}` : "",
+      person.location ? ` · ${person.location}` : "",
+      person.info ? ` · ${person.info}` : "");
+  };
   return h("div", { class: "drawer-body" },
     closeBtn(close),
     h("p", { class: "kicker", text: `${dateLabel(e.day)}${e.start ? ` · ${timeRange(e.start, e.end)}` : ""}` }),
@@ -189,12 +205,22 @@ function eventBody(e, close) {
           h("h3", { text: "Beschreibung" }),
           h("p", { class: "body", text: e.body }))
       : null,
-    e.people
+    e.people && !namedSpecial
       ? h("section", { class: "event-people" },
           h("h3", { text: "Beteiligte" }),
           h("p", { class: "meta", text: e.people }))
       : null,
-    e.grussworte?.length
+    otherParticipants.length
+      ? h("section", { class: "event-people" },
+          h("h3", { text: "Beteiligte" }),
+          h("ul", { class: "mini-list" }, otherParticipants.map(personItem)))
+      : null,
+    greetingParticipants.length
+      ? h("section", { class: "event-people" },
+          h("h3", { text: "Grußworte" }),
+          h("ul", { class: "mini-list" }, greetingParticipants.map(personItem)))
+      : null,
+    e.grussworte?.length && !namedSpecial
       ? h("section", {},
           h("h3", { text: "Grußworte" }),
           h("ul", { class: "mini-list" },
