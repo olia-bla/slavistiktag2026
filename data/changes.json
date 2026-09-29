@@ -69,5 +69,35 @@
    "status": "cancelled"
   }
  ],
- "generated_at": "2026-09-28T15:59:48+00:00"
+ "generated_at": "2026-09-28T15:59:48+00:00",
+ "history": [
+  {
+   "counts": { "new": 0, "changed": 1, "removed": 0 },
+   "new": [],
+   "changed": [
+    {
+     "id": "2026-10-02-09:00-SR125-10:00",
+     "title": "Einblicke in den Fernseh-Strudel: Dekonstruktionen der Surkovschen Propaganda im russischen Theater",
+     "speakers": ["Fabian Erlenmaier"],
+     "day": "2026-10-02",
+     "start": "10:00",
+     "end": "10:30",
+     "room": "SR 125",
+     "status": null,
+     "old": {
+      "id": "2026-10-02-09:00-SR125-10:00",
+      "title": "Von der sowjetischen Utopie zur putinschen Telekratie: Die Poetik des Fernsehens auf der Bühne des russischen Theaters",
+      "speakers": ["Fabian Erlenmaier"],
+      "day": "2026-10-02",
+      "start": "10:00",
+      "end": "10:30",
+      "room": "SR 125",
+      "status": null
+     }
+    }
+   ],
+   "removed": [],
+   "generated_at": "2026-09-28T12:02:42+02:00"
+  }
+ ]
 }

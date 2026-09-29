@@ -225,6 +225,13 @@ for (const vp of VIEWPORTS) {
     assert.ok((await page.locator("#app .view-person").innerText()).includes("Exzellenzcluster Imaginamics"));
   });
 
+  await page.evaluate(() => { location.hash = "#/aenderungen"; });
+  await page.waitForSelector("#app .view-changes .change-batch");
+  await t(`${vp.name}: Änderungshistorie ohne Überlauf`, async () => {
+    assert.deepEqual(await overflowIssues(page), []);
+    assert.ok(await page.locator("#app .view-changes .change-batch").count() >= 2);
+  });
+
   // Programm
   await page.evaluate(() => { location.hash = "#/programm"; });
   await page.waitForSelector("#app .results");

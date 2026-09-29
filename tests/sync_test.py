@@ -27,6 +27,28 @@ def program(sessions):
 
 
 class SyncTests(unittest.TestCase):
+    def test_change_history_preserves_real_updates_without_duplicates(self):
+        def batch(stamp, title=None):
+            new = [{"id": title, "title": title}] if title else []
+            return {"counts": {"new": len(new), "changed": 0, "removed": 0},
+                    "new": new, "changed": [], "removed": [], "generated_at": stamp}
+
+        first = batch("2026-09-28T12:00:00+02:00", "Erster Titel")
+        second = batch("2026-09-29T10:00:00+02:00", "Zweiter Titel")
+        third = batch("2026-09-29T11:00:00+02:00", "Dritter Titel")
+        migrated = sync.with_change_history(first, second)
+        self.assertEqual(migrated["history"], [first])
+        self.assertEqual(migrated["new"], second["new"])
+
+        no_change = sync.with_change_history(migrated, batch("2026-09-29T10:30:00+02:00"))
+        self.assertEqual(no_change["history"], [first, second])
+        resumed = sync.with_change_history(no_change, third)
+        self.assertEqual(resumed["history"], [first, second])
+        self.assertEqual(resumed["new"], third["new"])
+
+        duplicate = {**second, "history": [first, second]}
+        self.assertEqual(sync.with_change_history(duplicate, third)["history"], [first, second])
+
     def test_obfuscated_footer_id_is_not_a_program_change(self):
         old = program([])
         old["events"] = [{"id": "event-1", "people": "Kontakt ctmail5de5c4bc"}]

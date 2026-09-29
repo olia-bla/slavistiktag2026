@@ -1,4 +1,4 @@
-// views/changes.js – „Was ist neu?": Änderungen des letzten Programm-Syncs
+// views/changes.js – „Was ist neu?": datierte Historie aller Programmänderungen
 // (Quelle: data/changes.json, erzeugt von tools/fetch_conftool.py im Workflow).
 // Auch abgesagte Vorträge bleiben verlinkt, damit ihre Details sichtbar sind.
 import { h, dateLabel } from "../util.js";
@@ -28,32 +28,25 @@ function slotChange(oldSlot, newSlot) {
     h("span", { class: "new", text: parts(newSlot) }));
 }
 
-export function renderChanges(model, ctx) {
-  const ch = model.changes;
-  const wrap = h("div", { class: "view view-changes" });
+function changeCount(ch) {
+  const c = ch?.counts || {};
+  return (c.new || 0) + (c.changed || 0) + (c.removed || 0);
+}
 
-  if (!ch) {
-    wrap.append(
-      h("header", { class: "hero compact" },
-        h("h1", { text: "Programm-Änderungen" }),
-        h("p", { class: "meta", text: "Noch kein Änderungsverzeichnis vorhanden – es entsteht beim nächsten Programm-Sync, sobald sich etwas geändert hat." })));
-    return wrap;
-  }
+function changeTime(ch) {
+  const date = new Date(ch.generated_at);
+  return Number.isNaN(date.getTime()) ? "Zeit nicht bekannt"
+    : date.toLocaleString("de-DE", {
+        timeZone: "Europe/Berlin", day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit",
+      }) + " Uhr";
+}
 
+function renderBatch(ctx, ch) {
   const c = ch.counts || {};
-  const total = (c.new || 0) + (c.changed || 0) + (c.removed || 0);
-  wrap.append(
-    h("header", { class: "hero compact" },
-      h("h1", { text: "Programm-Änderungen" }),
-      h("p", { class: "meta", text: total
-        ? `Letzter Sync: ${new Date(ch.generated_at).toLocaleString("de-DE")} — ${c.new || 0} neu, ${c.changed || 0} geändert, ${c.removed || 0} abgesagt.`
-        : `Letzter Sync: ${new Date(ch.generated_at).toLocaleString("de-DE")} — keine Änderungen gegenüber dem Stand davor.` })));
-
-  if (!total) {
-    wrap.append(h("p", { class: "empty", text: "Das Programm hat sich seit dem letzten Sync nicht geändert." }));
-    return wrap;
-  }
-
+  const wrap = h("article", { class: "change-batch" },
+    h("h2", { text: changeTime(ch) }),
+    h("p", { class: "meta", text: `${c.new || 0} neu · ${c.changed || 0} geändert · ${c.removed || 0} abgesagt` }));
   if (c.new) {
     wrap.append(h("section", {},
       h("h3", { text: `Neu im Programm (${c.new})` }),
@@ -75,7 +68,35 @@ export function renderChanges(model, ctx) {
     wrap.append(h("section", {},
       h("h3", { text: `Abgesagt (${c.removed})` }),
       h("ul", { class: "mini-list" }, ch.removed.map((t) => h("li", { class: "removed" },
-        talkElement(ctx, t), " ", h("strong", { class: "cancel-label", text: "Abgesagt" }))))));
+        talkElement(ctx, t), " ", h("strong", { class: "cancel-label", text:
+          ctx.byId?.[t.id] && ctx.byId[t.id].status !== "cancelled"
+            ? "Damals abgesagt · inzwischen wieder im Programm" : "Abgesagt" }))))));
   }
+  return wrap;
+}
+
+export function renderChanges(model, ctx) {
+  const ch = model.changes;
+  const wrap = h("div", { class: "view view-changes" });
+
+  if (!ch) {
+    wrap.append(h("header", { class: "hero compact" },
+      h("h1", { text: "Programm-Änderungen" }),
+      h("p", { class: "meta", text: "Noch keine Programmänderungen erfasst." })));
+    return wrap;
+  }
+
+  // Ältere changes.json-Dateien ohne Historie bleiben weiterhin lesbar.
+  // Gespeichert sind frühere Updates zuerst, das aktuelle als Top-Level-Diff.
+  const updates = [...(Array.isArray(ch.history) ? ch.history : []), ch]
+    .filter((batch) => changeCount(batch) > 0).reverse();
+  wrap.append(h("header", { class: "hero compact" },
+    h("h1", { text: "Programm-Änderungen" }),
+    h("p", { class: "meta", text: updates.length
+      ? `${updates.length} ${updates.length === 1 ? "Update" : "Updates"} im Verlauf · neueste Änderung: ${changeTime(updates[0])}. Klick öffnet den aktuellen Programmpunkt.`
+      : "Noch keine Programmänderungen erfasst." })));
+
+  if (!updates.length) return wrap;
+  for (const batch of updates) wrap.append(renderBatch(ctx, batch));
   return wrap;
 }

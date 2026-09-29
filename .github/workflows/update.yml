@@ -35,7 +35,7 @@ jobs:
               exit 0
             fi
           fi
-          if ! python tools/fetch_conftool.py -o /tmp/program.json --codes data/program.json --changes /tmp/changes.json; then
+          if ! python tools/fetch_conftool.py -o /tmp/program.json --codes data/program.json --changes /tmp/changes.json --history data/changes.json; then
             echo "::error::ConfTool nicht erreichbar oder Validierung fehlgeschlagen – Programm-Update übersprungen, alte Daten bleiben online."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0

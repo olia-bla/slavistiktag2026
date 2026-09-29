@@ -90,7 +90,9 @@ function installCard() {
 
 function changesNotice(model) {
   const changes = model.changes;
-  const counts = changes?.counts || {};
+  const latest = [changes, ...(changes?.history || []).slice().reverse()]
+    .find((batch) => batch && ["new", "changed", "removed"].some((kind) => batch[kind]?.length));
+  const counts = latest?.counts || {};
   const total = (counts.new || 0) + (counts.changed || 0) + (counts.removed || 0);
   if (!total) return null;
   const parts = [
@@ -100,8 +102,8 @@ function changesNotice(model) {
   ].filter(Boolean).join(", ");
   return h("section", { class: "card dashboard-notice" },
     h("h2", { text: "Aktuelle Hinweise" }),
-    h("p", { text: `Das Programm wurde aktualisiert: ${parts}.` }),
-    h("a", { class: "btn ghost", href: "#/aenderungen", text: "Änderungen ansehen" }));
+    h("p", { text: `Letzte erfasste Programmänderung: ${parts}.` }),
+    h("a", { class: "btn ghost", href: "#/aenderungen", text: "Alle Änderungen ansehen" }));
 }
 
 function countdownText({ unit, days, hours, minutes }) {

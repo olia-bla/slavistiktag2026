@@ -5,7 +5,10 @@ import { JSDOM } from "jsdom";
 
 const indexHtml = await readFile(new URL("../index.html", import.meta.url), "utf-8");
 const currentChanges = JSON.parse(await readFile(new URL("../data/changes.json", import.meta.url), "utf-8"));
-const currentChangeCount = Object.values(currentChanges.counts || {}).reduce((sum, count) => sum + count, 0);
+const savedChangeBatches = [...(currentChanges.history || []), currentChanges]
+  .filter((batch) => ["new", "changed", "removed"].some((kind) => batch[kind]?.length));
+const currentChangeCount = savedChangeBatches.reduce((sum, batch) => sum +
+  ["new", "changed", "removed"].reduce((n, kind) => n + (batch[kind]?.length || 0), 0), 0);
 const dom = new JSDOM(indexHtml, { url: "https://example.org/", pretendToBeVisual: true });
 
 globalThis.window = dom.window;
@@ -105,7 +108,7 @@ t("Startseite: kompakte Orientierung ohne doppelte Programmübersicht", () => {
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Tage"), false);
   assert.equal([...document.querySelectorAll("#app h2")].some((el) => el.textContent === "Schnellzugriff"), false);
   assert.equal(Boolean(document.querySelector("#app .dashboard-notice")), currentChangeCount > 0,
-    "Änderungshinweis passt nicht zum letzten Programmabgleich");
+    "Änderungshinweis passt nicht zum gespeicherten Verlauf");
 });
 t("Startseite: Notfallnummer und Kontakt-E-Mail sind direkt nutzbar", () => {
   const contact = document.querySelector("#app .dashboard-contact");
@@ -833,13 +836,22 @@ t("Personen-Ansicht: unbekannter Name → ehrlicher Leerzustand", () => {
 // Änderungs-Ansicht (Was ist neu? / data/changes.json)
 dom.window.location.hash = "#/aenderungen";
 await waitFor(() => document.querySelector("#app .view-changes"));
-t("Änderungs-Ansicht: letzter Abgleich wird passend angezeigt", () => {
+t("Änderungs-Ansicht: Änderungen und Historie werden passend angezeigt", () => {
   assert.ok(document.querySelector("#app .view-changes h1").textContent.includes("Programm-Änderungen"));
-  if (currentChangeCount) {
-    const firstChange = [...currentChanges.new, ...currentChanges.changed, ...currentChanges.removed][0];
+  if (savedChangeBatches.length) {
+    const latestBatch = savedChangeBatches.at(-1);
+    const firstChange = [...latestBatch.new, ...latestBatch.changed, ...latestBatch.removed][0];
     assert.ok(document.querySelector("#app .view-changes").textContent.includes(firstChange.title));
+    const cards = [...document.querySelectorAll("#app .view-changes .change-batch")];
+    assert.equal(cards.length, savedChangeBatches.length);
+    assert.ok(cards[0].textContent.includes(firstChange.title));
+    if (cards.length > 1) {
+      const previousBatch = savedChangeBatches.at(-2);
+      const previousChange = [...previousBatch.new, ...previousBatch.changed, ...previousBatch.removed][0];
+      assert.ok(cards[1].textContent.includes(previousChange.title));
+    }
   } else {
-    assert.ok(document.body.textContent.includes("keine Änderungen"));
+    assert.ok(document.body.textContent.includes("keine Programmänderungen"));
   }
 });
 t("Änderungs-Ansicht: Titel/Name und Absage sind verständlich markiert", async () => {
@@ -863,6 +875,19 @@ t("Änderungs-Ansicht: Titel/Name und Absage sind verständlich markiert", async
   assert.ok(view.textContent.includes("Name zuvor: Alter Name"));
   assert.ok(view.textContent.includes("Abgesagt"));
   assert.equal(view.querySelectorAll("li li").length, 0);
+});
+t("Änderungs-Ansicht: leerer letzter Abgleich löscht die Historie nicht", async () => {
+  const { renderChanges } = await import("../js/views/changes.js");
+  const old = { counts: { new: 1, changed: 0, removed: 0 },
+    generated_at: "2026-09-28T10:00:00+02:00",
+    new: [{ id: "older", day: "2026-10-01", start: "09:00", title: "Älterer Beitrag" }],
+    changed: [], removed: [] };
+  const latest = { counts: { new: 0, changed: 0, removed: 0 },
+    generated_at: "2026-09-29T10:00:00+02:00", new: [], changed: [], removed: [], history: [old] };
+  const view = renderChanges({ changes: latest }, { byId: {}, openSession: () => {} });
+  assert.equal(view.querySelectorAll(".change-batch").length, 1);
+  assert.ok(view.textContent.includes("Älterer Beitrag"));
+  assert.ok(view.textContent.includes("1 Update im Verlauf"));
 });
 
 // Feature 2: „Läuft gerade" – beim Testlauf (Sept. 2026) vor der Tagung: keine „jetzt"-Pills

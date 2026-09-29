@@ -15,6 +15,7 @@ program.json per Titel-Matching übernommen.
 Usage:
     python tools/fetch_conftool.py -o data/program.json [--codes data/program.json]
     python tools/fetch_conftool.py -o /tmp/p.json --compare data/program.json   # Exit 1 = geändert
+    python tools/fetch_conftool.py -o /tmp/p.json --changes /tmp/c.json --history data/changes.json
 """
 from __future__ import annotations
 
@@ -494,6 +495,29 @@ def diff_programs(old: dict, new: dict) -> dict:
     }
 
 
+CHANGE_FIELDS = ("counts", "new", "changed", "removed", "generated_at")
+
+
+def _has_changes(batch: dict | None) -> bool:
+    return bool(batch and any(batch.get(kind) for kind in ("new", "changed", "removed")))
+
+
+def with_change_history(previous: dict | None, latest: dict) -> dict:
+    """Keep every real change batch; no-change syncs never become history entries.
+
+    Top-level fields stay the latest diff for older app versions. ``history``
+    contains earlier batches, oldest first, so the current batch is not stored
+    twice. A legacy changes.json without ``history`` is migrated automatically.
+    """
+    history = list(previous.get("history") or []) if previous else []
+    history = [batch for batch in history if _has_changes(batch)]
+    if _has_changes(previous):
+        prior_batch = {key: previous.get(key) for key in CHANGE_FIELDS}
+        if not history or history[-1].get("generated_at") != prior_batch.get("generated_at"):
+            history.append(prior_batch)
+    return {**latest, "history": history}
+
+
 def _real_talks(data: dict) -> list[dict]:
     panels = {p["id"]: p for p in data.get("panels", [])}
     return [s for s in data.get("sessions", []) if s.get("type") == "talk" and not (
@@ -601,6 +625,8 @@ def main() -> int:
                     help="nur vergleichen: Exit 1, wenn Programminhalt geändert ist")
     ap.add_argument("--changes", metavar="FILE",
                     help="Diff gegen den bisherigen Stand (--codes) als changes.json schreiben")
+    ap.add_argument("--history", metavar="FILE",
+                    help="bisherige changes.json für die fortlaufende Änderungshistorie")
     ap.add_argument("--delay", type=float, default=0.4)
     args = ap.parse_args()
 
@@ -673,6 +699,12 @@ def main() -> int:
         else:
             changes = diff_programs(old, data)
             changes["generated_at"] = datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+            if args.history:
+                try:
+                    previous_changes = json.load(open(args.history, encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    previous_changes = None
+                changes = with_change_history(previous_changes, changes)
             cpath = Path(args.changes)
             cpath.write_text(json.dumps(changes, ensure_ascii=False, indent=1), encoding="utf-8")
             print(f"Diff: +{changes['counts']['new']} neu, "
