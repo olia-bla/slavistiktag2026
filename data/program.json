@@ -2,22 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "9e773be9419c918a",
-  "generated_at": "2026-09-28T15:59:48+00:00",
+  "source_sha256": "e0c85ad1e339e44b",
+  "generated_at": "2026-09-29T08:28:43+00:00",
   "stats": {
-   "sessions": 309,
-   "cancelled": 1,
+   "sessions": 307,
+   "cancelled": 3,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 307
+   "abstracts": 305
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
    "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
-   "1 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
+   "2 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -2019,6 +2019,25 @@
    ]
   },
   {
+   "id": "2026-10-01-09:00-SR224-10:30",
+   "conftool_paper_id": "114",
+   "day": "2026-10-01",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 224",
+   "track": "LKW",
+   "panel_id": "2026-10-01|09:00|ct8",
+   "speakers": [
+    "Anna Seidel"
+   ],
+   "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
+   "type": "talk",
+   "abstract": "Erdöl stinke, es setze unangenehme Dämpfe frei, wodurch es zu einem Problem für die literarische Repräsentation würde, schreibt Amitav Ghosh in seinem Schlüsseltext zu Petrofiktionen. Etwas Anderes lässt sich in literarischen Narrativen über die galizischen Ölfelder beobachten. Hier werden die Ausdünstungen von Erdöl zu einem spürbaren Aktanten, der auf menschliche Protagonisten einwirkt und ihre Handlungen beeinflusst.\n\nDieser Beitrag widmet sich der Analyse jener Intra-Aktivität zwischen menschlicher und nicht-menschlicher Natur in literarischen Repräsentationen der galizischen Erdölindustrie um 1900 – einer Region, die als habsburgisches Kronland zwischen Polen und der Ukraine zum frühen Zentrum europäischer Ölförderung wurde. Ich untersuche, wie die literarische Repräsentation die Ausbeutung nicht-menschlicher Umwelten durch den Menschen als Grundlage für die Desintegration von nicht/menschlichen kin-Strukturen inszeniert. Basierend auf close readings von u.a. Artur Gruszeckis Dla miliona (1899) und Ivan Frankos Boa Constrictor (1884) zeige ich, wie diese galizischen Öltexte durch die Sichtbarmachung nicht-menschlicher Agentialität anthropozentrische extraktivistische Praktiken nicht nur kritisieren, sondern alternative Relationalitäten zwischen Mensch und Materie narrativ erproben. Diese neomaterialistische Relektüre des galizischen Öltextkorpus versteht Literatur als diskursiven Akteur, der kin-Strukturen zwischen menschlichen und nicht-menschlichen Naturen dokumentiert, verhandelt und potenziell wiederherstellt.",
+   "affiliations": [
+    "Universität Wien, Österreich"
+   ]
+  },
+  {
    "id": "2026-10-01-09:00-SR224-10:00",
    "conftool_paper_id": "144",
    "day": "2026-10-01",
@@ -2035,7 +2054,9 @@
    "abstract": "Mit einem Zyklus von 28 Holzschnitten, die realistische Szenen aus dem Leben der Bergleute von Bor zeigten, illustrierte der serbische Künstler Đorđe Andrijević Kun 1936 den „Bildroman“ Krvavo Zlato des Schriftstellers Jovan Popović. Die Holzschnitte basierten auf Zeichnungen, die Kun in Bor angefertigt hatte, während er einen Monat lang bei den Bergarbeitern der dortigen Kupferminen lebte. Der Bildroman zeichnet das Schicksal der Borer Bauern nach, die die Bewirtschaftung ihrer durch Fabrikabfälle vergifteten Äcker aufgeben müssen, und sich stattdessen zur auszehrenden und lebensbedrohlichen Arbeit im Kupferbergbau entscheiden. Die Veröffentlichung des Bildromans löste einen Skandal aus, der zu der Beschlagnahmung und dem Verbot der Holzschnitte unmittelbar nach der Veröffentlichung führte und markierte einen wichtigen Meilenstein der sozialistisch-realistischen Kunst. Geprägt von einem schonungslosen und kämpferischen Realismus ist der Bildtext ein frühes Beispiel engagierter jugoslawischer Literatur, der gängige Narrative von Modernität und Fortschritt der Forderung nach sozialer und ökologischer Gerechtigkeit gegenüberstellt. Dieser Vortrag soll die Kritik am Modernitäts- und Fortschrittsgedanken anhand von Mensch-Materie-Interaktionen aus sozialistischer Perspektive analysieren, unter besonderer Berücksichtigung der intermedialen Präsentation.",
    "affiliations": [
     "Karl Franzens Universität Graz, Österreich"
-   ]
+   ],
+   "cancelled_at": "2026-09-29T08:28:43+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-01-09:00-SR226-10:00",
@@ -2149,25 +2170,6 @@
    "abstract": "Wh -words with the interrogative k - formant are well described for Old East Slavic (Krys’ko et al. 2020; Pen’kova & Rabus 2021), but multiple wh -words in OES as a construction have received little attention (cf. mention in Apresjan & Kopotev 2022 on Russian). This study asks where these clusters occur, which wh -lexemes they recruit, and how their order and functions change after OES.\n\nData come from the Old East Slavic subcorpus of the Russian National Corpus (RNC), compared with the Middle Russian RNC corpus (1400–1700) and the DiaUk corpus of Ruthenian/Middle Ukrainian (same period). I code tokens for construction type, internal order, and lexical makeup, and compare distributions.\n\nInterrogative readings, often the cross-linguistic source of standalone indefinites (Haspelmath 1997), are not attested for multiple wh -forms in early OES texts, likely due to genre bias. Instead three uses dominate and already look grammaticalized: indirect questions with indefinite interpretation; conditional free-choice clauses where wh -words fill participant roles and may co-occur with the dedicated free-choice marker - ljubo ; and autonomous distributives. All three have Greek parallels and occur in translated OES texts, consistent with contact support.\n\nOrdering correlates with “weight”: wh -forms with distributive/free-choice marking ( ko-ždo ‘every’, later k-to-ni-budi ‘somebody’) prefer the rightmost slot, while lighter items are more flexible; the asymmetry strengthens later. The lexeme kotoryj ‘which’ appears in wh -clusters in the 14th century but disappears in Early Modern Russian as it grammaticalizes as a relative (Apresjan & Kopotev 2022: 123). Post-OES, order becomes more fixed ( kto čto > čto kto ), matching a shift from free wh -fronting to subject-first asymmetries (Rudin 1988: 472–476). A further split is areal: - koli ‘when’ sequences grammaticalize as free-choice markers in Southeastern OES and later Middle Ukrainian (cf. Polish - kolwiek ), but remain freer in Middle Russian.",
    "affiliations": [
     "Universität Potsdam, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-01-09:00-SR224-10:30",
-   "conftool_paper_id": "114",
-   "day": "2026-10-01",
-   "start": "10:30",
-   "end": "11:00",
-   "room": "SR 224",
-   "track": "LKW",
-   "panel_id": "2026-10-01|09:00|ct8",
-   "speakers": [
-    "Anna Seidel"
-   ],
-   "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
-   "type": "talk",
-   "abstract": "Erdöl stinke, es setze unangenehme Dämpfe frei, wodurch es zu einem Problem für die literarische Repräsentation würde, schreibt Amitav Ghosh in seinem Schlüsseltext zu Petrofiktionen. Etwas Anderes lässt sich in literarischen Narrativen über die galizischen Ölfelder beobachten. Hier werden die Ausdünstungen von Erdöl zu einem spürbaren Aktanten, der auf menschliche Protagonisten einwirkt und ihre Handlungen beeinflusst.\n\nDieser Beitrag widmet sich der Analyse jener Intra-Aktivität zwischen menschlicher und nicht-menschlicher Natur in literarischen Repräsentationen der galizischen Erdölindustrie um 1900 – einer Region, die als habsburgisches Kronland zwischen Polen und der Ukraine zum frühen Zentrum europäischer Ölförderung wurde. Ich untersuche, wie die literarische Repräsentation die Ausbeutung nicht-menschlicher Umwelten durch den Menschen als Grundlage für die Desintegration von nicht/menschlichen kin-Strukturen inszeniert. Basierend auf close readings von u.a. Artur Gruszeckis Dla miliona (1899) und Ivan Frankos Boa Constrictor (1884) zeige ich, wie diese galizischen Öltexte durch die Sichtbarmachung nicht-menschlicher Agentialität anthropozentrische extraktivistische Praktiken nicht nur kritisieren, sondern alternative Relationalitäten zwischen Mensch und Materie narrativ erproben. Diese neomaterialistische Relektüre des galizischen Öltextkorpus versteht Literatur als diskursiven Akteur, der kin-Strukturen zwischen menschlichen und nicht-menschlichen Naturen dokumentiert, verhandelt und potenziell wiederherstellt.",
-   "affiliations": [
-    "Universität Wien, Österreich"
    ]
   },
   {
@@ -2762,7 +2764,9 @@
    "abstract": "Phrasem-Konstruktionen (PhK) als musterhafte idiomatische Konstruktionen mit festen Komponenten und lexikalisch variablen Slots (Dobrovol'skij 2011), etwa [Тоже мне X!] , [Вот это X!] oder [N′ не (в) N′] , stellen eine produktive und hochfrequente Klasse russischer Spracheinheiten dar. Trotz ihrer hohen kommunikativen Relevanz und ihrer festen Verankerung im Sprachgebrauch finden sie im Unterricht Russisch als Fremdsprache (RaF) bislang nur geringe Berücksichtigung und werden nicht als eigenständige linguistische Kategorie mit spezifischen didaktischen Anforderungen systematisch aufgearbeitet (Schlund / Pavlova 2024). Zwar liegen vereinzelte Lehrwerke vor, etwa von Veličko (1996) und Pavlova (2022), diese haben jedoch überwiegend exemplarischen Charakter. Insbesondere fehlt bislang eine Einbindung von PhK in die offiziellen Kompetenzbeschreibungen des Gemeinsamen Europäischen Referenzrahmens (GER).\n\nDamit verbunden ist eine zentrale didaktische Herausforderung: die systematische und transparente Zuordnung von PhK zu GER-Niveaustufen. Die Niveaubestimmung erweist sich als hochkomplex, da zahlreiche Faktoren zu berücksichtigen sind: Grad der Idiomatizität, syntaktische und morphologische Eigenschaften, semantische Restriktionen, Produktivität, pragmatische Funktionen, stilistisches Register, interlinguales Interferenzpotenzial sowie mögliche Abweichungen von grammatischen Normen. So können PhK formal einfach erscheinen, zugleich jedoch pragmatisch oder semantisch so anspruchsvoll sein, dass sie höheren Kompetenzstufen zuzuordnen sind.\n\nEine systematische Niveauzuordnung bildet die Grundlage für eine kohärente curriculare Progression, die Entwicklung zielgerichteter Übungsformate sowie für die Förderung idiomatischer Ausdrucksfähigkeit. Der Beitrag stellt ein mehrdimensionales Kriteriensystem vor und veranschaulicht dessen Anwendung anhand ausgewählter PhK-Beispiele.",
    "affiliations": [
     "Martin-Luther-Universität Halle-Wittenberg, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-09-29T08:28:43+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-01-11:30-MMZ220-12:30",
@@ -7339,7 +7343,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail8873ffe2\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail6a199002\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7363,7 +7367,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail01a1f9bd\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail46fadc86\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }

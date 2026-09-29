@@ -1,84 +1,78 @@
 {
  "counts": {
   "new": 0,
-  "changed": 2,
-  "removed": 1
+  "changed": 1,
+  "removed": 2
  },
  "new": [],
  "changed": [
   {
-   "id": "2026-10-01-09:00-SR209-10:00",
-   "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
+   "id": "2026-10-01-09:00-SR224-10:30",
+   "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
    "speakers": [
-    "Ulyana Veryna"
-   ],
-   "day": "2026-10-01",
-   "start": "09:30",
-   "end": "10:00",
-   "room": "SR 209",
-   "status": null,
-   "old": {
-    "id": "2026-10-01-09:00-SR209-10:00",
-    "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
-    "speakers": [
-     "Ulyana Veryna"
-    ],
-    "day": "2026-10-01",
-    "start": "10:00",
-    "end": "10:30",
-    "room": "SR 209",
-    "status": null
-   }
-  },
-  {
-   "id": "2026-10-01-09:00-SR209-10:30",
-   "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
-   "speakers": [
-    "Nina Weller"
+    "Anna Seidel"
    ],
    "day": "2026-10-01",
    "start": "10:00",
    "end": "10:30",
-   "room": "SR 209",
+   "room": "SR 224",
    "status": null,
    "old": {
-    "id": "2026-10-01-09:00-SR209-10:30",
-    "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
+    "id": "2026-10-01-09:00-SR224-10:30",
+    "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
     "speakers": [
-     "Nina Weller"
+     "Anna Seidel"
     ],
     "day": "2026-10-01",
     "start": "10:30",
     "end": "11:00",
-    "room": "SR 209",
+    "room": "SR 224",
     "status": null
    }
   }
  ],
  "removed": [
   {
-   "id": "2026-10-01-09:00-SR209-09:30",
-   "title": "Staging Ukraine: Stars, Misfits, and Contested Role Models through Eurovision Costume and Performance",
+   "id": "2026-10-01-09:00-SR224-10:00",
+   "title": "Zwischen ökologischer und sozialer Gerechtigkeit. Anti-extraktivistische jugoslawische Narrative in Đorđe Andrijević Kuns und Jovan Popovićs Krvavo Zlato (Blutiges Gold, 1936)",
    "speakers": [
-    "Olha Korniienko"
+    "Yvonne Zivkovic"
    ],
    "day": "2026-10-01",
-   "start": "09:30",
-   "end": "10:00",
-   "room": "SR 209",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 224",
+   "status": "cancelled"
+  },
+  {
+   "id": "2026-10-01-11:30-HS8-12:30",
+   "title": "Die Notwendigkeit der Niveauzuordnung für russische Phrasem-Konstruktionen im RaF-Unterricht",
+   "speakers": [
+    "Natallia Funt"
+   ],
+   "day": "2026-10-01",
+   "start": "12:30",
+   "end": "13:00",
+   "room": "HS 8",
    "status": "cancelled"
   }
  ],
- "generated_at": "2026-09-28T15:59:48+00:00",
+ "generated_at": "2026-09-29T08:28:43+00:00",
  "history": [
   {
-   "counts": { "new": 0, "changed": 1, "removed": 0 },
+   "counts": {
+    "new": 0,
+    "changed": 1,
+    "removed": 0
+   },
    "new": [],
    "changed": [
     {
      "id": "2026-10-02-09:00-SR125-10:00",
      "title": "Einblicke in den Fernseh-Strudel: Dekonstruktionen der Surkovschen Propaganda im russischen Theater",
-     "speakers": ["Fabian Erlenmaier"],
+     "speakers": [
+      "Fabian Erlenmaier"
+     ],
      "day": "2026-10-02",
      "start": "10:00",
      "end": "10:30",
@@ -87,7 +81,9 @@
      "old": {
       "id": "2026-10-02-09:00-SR125-10:00",
       "title": "Von der sowjetischen Utopie zur putinschen Telekratie: Die Poetik des Fernsehens auf der Bühne des russischen Theaters",
-      "speakers": ["Fabian Erlenmaier"],
+      "speakers": [
+       "Fabian Erlenmaier"
+      ],
       "day": "2026-10-02",
       "start": "10:00",
       "end": "10:30",
@@ -98,6 +94,79 @@
    ],
    "removed": [],
    "generated_at": "2026-09-28T12:02:42+02:00"
+  },
+  {
+   "counts": {
+    "new": 0,
+    "changed": 2,
+    "removed": 1
+   },
+   "new": [],
+   "changed": [
+    {
+     "id": "2026-10-01-09:00-SR209-10:00",
+     "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
+     "speakers": [
+      "Ulyana Veryna"
+     ],
+     "day": "2026-10-01",
+     "start": "09:30",
+     "end": "10:00",
+     "room": "SR 209",
+     "status": null,
+     "old": {
+      "id": "2026-10-01-09:00-SR209-10:00",
+      "title": "Nameless Stars and Star Names: A New Wave of Pseudonymity and Anonymity in Belarusian Literature after 2020",
+      "speakers": [
+       "Ulyana Veryna"
+      ],
+      "day": "2026-10-01",
+      "start": "10:00",
+      "end": "10:30",
+      "room": "SR 209",
+      "status": null
+     }
+    },
+    {
+     "id": "2026-10-01-09:00-SR209-10:30",
+     "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
+     "speakers": [
+      "Nina Weller"
+     ],
+     "day": "2026-10-01",
+     "start": "10:00",
+     "end": "10:30",
+     "room": "SR 209",
+     "status": null,
+     "old": {
+      "id": "2026-10-01-09:00-SR209-10:30",
+      "title": "„Wie die Kosaken…“ Reaktivierung und Neuschreibung eines Mythos in der ukrainischen Populärkultur (1970er–2020er Jahre)",
+      "speakers": [
+       "Nina Weller"
+      ],
+      "day": "2026-10-01",
+      "start": "10:30",
+      "end": "11:00",
+      "room": "SR 209",
+      "status": null
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "2026-10-01-09:00-SR209-09:30",
+     "title": "Staging Ukraine: Stars, Misfits, and Contested Role Models through Eurovision Costume and Performance",
+     "speakers": [
+      "Olha Korniienko"
+     ],
+     "day": "2026-10-01",
+     "start": "09:30",
+     "end": "10:00",
+     "room": "SR 209",
+     "status": "cancelled"
+    }
+   ],
+   "generated_at": "2026-09-28T15:59:48+00:00"
   }
  ]
 }
