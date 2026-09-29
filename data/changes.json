@@ -1,63 +1,13 @@
 {
  "counts": {
   "new": 0,
-  "changed": 1,
-  "removed": 2
+  "changed": 0,
+  "removed": 0
  },
  "new": [],
- "changed": [
-  {
-   "id": "2026-10-01-09:00-SR224-10:30",
-   "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
-   "speakers": [
-    "Anna Seidel"
-   ],
-   "day": "2026-10-01",
-   "start": "10:00",
-   "end": "10:30",
-   "room": "SR 224",
-   "status": null,
-   "old": {
-    "id": "2026-10-01-09:00-SR224-10:30",
-    "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
-    "speakers": [
-     "Anna Seidel"
-    ],
-    "day": "2026-10-01",
-    "start": "10:30",
-    "end": "11:00",
-    "room": "SR 224",
-    "status": null
-   }
-  }
- ],
- "removed": [
-  {
-   "id": "2026-10-01-09:00-SR224-10:00",
-   "title": "Zwischen ökologischer und sozialer Gerechtigkeit. Anti-extraktivistische jugoslawische Narrative in Đorđe Andrijević Kuns und Jovan Popovićs Krvavo Zlato (Blutiges Gold, 1936)",
-   "speakers": [
-    "Yvonne Zivkovic"
-   ],
-   "day": "2026-10-01",
-   "start": "10:00",
-   "end": "10:30",
-   "room": "SR 224",
-   "status": "cancelled"
-  },
-  {
-   "id": "2026-10-01-11:30-HS8-12:30",
-   "title": "Die Notwendigkeit der Niveauzuordnung für russische Phrasem-Konstruktionen im RaF-Unterricht",
-   "speakers": [
-    "Natallia Funt"
-   ],
-   "day": "2026-10-01",
-   "start": "12:30",
-   "end": "13:00",
-   "room": "HS 8",
-   "status": "cancelled"
-  }
- ],
- "generated_at": "2026-09-29T08:28:43+00:00",
+ "changed": [],
+ "removed": [],
+ "generated_at": "2026-09-29T15:06:38+00:00",
  "history": [
   {
    "counts": {
@@ -167,6 +117,67 @@
     }
    ],
    "generated_at": "2026-09-28T15:59:48+00:00"
+  },
+  {
+   "counts": {
+    "new": 0,
+    "changed": 1,
+    "removed": 2
+   },
+   "new": [],
+   "changed": [
+    {
+     "id": "2026-10-01-09:00-SR224-10:30",
+     "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
+     "speakers": [
+      "Anna Seidel"
+     ],
+     "day": "2026-10-01",
+     "start": "10:00",
+     "end": "10:30",
+     "room": "SR 224",
+     "status": null,
+     "old": {
+      "id": "2026-10-01-09:00-SR224-10:30",
+      "title": "Wenn Erdöl atmet: Nicht-menschliche Agentialität in galizischen Erdölnarrativen",
+      "speakers": [
+       "Anna Seidel"
+      ],
+      "day": "2026-10-01",
+      "start": "10:30",
+      "end": "11:00",
+      "room": "SR 224",
+      "status": null
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "2026-10-01-09:00-SR224-10:00",
+     "title": "Zwischen ökologischer und sozialer Gerechtigkeit. Anti-extraktivistische jugoslawische Narrative in Đorđe Andrijević Kuns und Jovan Popovićs Krvavo Zlato (Blutiges Gold, 1936)",
+     "speakers": [
+      "Yvonne Zivkovic"
+     ],
+     "day": "2026-10-01",
+     "start": "10:00",
+     "end": "10:30",
+     "room": "SR 224",
+     "status": "cancelled"
+    },
+    {
+     "id": "2026-10-01-11:30-HS8-12:30",
+     "title": "Die Notwendigkeit der Niveauzuordnung für russische Phrasem-Konstruktionen im RaF-Unterricht",
+     "speakers": [
+      "Natallia Funt"
+     ],
+     "day": "2026-10-01",
+     "start": "12:30",
+     "end": "13:00",
+     "room": "HS 8",
+     "status": "cancelled"
+    }
+   ],
+   "generated_at": "2026-09-29T08:28:43+00:00"
   }
  ]
 }
