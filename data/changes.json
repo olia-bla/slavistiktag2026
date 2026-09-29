@@ -2,12 +2,25 @@
  "counts": {
   "new": 0,
   "changed": 0,
-  "removed": 0
+  "removed": 1
  },
  "new": [],
  "changed": [],
- "removed": [],
- "generated_at": "2026-09-29T15:06:38+00:00",
+ "removed": [
+  {
+   "id": "2026-10-01-09:00-SR223-10:00",
+   "title": "Professor:innen als gastarbajter? (Literatur)Professor:innen im Exil",
+   "speakers": [
+    "Cristina Beretta"
+   ],
+   "day": "2026-10-01",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 223",
+   "status": "cancelled"
+  }
+ ],
+ "generated_at": "2026-09-29T20:00:22+00:00",
  "history": [
   {
    "counts": {

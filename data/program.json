@@ -2,21 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "e4d026080fff0f2d",
-  "generated_at": "2026-09-29T15:06:38+00:00",
+  "source_sha256": "627ca96a80778680",
+  "generated_at": "2026-09-29T20:00:22+00:00",
   "stats": {
-   "sessions": 307,
-   "cancelled": 3,
+   "sessions": 306,
+   "cancelled": 4,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 305
+   "abstracts": 304
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
-   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen"
+   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
+   "1 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -2015,7 +2016,9 @@
    "abstract": "Im deutschsprachigen Diskurs werden Universitätsprofessor:innen in Exil- und Migrationskontexten nicht als Gastarbeiter:innen eingeordnet. Gleichwohl lassen sich zwischen beiden Arbeits- und Lebenslagen Gemeinsamkeiten ausmachen, allen voran die anthropologische Grunderfahrung des displacement .\n\nDer Vortrag untersucht literarische Figurationen von Mobilität und Arbeit im Kontext von Exilerfahrungen aus dem postjugoslawischen bzw. postsowjetischen Raum. Fokussiert wird auf folgende Romane: Dubravka Ugrešićs Ministarstvo boli (2004; dt. Das Ministerium der Schmerzen) und Vladimir Nabokovs Pnin (1957), wobei auch Nabokovs Lolita (1955) in die Analyse einbezogen wird.\n\nGerade vor dem Hintergrund unterschiedlicher historischer und gesellschaftspolitischer Kontexte erweist sich ein typologischer Vergleich dieser Texte als besonders aufschlussreich. Dies gilt insbesondere für die literarische Verarbeitung zentraler Grunderfahrungen wie Exil, Identitätssuche, Sprachverlust und -findung, zeitlicher und räumlicher Dislozierung, Einsamkeit, Humor sowie Fragen von Gedächtnis und Heimat.\n\nDer Vortrag zeigt, dass die literarischen Figurationen exilierter Universitätsprofessor:innen gängige Grenzziehungen zwischen akademischer Mobilität und Arbeitsmigration verschieben und damit neue Perspektiven auf Exil, Arbeit und Zugehörigkeit eröffnen.",
    "affiliations": [
     "Universität Klagenfurt, Österreich"
-   ]
+   ],
+   "cancelled_at": "2026-09-29T20:00:22+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-01-09:00-SR224-10:30",
@@ -7342,7 +7345,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail2985e102\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailc3b314a6\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7366,7 +7369,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail8c1d5d76\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaild6578498\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
