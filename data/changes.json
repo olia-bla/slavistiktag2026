@@ -2,74 +2,86 @@
  "counts": {
   "new": 0,
   "changed": 2,
-  "removed": 1
+  "removed": 2
  },
  "new": [],
  "changed": [
   {
-   "id": "2026-10-01-09:00-SR125-09:30",
-   "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+   "id": "2026-10-02-09:00-SR124-10:30",
+   "title": "Philosophische Debatten in der Sowjetunion: Argumentative Muster, ideologische Funktion, typische Merkmale",
    "speakers": [
-    "Lina Steiner"
+    "Nikolaj Plotnikov"
    ],
-   "day": "2026-10-01",
-   "start": "09:00",
-   "end": "09:30",
-   "room": "SR 125",
+   "day": "2026-10-02",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 124",
    "status": null,
    "old": {
-    "id": "2026-10-01-09:00-SR125-09:30",
-    "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+    "id": "2026-10-02-09:00-SR124-10:30",
+    "title": "Philosophische Debatten in der Sowjetunion: Argumentative Muster, ideologische Funktion, typische Merkmale",
     "speakers": [
-     "Lina Steiner"
+     "Nikolaj Plotnikov"
     ],
-    "day": "2026-10-01",
-    "start": "09:30",
-    "end": "10:00",
-    "room": "SR 125",
+    "day": "2026-10-02",
+    "start": "10:30",
+    "end": "11:00",
+    "room": "SR 124",
     "status": null
    }
   },
   {
-   "id": "2026-10-01-09:00-SR125-10:00",
-   "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+   "id": "2026-10-02-14:00-SR209-14:30",
+   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
    "speakers": [
-    "Natalia Borisova"
+    "Daria Khrushcheva"
    ],
-   "day": "2026-10-01",
-   "start": "09:30",
-   "end": "10:00",
-   "room": "SR 125",
+   "day": "2026-10-02",
+   "start": "14:00",
+   "end": "14:30",
+   "room": "SR 209",
    "status": null,
    "old": {
-    "id": "2026-10-01-09:00-SR125-10:00",
-    "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+    "id": "2026-10-02-14:00-SR209-14:30",
+    "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
     "speakers": [
-     "Natalia Borisova"
+     "Daria Khrushcheva"
     ],
-    "day": "2026-10-01",
-    "start": "10:00",
-    "end": "10:30",
-    "room": "SR 125",
+    "day": "2026-10-02",
+    "start": "14:30",
+    "end": "15:00",
+    "room": "SR 209",
     "status": null
    }
   }
  ],
  "removed": [
   {
-   "id": "2026-10-01-09:00-SR125-09:00",
-   "title": "Modeling the Post-Reform Social and Economic Transition: Gleb Uspensky's Early Ocherks",
+   "id": "2026-10-02-09:00-SR124-10:00",
+   "title": "The Praxis-Oriented Philosophy in Mikhail Gefter",
    "speakers": [
-    "Anastassia Kostrioukova"
+    "Andrey Oleynikov"
    ],
-   "day": "2026-10-01",
-   "start": "09:00",
-   "end": "09:30",
-   "room": "SR 125",
+   "day": "2026-10-02",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 124",
+   "status": "cancelled"
+  },
+  {
+   "id": "2026-10-02-14:00-SR209-14:00",
+   "title": "Norm, Trauma, Gegenentwurf: Elternschaft in der ostmitteleuropäischen Gegenwartsliteratur",
+   "speakers": [
+    "Elisa-Maria Hiemer"
+   ],
+   "day": "2026-10-02",
+   "start": "14:00",
+   "end": "14:30",
+   "room": "SR 209",
    "status": "cancelled"
   }
  ],
- "generated_at": "2026-09-30T09:02:01+00:00",
+ "generated_at": "2026-09-30T15:56:13+00:00",
  "history": [
   {
    "counts": {
@@ -264,6 +276,79 @@
     }
    ],
    "generated_at": "2026-09-29T20:00:22+00:00"
+  },
+  {
+   "counts": {
+    "new": 0,
+    "changed": 2,
+    "removed": 1
+   },
+   "new": [],
+   "changed": [
+    {
+     "id": "2026-10-01-09:00-SR125-09:30",
+     "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+     "speakers": [
+      "Lina Steiner"
+     ],
+     "day": "2026-10-01",
+     "start": "09:00",
+     "end": "09:30",
+     "room": "SR 125",
+     "status": null,
+     "old": {
+      "id": "2026-10-01-09:00-SR125-09:30",
+      "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+      "speakers": [
+       "Lina Steiner"
+      ],
+      "day": "2026-10-01",
+      "start": "09:30",
+      "end": "10:00",
+      "room": "SR 125",
+      "status": null
+     }
+    },
+    {
+     "id": "2026-10-01-09:00-SR125-10:00",
+     "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+     "speakers": [
+      "Natalia Borisova"
+     ],
+     "day": "2026-10-01",
+     "start": "09:30",
+     "end": "10:00",
+     "room": "SR 125",
+     "status": null,
+     "old": {
+      "id": "2026-10-01-09:00-SR125-10:00",
+      "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+      "speakers": [
+       "Natalia Borisova"
+      ],
+      "day": "2026-10-01",
+      "start": "10:00",
+      "end": "10:30",
+      "room": "SR 125",
+      "status": null
+     }
+    }
+   ],
+   "removed": [
+    {
+     "id": "2026-10-01-09:00-SR125-09:00",
+     "title": "Modeling the Post-Reform Social and Economic Transition: Gleb Uspensky's Early Ocherks",
+     "speakers": [
+      "Anastassia Kostrioukova"
+     ],
+     "day": "2026-10-01",
+     "start": "09:00",
+     "end": "09:30",
+     "room": "SR 125",
+     "status": "cancelled"
+    }
+   ],
+   "generated_at": "2026-09-30T09:02:01+00:00"
   }
  ]
 }

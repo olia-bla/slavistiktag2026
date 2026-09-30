@@ -2,22 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "ecbb35fdecbc9c2e",
-  "generated_at": "2026-09-30T09:02:01+00:00",
+  "source_sha256": "f36937b26e05183b",
+  "generated_at": "2026-09-30T15:56:13+00:00",
   "stats": {
-   "sessions": 305,
-   "cancelled": 5,
+   "sessions": 303,
+   "cancelled": 7,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 303
+   "abstracts": 301
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
    "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
-   "1 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
+   "2 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -603,7 +603,7 @@
    "block_start": "09:00",
    "code": null,
    "title": "Die philosophische Kultur in der Sowjetzeit. Neue Forschungsansätze",
-   "chair": "Prof. Dr. Nikolaj Plotnikov",
+   "chair": "Prof. Dr. Nikolaj Plotnikov, Prof. Dr. Holger Kuße",
    "room": "SR 124",
    "track": "LKW"
   },
@@ -4309,6 +4309,25 @@
    ]
   },
   {
+   "id": "2026-10-02-09:00-SR124-10:30",
+   "conftool_paper_id": "389",
+   "day": "2026-10-02",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 124",
+   "track": "LKW",
+   "panel_id": "2026-10-02|09:00|ct47",
+   "speakers": [
+    "Nikolaj Plotnikov"
+   ],
+   "title": "Philosophische Debatten in der Sowjetunion: Argumentative Muster, ideologische Funktion, typische Merkmale",
+   "type": "talk",
+   "abstract": "Der Vortrag analysiert philosophische Debatten in der Sowjetunion als eine diskursive Praxis, in der sich theoretischer Streit und der Anspruch auf Deutungshoheit in der Bestimmung von Wissenschaft und ihrer Verbindung zur politischen Praxis untrennbar verschränken. Im Zentrum steht die Frage, welche argumentativen Muster diese Debatten strukturieren, welche rhetorischen Verfahren dominieren und welche ideologischen Funktionen sie innerhalb des sowjetischen Wissenschaftssystems erfüllen.\n\nPhilosophie tritt dabei als institutionell verankerte Disziplin auf, die den Anspruch erhebt, wissenschaftliche Rationalität und politische Parteilichkeit in einer „Einheit“ zu verbinden. Debatten fungieren nicht nur als Austragungsorte theoretischer Differenzen, sondern zugleich als Mechanismen der Kanonisierung, Grenzziehung und Legitimation.\n\nAls paradigmatischer Testfall dient die Debatte zwischen den sogenannten Mechanisten und Dialektikern in den 1920er Jahren. Diese Kontroverse um das Verhältnis von Dialektik und Naturwissenschaft entwickelt sich rasch von einer methodologischen Differenz zu einem Kampf um die verbindliche Interpretation des dialektischen Materialismus. In ihr entstehen argumentative Grundfiguren, die für spätere philosophische Auseinandersetzungen modellbildend bleiben: der Rekurs auf kanonische Texte als letztinstanzliche Autorität, die moralisch-politische Qualifizierung theoretischer Positionen („Reduktionismus“, „Idealismus“, „Abweichung“), die Gleichsetzung wissenschaftlicher Irrtümer mit politischer Gefährdung sowie die rhetorische Inszenierung von Kritik und Selbstkritik.\n\nIm Fokus steht die Struktur des Streitens selbst: die spezifische Verbindung von theoretischer Argumentation, normativer Markierung und institutioneller Macht. Philosophische Debatten erscheinen so als hybride Kommunikationsform, in der epistemische Klärung, politische Legitimation und symbolische Selbstvergewisserung gleichzeitig stattfinden.",
+   "affiliations": [
+    "Ruhr-Universität Bochum, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-02-09:00-SR124-10:00",
    "conftool_paper_id": "368",
    "day": "2026-10-02",
@@ -4325,7 +4344,9 @@
    "abstract": "In my paper, I aim to emphasize the importance of studying the legacy of Mikhail Gefter, an exceptionally original late-Soviet theorist of history who headed the historical methodology sector at the USSR Academy of Sciences from 1964 to 1969. The history of this sector has already been the subject of several substantial studies, mostly conducted by Western scholars. However, to date, no systematic analysis has been undertaken in Russia or abroad of Gefter’s philosophical and historical views, which deserve close attention due to both their originality for their time and their remarkable resonance with contemporary theories of history.\n\nGleb Pavlovsky, who considered himself a friend and student of Gefter and was once an influential publicist and so called “political technologist”, contributed significantly to popularizing his teacher’s name by publishing several volumes of dialogues with him, originally recorded on tape. However, this represents a particular appropriation of the memory of Gefter rather than a scholarly analysis of his legacy. Notably, Gefter’s most original texts, written in the 1960s and 1970s and mostly unpublished during his lifetime, remain unedited and uncommented. As a result, a marked imbalance exists between, on the one hand, Gefter of the perestroika and post-perestroika period, whose public reputation was largely shaped by Pavlovsky, and, on the other hand, Gefter of the 1960s–1970s. In my paper, I will draw attention to the clear influence of Antonio Gramsci in these texts, which allows us to interpret Gefter’s theory of history as an original version of praxis-oriented philosophy.",
    "affiliations": [
     "Universität Bielefeld, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-09-30T15:56:13+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-02-09:00-SR125-10:00",
@@ -4633,25 +4654,6 @@
    "abstract": "In dem Vortrag werden Ansatz, Aufbau und Inhalte des aktuellen niedersorbischen Sprachplanungsprojektes und des Beteiligungsprozesses SROKA (Serbsku rewitalizaciju organizěrowaś, koordiněrowaś a analyzěrowaś / Sorbische Revitalisierung organisieren, koordinieren und analysieren) vorgestellt und die Herausforderungen einer community- und wissenschaftsbasierten Sprachplanung unter den Bedingungen einer fragmentierten, kaum noch auf Sprache basierenden autochthonen slawischen Gemeinschaft in Deutschland diskutiert.\n\nDie niedersorbische Sprache ist eine autochthone slawische Minderheitensprache in Deutschland und gilt als stark in ihrem Fortbestand bedroht. Von staatlicher Seite liegen neben den gesetzlichen Regelungen auch politisch-konzeptionelle Papiere mit sprachförderndem Bezug vor (z. B. 2. Landesplan zur Stärkung der niedersorbischen Sprache, Mehrsprachigkeitskonzept). Verschiedene Institutionen widmen sich der Pflege, Vermittlung und Weiterentwicklung der niedersorbischen Sprache. Was bisher jedoch fehlt, ist ein verbindliches Verständnis von Sprachplanung sowohl auf staatlicher als auch sorbischer/wendischer Seite einerseits, sowie Strukturen, Monitoring und Steuerungsprozesse andererseits. Mit einer Laufzeit von 2022 bis 2031 wurde ein Projekt zur Entwicklung einer Sprachstrategie sowie zugehöriger Strukturen und Prozesse aufgesetzt und dessen Trägerschaft für die erste Phase vom Sorbischen Institut in Cottbus/Chóśebuz übernommen. Das Projekt versucht, eine Brücke zwischen Theorie und Praxis der Sprachrevitalisierung zu schlagen. Nach einer Bestandsaufnahme wurde 2025 der öffentliche Beteiligungsprozess unter dem Label SROKA begonnen. Die erste Projektphase endet 2027 mit einem zu erarbeitenden Sprachplanungsdokument.",
    "affiliations": [
     "Serbski institut/Sorbisches Institut, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-02-09:00-SR124-10:30",
-   "conftool_paper_id": "389",
-   "day": "2026-10-02",
-   "start": "10:30",
-   "end": "11:00",
-   "room": "SR 124",
-   "track": "LKW",
-   "panel_id": "2026-10-02|09:00|ct47",
-   "speakers": [
-    "Nikolaj Plotnikov"
-   ],
-   "title": "Philosophische Debatten in der Sowjetunion: Argumentative Muster, ideologische Funktion, typische Merkmale",
-   "type": "talk",
-   "abstract": "Der Vortrag analysiert philosophische Debatten in der Sowjetunion als eine diskursive Praxis, in der sich theoretischer Streit und der Anspruch auf Deutungshoheit in der Bestimmung von Wissenschaft und ihrer Verbindung zur politischen Praxis untrennbar verschränken. Im Zentrum steht die Frage, welche argumentativen Muster diese Debatten strukturieren, welche rhetorischen Verfahren dominieren und welche ideologischen Funktionen sie innerhalb des sowjetischen Wissenschaftssystems erfüllen.\n\nPhilosophie tritt dabei als institutionell verankerte Disziplin auf, die den Anspruch erhebt, wissenschaftliche Rationalität und politische Parteilichkeit in einer „Einheit“ zu verbinden. Debatten fungieren nicht nur als Austragungsorte theoretischer Differenzen, sondern zugleich als Mechanismen der Kanonisierung, Grenzziehung und Legitimation.\n\nAls paradigmatischer Testfall dient die Debatte zwischen den sogenannten Mechanisten und Dialektikern in den 1920er Jahren. Diese Kontroverse um das Verhältnis von Dialektik und Naturwissenschaft entwickelt sich rasch von einer methodologischen Differenz zu einem Kampf um die verbindliche Interpretation des dialektischen Materialismus. In ihr entstehen argumentative Grundfiguren, die für spätere philosophische Auseinandersetzungen modellbildend bleiben: der Rekurs auf kanonische Texte als letztinstanzliche Autorität, die moralisch-politische Qualifizierung theoretischer Positionen („Reduktionismus“, „Idealismus“, „Abweichung“), die Gleichsetzung wissenschaftlicher Irrtümer mit politischer Gefährdung sowie die rhetorische Inszenierung von Kritik und Selbstkritik.\n\nIm Fokus steht die Struktur des Streitens selbst: die spezifische Verbindung von theoretischer Argumentation, normativer Markierung und institutioneller Macht. Philosophische Debatten erscheinen so als hybride Kommunikationsform, in der epistemische Klärung, politische Legitimation und symbolische Selbstvergewisserung gleichzeitig stattfinden.",
-   "affiliations": [
-    "Ruhr-Universität Bochum, Deutschland"
    ]
   },
   {
@@ -6109,6 +6111,25 @@
    ]
   },
   {
+   "id": "2026-10-02-14:00-SR209-14:30",
+   "conftool_paper_id": "350",
+   "day": "2026-10-02",
+   "start": "14:00",
+   "end": "14:30",
+   "room": "SR 209",
+   "track": "LKW",
+   "panel_id": "2026-10-02|14:00|ct66",
+   "speakers": [
+    "Daria Khrushcheva"
+   ],
+   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
+   "type": "talk",
+   "abstract": "Im Zuge der soziokulturellen Liberalisierung der späten 1980er Jahre sowie der Entkriminalisierung homosexueller Beziehungen im Jahr 1993 rückte das Thema Queerness in Russland zunehmend in den gesellschaftlichen Fokus, was sich auch in kulturellen Ausdrucksformen und in der literarischen Auseinandersetzung mit queerer Identität widerspiegelte. Die jüngsten politischen Entwicklungen – insbesondere das sogenannte Verbot „homosexueller Propaganda“ von 2013 und dessen Verschärfung im Jahr 2022 – verdeutlichen jedoch eine gegenläufige Tendenz, in deren Folge die Beschäftigung mit queeren Themen in unterschiedlichen gesellschaftlichen Bereichen zunehmend erschwert oder vollständig unterbunden wird.\n\nTrotz der zunehmenden politischen Restriktionen entstanden zeitweise neue kulturelle Nischen, in denen alternative Themen und Erzählformen weiterhin verhandelt wurden. In diesem Zusammenhang nahm Mitte bis Ende der 2010er-Jahre bei vielen russischen Verlagen das Interesse am Genre Young Adult zu. Die neu entstandene Nachfrage nach spezifischer Literatur für Jugendliche und junge Erwachsene wurde teilweise durch soziale Netzwerke und die populäre Kultur der Fanfiction begünstigt. Einige Verlage wie beispielsweise Popcorn Books machten diese Altersgruppe zu ihrem zentralen Zielpublikum. Nicht nur heteronormative Liebesgeschichten oder Fantasyromane wurden zu Gegenständen neuer Publikationen, sondern auch queere Themen, die auf einen erkennbaren politischen und historischen Kontext ausgerichtet sind.\n\nWorin besteht die Besonderheit queerer Young-Adult -Romane in Bezug auf das russischsprachige Publikum? Worin liegen ihre Popularität und ihre Nachfrage? Welche genre- und stilistischen Besonderheiten sind bei der Analyse dieser Werke zu berücksichtigen? Der Vortrag versucht, diese Fragen am Beispiel zweier Romane zu beantworten: Drugoe detstvo von Sergej Chazov-Kassija (2017) und Leto v pionerskom galstuke von Elena Malisova und Katerina Sil’vanova (2021).",
+   "affiliations": [
+    "Ruhr-Universität Bochum, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-02-14:00-SR209-14:00",
    "conftool_paper_id": "129",
    "day": "2026-10-02",
@@ -6125,7 +6146,9 @@
    "abstract": "Obwohl Elternschaft eine der zentralen Erfahrungen aller Gesellschaften gilt, gibt es eher wenig vergleichende Forschung und dass obwohl Familien auch politisch ein zentrales Thema darstellen. Gerade der Fall die Kommunismus brachte grundlegende Änderungen in der Organisation des Familienalltags, in den politischen Programmen und den Geschlechterverhältnissen im privaten wie öffentlichen Raum mit sich. Retraditionalisierungsmuster lassen sich in allen Ländern Ostmitteleuropas feststellen - mit gleichwohl starken Gegenstimmen und einer jungen Schriftsteller*innengeneration, die sich pronatalistisch-konservativen Erwartungshaltungen und traditionallen Familienstrukturen entgegenstellt. Gleichzeitig spiegelt diese Literatur auch generationelle Traumata wider, wie etwa das Phänomen des abwesenden Vaters (Sammelband: Ojciec, 2017). Dieser Vortrag untersucht am Beispiel der polnischen (Natalia Fiedorczuk-Cieślak), tschechischen (Soukupová) und ungarischen (Szabó, Tóth) Literatur, wie Elternschaft im Spannungsfeld von postsozialistischen Transformationsprozessen, Retraditionalisierungstendenzen und individuellen Erfahrungen literarisch verhandelt wird. Dabei stehen insbesondere Kritik an normativen Familienmodellen sowie alternative Entwürfe von Geschlechter- und Fürsorgeverhältnissen im Mittelpunkt.",
    "affiliations": [
     "Freie Universität Berlin, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-09-30T15:56:13+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-02-14:00-SR221-14:00",
@@ -6405,25 +6428,6 @@
    "affiliations": [
     "Universität Regensburg, Deutschland",
     "Universität Regensburg, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-02-14:00-SR209-14:30",
-   "conftool_paper_id": "350",
-   "day": "2026-10-02",
-   "start": "14:30",
-   "end": "15:00",
-   "room": "SR 209",
-   "track": "LKW",
-   "panel_id": "2026-10-02|14:00|ct66",
-   "speakers": [
-    "Daria Khrushcheva"
-   ],
-   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
-   "type": "talk",
-   "abstract": "Im Zuge der soziokulturellen Liberalisierung der späten 1980er Jahre sowie der Entkriminalisierung homosexueller Beziehungen im Jahr 1993 rückte das Thema Queerness in Russland zunehmend in den gesellschaftlichen Fokus, was sich auch in kulturellen Ausdrucksformen und in der literarischen Auseinandersetzung mit queerer Identität widerspiegelte. Die jüngsten politischen Entwicklungen – insbesondere das sogenannte Verbot „homosexueller Propaganda“ von 2013 und dessen Verschärfung im Jahr 2022 – verdeutlichen jedoch eine gegenläufige Tendenz, in deren Folge die Beschäftigung mit queeren Themen in unterschiedlichen gesellschaftlichen Bereichen zunehmend erschwert oder vollständig unterbunden wird.\n\nTrotz der zunehmenden politischen Restriktionen entstanden zeitweise neue kulturelle Nischen, in denen alternative Themen und Erzählformen weiterhin verhandelt wurden. In diesem Zusammenhang nahm Mitte bis Ende der 2010er-Jahre bei vielen russischen Verlagen das Interesse am Genre Young Adult zu. Die neu entstandene Nachfrage nach spezifischer Literatur für Jugendliche und junge Erwachsene wurde teilweise durch soziale Netzwerke und die populäre Kultur der Fanfiction begünstigt. Einige Verlage wie beispielsweise Popcorn Books machten diese Altersgruppe zu ihrem zentralen Zielpublikum. Nicht nur heteronormative Liebesgeschichten oder Fantasyromane wurden zu Gegenständen neuer Publikationen, sondern auch queere Themen, die auf einen erkennbaren politischen und historischen Kontext ausgerichtet sind.\n\nWorin besteht die Besonderheit queerer Young-Adult -Romane in Bezug auf das russischsprachige Publikum? Worin liegen ihre Popularität und ihre Nachfrage? Welche genre- und stilistischen Besonderheiten sind bei der Analyse dieser Werke zu berücksichtigen? Der Vortrag versucht, diese Fragen am Beispiel zweier Romane zu beantworten: Drugoe detstvo von Sergej Chazov-Kassija (2017) und Leto v pionerskom galstuke von Elena Malisova und Katerina Sil’vanova (2021).",
-   "affiliations": [
-    "Ruhr-Universität Bochum, Deutschland"
    ]
   },
   {
@@ -7347,7 +7351,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail1bdaf58f\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaile2d1c8e0\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7371,7 +7375,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail755f4c99\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailf2aad8a9\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
