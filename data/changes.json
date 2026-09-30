@@ -1,26 +1,75 @@
 {
  "counts": {
   "new": 0,
-  "changed": 0,
+  "changed": 2,
   "removed": 1
  },
  "new": [],
- "changed": [],
- "removed": [
+ "changed": [
   {
-   "id": "2026-10-01-09:00-SR223-10:00",
-   "title": "Professor:innen als gastarbajter? (Literatur)Professor:innen im Exil",
+   "id": "2026-10-01-09:00-SR125-09:30",
+   "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
    "speakers": [
-    "Cristina Beretta"
+    "Lina Steiner"
    ],
    "day": "2026-10-01",
-   "start": "10:00",
-   "end": "10:30",
-   "room": "SR 223",
+   "start": "09:00",
+   "end": "09:30",
+   "room": "SR 125",
+   "status": null,
+   "old": {
+    "id": "2026-10-01-09:00-SR125-09:30",
+    "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+    "speakers": [
+     "Lina Steiner"
+    ],
+    "day": "2026-10-01",
+    "start": "09:30",
+    "end": "10:00",
+    "room": "SR 125",
+    "status": null
+   }
+  },
+  {
+   "id": "2026-10-01-09:00-SR125-10:00",
+   "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+   "speakers": [
+    "Natalia Borisova"
+   ],
+   "day": "2026-10-01",
+   "start": "09:30",
+   "end": "10:00",
+   "room": "SR 125",
+   "status": null,
+   "old": {
+    "id": "2026-10-01-09:00-SR125-10:00",
+    "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
+    "speakers": [
+     "Natalia Borisova"
+    ],
+    "day": "2026-10-01",
+    "start": "10:00",
+    "end": "10:30",
+    "room": "SR 125",
+    "status": null
+   }
+  }
+ ],
+ "removed": [
+  {
+   "id": "2026-10-01-09:00-SR125-09:00",
+   "title": "Modeling the Post-Reform Social and Economic Transition: Gleb Uspensky's Early Ocherks",
+   "speakers": [
+    "Anastassia Kostrioukova"
+   ],
+   "day": "2026-10-01",
+   "start": "09:00",
+   "end": "09:30",
+   "room": "SR 125",
    "status": "cancelled"
   }
  ],
- "generated_at": "2026-09-29T20:00:22+00:00",
+ "generated_at": "2026-09-30T09:02:01+00:00",
  "history": [
   {
    "counts": {
@@ -191,6 +240,30 @@
     }
    ],
    "generated_at": "2026-09-29T08:28:43+00:00"
+  },
+  {
+   "counts": {
+    "new": 0,
+    "changed": 0,
+    "removed": 1
+   },
+   "new": [],
+   "changed": [],
+   "removed": [
+    {
+     "id": "2026-10-01-09:00-SR223-10:00",
+     "title": "Professor:innen als gastarbajter? (Literatur)Professor:innen im Exil",
+     "speakers": [
+      "Cristina Beretta"
+     ],
+     "day": "2026-10-01",
+     "start": "10:00",
+     "end": "10:30",
+     "room": "SR 223",
+     "status": "cancelled"
+    }
+   ],
+   "generated_at": "2026-09-29T20:00:22+00:00"
   }
  ]
 }

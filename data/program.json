@@ -2,15 +2,15 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "627ca96a80778680",
-  "generated_at": "2026-09-29T20:00:22+00:00",
+  "source_sha256": "ecbb35fdecbc9c2e",
+  "generated_at": "2026-09-30T09:02:01+00:00",
   "stats": {
-   "sessions": 306,
-   "cancelled": 4,
+   "sessions": 305,
+   "cancelled": 5,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 304
+   "abstracts": 303
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
@@ -1336,6 +1336,25 @@
    ]
   },
   {
+   "id": "2026-10-01-09:00-SR125-09:30",
+   "conftool_paper_id": "206",
+   "day": "2026-10-01",
+   "start": "09:00",
+   "end": "09:30",
+   "room": "SR 125",
+   "track": "LKW",
+   "panel_id": "2026-10-01|09:00|ct24",
+   "speakers": [
+    "Lina Steiner"
+   ],
+   "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+   "type": "talk",
+   "abstract": "After establishing himself as the master of Yasnaya Polyana, Tolstoy began to engage with British, French and German agricultural and social reform theories that promised solutions to rural poverty. As can be gleaned from Anna Karenina, where Lyovin’s ideas about agriculture reflect the author’s own views, by the 1870s Tolstoy had come to reject British approaches based on mechanization and high energy expenses, which fostered industrialization, urbanization and greater socioeconomic inequality. Instead, he favored the agricultural theories of the French physiocrats (in particular, François Quesnay and Anne-Robert-Jacques Turgot), which had informed Rousseau’s critique of modern civilization. This school of thought held that agricultural development must go hand-in-hand with moral education, promoting adherence to natural law and a simple way of life. Tolstoy’s firsthand experience with Moscow’s poor during the 1882 census reinforced his distrust of industrialization and commercial enterprise, along with his animosity toward post‑Reform land speculators. By the mid‑1880s, Tolstoy had become a passionate follower of the American economist Henry George, whose single‑land‑tax idea—also inspired by the physiocrats—aligned closely with Tolstoy’s moral and socioeconomic ideals. To conclude, I will show how Tolstoy’s engagement with Georgist ideas is reflected throughout his final large‑scale narrative, Resurrection .",
+   "affiliations": [
+    "Universität Bonn, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-01-09:00-SR125-09:00",
    "conftool_paper_id": "284",
    "day": "2026-10-01",
@@ -1352,7 +1371,9 @@
    "abstract": "Publishing his works predominately on the pages of Otechestvennye zapiski, Gleb Uspensky was a widely popular writer in the latter half of the nineteenth century. Yet, while hailed by his contemporaries for being a master of sociological analysis, he was oftentimes critiqued for his disorderly aesthetic style. According to some, the author was unable to reach the same literary stature of Tolstoy and Turgenev due to this contradiction. My talk will address some of Uspensky’s earliest series of ocherks published at the end of the 1860s and early 1870s, which model the collective provincial experience of the post-reform transition and explore the emergence of new economic subjects. Alternating between the experiences of peasants, new kinds of merchants and provincial town residents, the narrative gaze records the post-reform social totality as a mass of people in disarray and in the grips of despotic chance. I will attempt to trace some parallels between the sporadic and fragmented nature of Uspensky’s prose and the social phenomenon he tries to capture. In my analysis, I will keep in mind the evolutionary epistemological paradigm central to the time when these ocherks have been written, which affected how reality was imagined and how narratives could be constructed.",
    "affiliations": [
     "Ludwig Maximilians Universität München, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-09-30T09:02:01+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-01-09:00-SR206-09:00",
@@ -1612,8 +1633,8 @@
    ]
   },
   {
-   "id": "2026-10-01-09:00-SR125-09:30",
-   "conftool_paper_id": "206",
+   "id": "2026-10-01-09:00-SR125-10:00",
+   "conftool_paper_id": "201",
    "day": "2026-10-01",
    "start": "09:30",
    "end": "10:00",
@@ -1621,13 +1642,13 @@
    "track": "LKW",
    "panel_id": "2026-10-01|09:00|ct24",
    "speakers": [
-    "Lina Steiner"
+    "Natalia Borisova"
    ],
-   "title": "Agriculture and Social Reform: Tolstoy’s Approach to Poverty Alleviation",
+   "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
    "type": "talk",
-   "abstract": "After establishing himself as the master of Yasnaya Polyana, Tolstoy began to engage with British, French and German agricultural and social reform theories that promised solutions to rural poverty. As can be gleaned from Anna Karenina, where Lyovin’s ideas about agriculture reflect the author’s own views, by the 1870s Tolstoy had come to reject British approaches based on mechanization and high energy expenses, which fostered industrialization, urbanization and greater socioeconomic inequality. Instead, he favored the agricultural theories of the French physiocrats (in particular, François Quesnay and Anne-Robert-Jacques Turgot), which had informed Rousseau’s critique of modern civilization. This school of thought held that agricultural development must go hand-in-hand with moral education, promoting adherence to natural law and a simple way of life. Tolstoy’s firsthand experience with Moscow’s poor during the 1882 census reinforced his distrust of industrialization and commercial enterprise, along with his animosity toward post‑Reform land speculators. By the mid‑1880s, Tolstoy had become a passionate follower of the American economist Henry George, whose single‑land‑tax idea—also inspired by the physiocrats—aligned closely with Tolstoy’s moral and socioeconomic ideals. To conclude, I will show how Tolstoy’s engagement with Georgist ideas is reflected throughout his final large‑scale narrative, Resurrection .",
+   "abstract": "This paper examines narratives of women’s fate in post-reform Poland through the lens of political economy as an emerging epistemological framework of late nineteenth-century realism. Focusing on novels by Eliza Orzeszkowa it explores how realist fiction becomes a space for negotiating economic theories and social change. Orzeszkowa’s heroines—women who fall outside established class and gender norms—are compelled to pursue economic independence, reframing the “woman question” from a discourse of moral emancipation toward the logic of labor and market competition. The paper analyzes how Orzeszkowa’s position as a female author shapes her depiction of women as economic subjects and distinguishes her work from that of her male contemporaries. By foregrounding the tension between patriarchal norms and capitalist modernity, the paper situates Orzeszkowa’s novels within the broader shift toward political economy as a dominant explanatory framework of realist aesthetics.",
    "affiliations": [
-    "Universität Bonn, Deutschland"
+    "Universität Tübingen, Deutschland"
    ]
   },
   {
@@ -1902,25 +1923,6 @@
    "abstract": "In meinem Vortrag führe ich den Begriff comedy of emergency zur Beschreibung einer Form der Krisenkomik ein, die als Reaktion auf gesellschaftliche und politische Katastrophen entsteht. Stand-up als eine autobiografisch angelegte Kleinkunst, die auf negativen persönlichen und kollektiven Erinnerungen basiert, stellt eine spezifische und in der Forschung unterschätzte Form von Zeugenschaft dar, die, zwischen Performance und Literatur balancierend, Kriegs- und Exilerfahrungen zu dokumentieren vermag. Im Fokus meiner Untersuchungen, die man nicht nur den Testimony-, sondern auch den medienwissenschaftlich interessierten Diaspora Studies zurechnen kann, steht das russische, ukrainische (ukrainisch- und russischsprachige) und belarussische (belarussisch- und russischsprachige) Stand-up nach 2022. Neben den Verhandlungen des Kriegsalltags und der Exilstrapazen thematisiert die gegenwärtige osteuropäische Stand-up-Comedy nicht zuletzt die (meta)sprachlichen Revisionen und Demontagen des Russischen und Konversionen zum Ukrainischen bzw. Belarussischen, die die Identitätsmetamorphosen der letzten Jahre dominieren. Zu dieser prinzipiellen Metalingualität kommen Diskursivierungen der Begegnungen mit den sozialen, kulturellen und sprachlichen Realien der Exilorte und der neuen Zufluchtsstätten, von Almaty und Jerewan bis nach Warschau und Berlin.“",
    "affiliations": [
     "Universität Leipzig, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-01-09:00-SR125-10:00",
-   "conftool_paper_id": "201",
-   "day": "2026-10-01",
-   "start": "10:00",
-   "end": "10:30",
-   "room": "SR 125",
-   "track": "LKW",
-   "panel_id": "2026-10-01|09:00|ct24",
-   "speakers": [
-    "Natalia Borisova"
-   ],
-   "title": "Liberation for what? Economic Subjectivity and Female Agency in Eliza Orzeszkowa’s Fiction",
-   "type": "talk",
-   "abstract": "This paper examines narratives of women’s fate in post-reform Poland through the lens of political economy as an emerging epistemological framework of late nineteenth-century realism. Focusing on novels by Eliza Orzeszkowa it explores how realist fiction becomes a space for negotiating economic theories and social change. Orzeszkowa’s heroines—women who fall outside established class and gender norms—are compelled to pursue economic independence, reframing the “woman question” from a discourse of moral emancipation toward the logic of labor and market competition. The paper analyzes how Orzeszkowa’s position as a female author shapes her depiction of women as economic subjects and distinguishes her work from that of her male contemporaries. By foregrounding the tension between patriarchal norms and capitalist modernity, the paper situates Orzeszkowa’s novels within the broader shift toward political economy as a dominant explanatory framework of realist aesthetics.",
-   "affiliations": [
-    "Universität Tübingen, Deutschland"
    ]
   },
   {
@@ -7345,7 +7347,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailc3b314a6\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail1bdaf58f\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7369,7 +7371,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaild6578498\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail755f4c99\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
