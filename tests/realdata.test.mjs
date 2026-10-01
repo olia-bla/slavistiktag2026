@@ -38,6 +38,13 @@ t("ConfTool-Titeländerung von Fabian Erlenmaier ist im Programm", () => {
   assert.equal(talk.start, "10:00");
   assert.equal(talk.room, "SR 125");
 });
+t("Gemeinsamer Vortrag: Chingiz Poletaev steht mit richtiger Einrichtung zuerst", () => {
+  const talk = program.sessions.find((s) => s.conftool_paper_id === "342");
+  assert.deepEqual(talk?.speakers,
+    ["Chingiz Poletaev", "Tatjana Kurbangulova", "Olia Blacher"]);
+  assert.deepEqual(talk.affiliations,
+    ["Universität Konstanz, Deutschland", "Universität Innsbruck, Österreich", "Universität Jena, Deutschland"]);
+});
 t("Model: Panel-Überschrift ist kein Vortrag; Ergänzungen bleiben erhalten", () => {
   const sourceTalks = program.sessions.filter((s) => s.type === "talk");
   const placeholders = sourceTalks.filter((s) => !s.speakers?.length &&

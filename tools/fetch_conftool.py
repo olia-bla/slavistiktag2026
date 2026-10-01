@@ -48,6 +48,10 @@ COLOR_TRACK = {
 }
 COLOR_SPECIAL = {"#e0ffdd", "#e0f8ff"}
 
+# App-only editorial order for a jointly authored talk. ConfTool is read-only;
+# keep this ordering through later imports without reporting it as a new change.
+APP_FIRST_AUTHORS = {"342": "Chingiz Poletaev"}
+
 WEEKDAYS = {"Montag": 0, "Dienstag": 1, "Mittwoch": 2, "Donnerstag": 3,
             "Freitag": 4, "Samstag": 5, "Sonntag": 6}
 
@@ -526,6 +530,22 @@ def _real_talks(data: dict) -> list[dict]:
         one_line(panels.get(s.get("panel_id"), {}).get("title", "")).casefold())]
 
 
+def apply_app_author_order(data: dict) -> None:
+    """Move locally designated first authors together with their affiliations."""
+    for session in data.get("sessions", []):
+        first = APP_FIRST_AUTHORS.get(str(session.get("conftool_paper_id")))
+        speakers = session.get("speakers") or []
+        if not first or first not in speakers or speakers[0] == first:
+            continue
+        index = speakers.index(first)
+        order = [index, *(i for i in range(len(speakers)) if i != index)]
+        session["speakers"] = [speakers[i] for i in order]
+        affiliations = session.get("affiliations")
+        if affiliations:
+            session["affiliations"] = [affiliations[i] if i < len(affiliations) else None
+                                       for i in order]
+
+
 def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
     """Keep vanished talks as cancelled and preserve IDs across edits/moves."""
     available = {s["id"]: s for s in _real_talks(old)}
@@ -663,6 +683,7 @@ def main() -> int:
             data = reconcile_programs(old, data, warnings)
         except ValueError as e:
             problems.append(str(e))
+    apply_app_author_order(data)
     stats = {
         "talks": sum(1 for s in data["sessions"] if s["type"] == "talk" and s.get("status") != "cancelled"),
         "cancelled": sum(1 for s in data["sessions"] if s.get("status") == "cancelled"),

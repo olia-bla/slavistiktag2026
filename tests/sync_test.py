@@ -27,6 +27,21 @@ def program(sessions):
 
 
 class SyncTests(unittest.TestCase):
+    def test_app_first_author_keeps_affiliation_and_does_not_repeat_as_change(self):
+        item = talk("paper-342", "342", "Gemeinsamer Vortrag", "Tatjana Kurbangulova")
+        item["speakers"] = ["Tatjana Kurbangulova", "Olia Blacher", "Chingiz Poletaev"]
+        item["affiliations"] = ["Innsbruck", "Jena", "Konstanz"]
+        source = program([item])
+        sync.apply_app_author_order(source)
+        corrected = source["sessions"][0]
+        self.assertEqual(corrected["speakers"],
+                         ["Chingiz Poletaev", "Tatjana Kurbangulova", "Olia Blacher"])
+        self.assertEqual(corrected["affiliations"], ["Konstanz", "Innsbruck", "Jena"])
+        repeated = copy.deepcopy(source)
+        sync.apply_app_author_order(repeated)
+        self.assertEqual(sync.diff_programs(source, repeated)["counts"],
+                         {"new": 0, "changed": 0, "removed": 0})
+
     def test_change_history_preserves_real_updates_without_duplicates(self):
         def batch(stamp, title=None):
             new = [{"id": title, "title": title}] if title else []
