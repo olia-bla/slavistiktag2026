@@ -2,21 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "c9525e3e634c8270",
-  "generated_at": "2026-10-01T06:01:40+00:00",
+  "source_sha256": "3df23035988b06bd",
+  "generated_at": "2026-10-01T13:22:52+00:00",
   "stats": {
-   "sessions": 304,
-   "cancelled": 7,
+   "sessions": 302,
+   "cancelled": 9,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 302
+   "abstracts": 300
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
-   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen"
+   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
+   "2 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -158,7 +159,6 @@
     "SR 206",
     "SR 207",
     "SR 208",
-    "SR 209",
     "SR 221",
     "SR 222",
     "SR 223",
@@ -4841,6 +4841,25 @@
    ]
   },
   {
+   "id": "2026-10-02-11:30-HS8-12:00",
+   "conftool_paper_id": "318",
+   "day": "2026-10-02",
+   "start": "11:30",
+   "end": "12:00",
+   "room": "HS 8",
+   "track": "SW+DID",
+   "panel_id": "2026-10-02|11:30|ct56",
+   "speakers": [
+    "Uliana Retzlaff"
+   ],
+   "title": "Научная фантастика на уроках русского языка: развитие компетенций академического письма на основе подхода CLIL / Science-Fiction im HSU-Unterricht: Entwicklung akademischer Schreibkompetenzen auf Basis des CLIL-Ansatzes",
+   "type": "talk",
+   "abstract": "Angesichts technologischer Transformationen wird der Science-Fiction-Diskurs als effektives kognitives Instrument anerkannt. Er ermöglicht die Modellierung von Zukunftsszenarien sowie die kritische Analyse ethisch-sozialer Folgen, was die Lebenswelt Jugendlicher adressiert und zur Teilhabe an fachlichen Debatten motiviert. Forschungsergebnisse zeigen, dass das Genre analytische Lesekompetenz, kritisches Denken und prognostisches Vorstellungsvermögen stärkt (Putt, 2011; Vrasidas, 2015; Black & Barnes, 2021; Pfützner, 2022). Im Rahmen der Präsentation wird ein didaktisches Projekt vorgestellt, das die Entwicklung und Erprobung von HSU-Lernmaterialien für Russisch auf Grundlage von Science-Fiction-Erzählungen (R. Bradbury, I. Asimov, L. Biggle Jr.) zum Gegenstand hat und dabei den CLIL-Ansatz methodisch integriert. Die Aktualität des Projekts ergibt sich aus der Notwendigkeit, das für Herkunftssprecher typische Ungleichgewicht zwischen hohen alltagssprachlichen Kompetenzen und Defiziten in akademischen Schreibfertigkeiten zu überwinden. Die Anwendung der Bloomschen Taxonomie (Anderson & Krathwohl, 2001) gewährleistet einen konsequenten Übergang von basaler Wortschatzarbeit zu kognitiven Operationen höherer Ordnung: Analyse, Synthese und kritische Bewertung. Das Aufgabensystem folgt dem Prinzip der graduellen Komplexitätssteigerung — von der Aktivierung des Vorwissens bis zur Erstellung eigener Texte und der Teilnahme an kontroversen Fachgesprächen. Besonderes Augenmerk liegt auf argumentativen Fähigkeiten, der logischen Kohärenz sowie auf Grammatik und Orthografie. Die Erprobung der Materialien im Unterricht zeigte eine gesteigerte Lernmotivation und eine qualitative Verbesserung der Schülertexte hinsichtlich Struktur, semantischer Präzision und Fehlerreduktion.",
+   "affiliations": [
+    "Schulamt Düsseldorf, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-02-11:30-HS8-11:30",
    "conftool_paper_id": "178",
    "day": "2026-10-02",
@@ -4857,7 +4876,9 @@
    "abstract": "Aktuelle Diskussionen zum schulischen Russischunterricht betonen die Notwendigkeit, Lernkulturen angesichts der Digitalität neu zu denken (vgl. Böhmer 2023). Lehrkraftzentrierte, textbasierte Formate reichen zunehmend nicht aus, um Motivation und zeitgemäße Kompetenzen zu fördern. Zugleich nutzen laut ICIL-Studie 2023 nur 19,6 % der Fremdsprachenlehrkräfte regelmäßig digitale Medien (vgl. Eickelmann et al. 2024). Für den Russischunterricht zeigt Bacher (2022), dass digitale Medien zwar vorhanden sind, ihre Nutzung jedoch oft von Unsicherheit, begrenzten didaktischen Konzepten und mangelnder medienpädagogischer Ausbildung begleitet wird. Daraus ergibt sich eine zentrale Herausforderung: Lehrkräfte müssen digitale Werkzeuge didaktisch reflektiert in lernwirksame Szenarien überführen.\n\nGamification bietet hierfür ein besonderes Potenzial. Narrative Aufgabenformate, interaktive Problemlöseaufgaben und spielbasierte Sequenzen schaffen multimodale Lernräume, die Motivation, sprachliche Handlungsfähigkeit und Selbstwirksamkeit fördern (vgl. Hoblitz 2015; Al-Khayat et al. 2023). Zugleich erfordert die Entwicklung gamifizierter Szenarien vielfältige sprachliche, didaktische und medienspezifische Kompetenzen und eröffnet damit ein produktives Lernfeld für die Lehrkräftebildung.\n\nDer Beitrag stellt ein Projektseminar an der Universität Potsdam vor, in dem Russisch-Lehramtsstudierende nach einer Einführung in Gamification und das H5P-Tool eigene digitale Lernspiele entwickeln und als OER veröffentlichen. Der Designprozess fördert medienspezifische, didaktische, kreative und reflexive Kompetenzen und stärkt professionelle Handlungskompetenz. Zugleich zeigt das Konzept, wie Gamification systematisch in die Lehrkräftebildung integriert und für die schulische Praxis nutzbar gemacht werden kann. Der Vortrag leistet damit einen Beitrag zur Diskussion um innovative Unterrichtskonzepte, Professionalisierung im digitalen Wandel und Transfer zwischen Universität und Schule.",
    "affiliations": [
     "Universität Potsdam, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-10-01T13:22:52+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-02-11:30-SR113-11:30",
@@ -5185,8 +5206,8 @@
    ]
   },
   {
-   "id": "2026-10-02-11:30-HS8-12:00",
-   "conftool_paper_id": "318",
+   "id": "2026-10-02-11:30-HS8-12:30",
+   "conftool_paper_id": "165",
    "day": "2026-10-02",
    "start": "12:00",
    "end": "12:30",
@@ -5194,13 +5215,13 @@
    "track": "SW+DID",
    "panel_id": "2026-10-02|11:30|ct56",
    "speakers": [
-    "Uliana Retzlaff"
+    "Jule Böhmer"
    ],
-   "title": "Научная фантастика на уроках русского языка: развитие компетенций академического письма на основе подхода CLIL / Science-Fiction im HSU-Unterricht: Entwicklung akademischer Schreibkompetenzen auf Basis des CLIL-Ansatzes",
+   "title": "Was und wie denken Russischlehrer:innen über ihren Unterricht. Ergebnisse einer Q-Studie zum Russischunterricht im 21. Jh. und daraus resultierende Implikationen für die Fort- und Weiterbildung",
    "type": "talk",
-   "abstract": "Angesichts technologischer Transformationen wird der Science-Fiction-Diskurs als effektives kognitives Instrument anerkannt. Er ermöglicht die Modellierung von Zukunftsszenarien sowie die kritische Analyse ethisch-sozialer Folgen, was die Lebenswelt Jugendlicher adressiert und zur Teilhabe an fachlichen Debatten motiviert. Forschungsergebnisse zeigen, dass das Genre analytische Lesekompetenz, kritisches Denken und prognostisches Vorstellungsvermögen stärkt (Putt, 2011; Vrasidas, 2015; Black & Barnes, 2021; Pfützner, 2022). Im Rahmen der Präsentation wird ein didaktisches Projekt vorgestellt, das die Entwicklung und Erprobung von HSU-Lernmaterialien für Russisch auf Grundlage von Science-Fiction-Erzählungen (R. Bradbury, I. Asimov, L. Biggle Jr.) zum Gegenstand hat und dabei den CLIL-Ansatz methodisch integriert. Die Aktualität des Projekts ergibt sich aus der Notwendigkeit, das für Herkunftssprecher typische Ungleichgewicht zwischen hohen alltagssprachlichen Kompetenzen und Defiziten in akademischen Schreibfertigkeiten zu überwinden. Die Anwendung der Bloomschen Taxonomie (Anderson & Krathwohl, 2001) gewährleistet einen konsequenten Übergang von basaler Wortschatzarbeit zu kognitiven Operationen höherer Ordnung: Analyse, Synthese und kritische Bewertung. Das Aufgabensystem folgt dem Prinzip der graduellen Komplexitätssteigerung — von der Aktivierung des Vorwissens bis zur Erstellung eigener Texte und der Teilnahme an kontroversen Fachgesprächen. Besonderes Augenmerk liegt auf argumentativen Fähigkeiten, der logischen Kohärenz sowie auf Grammatik und Orthografie. Die Erprobung der Materialien im Unterricht zeigte eine gesteigerte Lernmotivation und eine qualitative Verbesserung der Schülertexte hinsichtlich Struktur, semantischer Präzision und Fehlerreduktion.",
+   "abstract": "Der schulische Russischunterricht steht – wie auch der Unterricht in den anderen zweiten und dritten Fremdsprachen – vor großen Herausforderungen (vgl. Bergmann 2023; Gerlach 2020). Neben schulsystemischen und bildungsadministrativen Veränderungen hängt es auch von der Innovationsbereitschaft von Russischlehrkräften ab, wie gut und schnell sich Russischunterricht an die veränderten Rahmenbedingungen anpassen kann. Aus der Professionsforschung ist bekannt, dass sich die subjektiven Einstellungen von Lehrkräften als sehr stabil erweisen und dies maßgeblich die Unterrichtsgestaltung beeinflusst (vgl. Kunter / Pohlmann 2009; Gerlach 2023). In meinem Beitrag stelle ich vor, wie Lehrkräfte auf ihren schulischen Russischunterricht blicken, welche Herausforderungen sie sehen und welche Wünsche und Möglichkeiten zur Veränderung sie sehen. Die Ergebnisse basieren auf einer QStudie, in der die subjektiven Einstellungen von 30 Russischlehrkräften zum Status Quo und den aktuellen Herausforderungen des Russischunterrichts erfasst wurden. Aus den erhobenen Daten wurden Gruppen von Lehrkräften mit ähnlichen Einstellungen gebildet (vgl. Müller / Kals 2004) und im Anschluss mit einzelnen Vertreter:innen dieser Gruppen biographische Interviews geführt. Die Identifikation und Analyse dieser Einstellungstypen sowie die biographischen Begründungsmuster ermöglichen nicht nur einen Einblick in die unterschiedlichen Perspektiven von Russischlehrkräften auf die Zielstellung, Durchführung und Zukunftsvision von Russischunterricht (Kunter / Pohlmann 2009), sondern erlauben auch die Antizipation und Berücksichtigung unterschiedlicher Haltungen und daraus resultierender Bedürfnisse in der Lehreraus- und -fortbildung.",
    "affiliations": [
-    "Schulamt Düsseldorf, Deutschland"
+    "Humboldt-Universität zu Berlin, Deutschland"
    ]
   },
   {
@@ -5510,25 +5531,6 @@
    ]
   },
   {
-   "id": "2026-10-02-11:30-HS8-12:30",
-   "conftool_paper_id": "165",
-   "day": "2026-10-02",
-   "start": "12:30",
-   "end": "13:00",
-   "room": "HS 8",
-   "track": "SW+DID",
-   "panel_id": "2026-10-02|11:30|ct56",
-   "speakers": [
-    "Jule Böhmer"
-   ],
-   "title": "Was und wie denken Russischlehrer:innen über ihren Unterricht. Ergebnisse einer Q-Studie zum Russischunterricht im 21. Jh. und daraus resultierende Implikationen für die Fort- und Weiterbildung",
-   "type": "talk",
-   "abstract": "Der schulische Russischunterricht steht – wie auch der Unterricht in den anderen zweiten und dritten Fremdsprachen – vor großen Herausforderungen (vgl. Bergmann 2023; Gerlach 2020). Neben schulsystemischen und bildungsadministrativen Veränderungen hängt es auch von der Innovationsbereitschaft von Russischlehrkräften ab, wie gut und schnell sich Russischunterricht an die veränderten Rahmenbedingungen anpassen kann. Aus der Professionsforschung ist bekannt, dass sich die subjektiven Einstellungen von Lehrkräften als sehr stabil erweisen und dies maßgeblich die Unterrichtsgestaltung beeinflusst (vgl. Kunter / Pohlmann 2009; Gerlach 2023). In meinem Beitrag stelle ich vor, wie Lehrkräfte auf ihren schulischen Russischunterricht blicken, welche Herausforderungen sie sehen und welche Wünsche und Möglichkeiten zur Veränderung sie sehen. Die Ergebnisse basieren auf einer QStudie, in der die subjektiven Einstellungen von 30 Russischlehrkräften zum Status Quo und den aktuellen Herausforderungen des Russischunterrichts erfasst wurden. Aus den erhobenen Daten wurden Gruppen von Lehrkräften mit ähnlichen Einstellungen gebildet (vgl. Müller / Kals 2004) und im Anschluss mit einzelnen Vertreter:innen dieser Gruppen biographische Interviews geführt. Die Identifikation und Analyse dieser Einstellungstypen sowie die biographischen Begründungsmuster ermöglichen nicht nur einen Einblick in die unterschiedlichen Perspektiven von Russischlehrkräften auf die Zielstellung, Durchführung und Zukunftsvision von Russischunterricht (Kunter / Pohlmann 2009), sondern erlauben auch die Antizipation und Berücksichtigung unterschiedlicher Haltungen und daraus resultierender Bedürfnisse in der Lehreraus- und -fortbildung.",
-   "affiliations": [
-    "Humboldt-Universität zu Berlin, Deutschland"
-   ]
-  },
-  {
    "id": "2026-10-02-11:30-SR113-12:30",
    "conftool_paper_id": "374",
    "day": "2026-10-02",
@@ -5545,7 +5547,9 @@
    "abstract": "Based on results of two focus groups (13 research participants) with Germans who learn Ukrainian, this presentation delves into the narratives that explain the motivation of learners who represent different age, gender and professions, such as trauma-therapists, journalists, IT workers, historians, translators, political scientists, engineers, and teachers. The focus groups also cover different learners’ levels, the first focus group was conducted with learners at advanced level (b2-c1), while the second with beginners.\n\nThe research was conducted in the second half of 2025 in the frame of the study by Ukrainian Institute, which analyses and compares the situation with teaching and learning Ukrainian as a foreign language in different educational settings (higher education institutions and private language schools) in three different countries – Germany, Poland and France. As results of the focus groups in Germany revealed the motivations of Germans are various, such as communication needs for personal connections, for instance with friends or partners from Ukraine, professional needs and connecting future career with the context of Ukraine, and political solidarity and support for people who stays in Ukraine and those who fled to Germany. The focus groups results also demonstrate high level of learners’ autonomy. German speakers who learn Ukrainian actively use possibilities to communicate in Ukrainian also outside the classroom, joining Ukrainian cultural events and protests of solidarity in Germany, travelling to Ukraine even in war conditions, getting acquainted with contemporary Ukrainian art, music and literature and critically reflecting on existing handbooks and approaches to teaching Ukrainian as a foreign language.",
    "affiliations": [
     "University of Erfurt, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-10-01T13:22:52+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-02-11:30-SR121-12:30",
@@ -5739,6 +5743,25 @@
    "abstract": "This paper examines the representation of waste, pollution, and natural degradation in Yugoslav (amateur) films produced during the late 1960s to the 1970s, a period marked by growing global environmental awareness. By analyzing these films, the study investigates how filmmakers engaged directly and indirectly with ecological issues and visually articulated the environmental challenges of their time. I argue that these films not only reflect the socio-political context of Yugoslavia but also serve as a unique lens to investigate different environmentalist agendas through aesthetic sensibilities. While rooted in the specific socio-political context of socialist Yugoslavia, these cinematic expressions were not isolated phenomena; rather, they were embedded within broader international discourses on environmentalism, natural preservation, and sustainability. With multidisciplinary approach combining film studies, environmental humanities, and cultural history, this research highlights the role of (amateur) cinema in shaping public awareness and fostering critical reflections on human relationship with nature. Ultimately, the study contributes to broader discussions on the cultural dimensions of environmentalism “from the margins” and on ecological thought in visual media.",
    "affiliations": [
     "Universität Graz, Österreich"
+   ]
+  },
+  {
+   "id": "2026-10-02-14:00-SR209-14:30",
+   "conftool_paper_id": "350",
+   "day": "2026-10-02",
+   "start": "12:30",
+   "end": "13:00",
+   "room": "SR 226",
+   "track": "LKW",
+   "panel_id": "2026-10-02|11:30|ct75",
+   "speakers": [
+    "Daria Khrushcheva"
+   ],
+   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
+   "type": "talk",
+   "abstract": "Im Zuge der soziokulturellen Liberalisierung der späten 1980er Jahre sowie der Entkriminalisierung homosexueller Beziehungen im Jahr 1993 rückte das Thema Queerness in Russland zunehmend in den gesellschaftlichen Fokus, was sich auch in kulturellen Ausdrucksformen und in der literarischen Auseinandersetzung mit queerer Identität widerspiegelte. Die jüngsten politischen Entwicklungen – insbesondere das sogenannte Verbot „homosexueller Propaganda“ von 2013 und dessen Verschärfung im Jahr 2022 – verdeutlichen jedoch eine gegenläufige Tendenz, in deren Folge die Beschäftigung mit queeren Themen in unterschiedlichen gesellschaftlichen Bereichen zunehmend erschwert oder vollständig unterbunden wird.\n\nTrotz der zunehmenden politischen Restriktionen entstanden zeitweise neue kulturelle Nischen, in denen alternative Themen und Erzählformen weiterhin verhandelt wurden. In diesem Zusammenhang nahm Mitte bis Ende der 2010er-Jahre bei vielen russischen Verlagen das Interesse am Genre Young Adult zu. Die neu entstandene Nachfrage nach spezifischer Literatur für Jugendliche und junge Erwachsene wurde teilweise durch soziale Netzwerke und die populäre Kultur der Fanfiction begünstigt. Einige Verlage wie beispielsweise Popcorn Books machten diese Altersgruppe zu ihrem zentralen Zielpublikum. Nicht nur heteronormative Liebesgeschichten oder Fantasyromane wurden zu Gegenständen neuer Publikationen, sondern auch queere Themen, die auf einen erkennbaren politischen und historischen Kontext ausgerichtet sind.\n\nWorin besteht die Besonderheit queerer Young-Adult -Romane in Bezug auf das russischsprachige Publikum? Worin liegen ihre Popularität und ihre Nachfrage? Welche genre- und stilistischen Besonderheiten sind bei der Analyse dieser Werke zu berücksichtigen? Der Vortrag versucht, diese Fragen am Beispiel zweier Romane zu beantworten: Drugoe detstvo von Sergej Chazov-Kassija (2017) und Leto v pionerskom galstuke von Elena Malisova und Katerina Sil’vanova (2021).",
+   "affiliations": [
+    "Ruhr-Universität Bochum, Deutschland"
    ]
   },
   {
@@ -6126,25 +6149,6 @@
    "abstract": "Der Vortrag untersucht Kirchenslavismen im russischsprachigen islamischen Diskurs und kontrastiert sie mit dem orthodoxen Kirchendiskurs. Bekannt ist die aktive Übersetzung arabischer Terminologie ins Russische mit Mitteln der orthodoxen Sprache, darunter Kirchenslavismen (vgl. Sibgatullina 2020: 51; Buchenau 2023: 32). Bisherige Beschreibungen sind überwiegend qualitativ; systematische, quantitativ-korpuslinguistische Studien zum russischen Islamdiskurs fehlen weitgehend, und vereinzelte korpusgestützte Ansätze (Sibgatullina 2020: 47–64) bleiben methodisch begrenzt. Der Vortrag zielt darauf, diese Forschungslücke zu verkleinern.\n\nAls Material dienen zwei von mir aufgebaute Korpora aus reichweitenstarken, konfessionell gebundenen Onlineportalen: IslamRus (über 35 Mio. Token) zu zentralen Kontexten des russischen Islams (Tatarstan, Dagestan, Moskauer Muftiate) und OrthRus (über 230 Mio. Token) aus Portalen, die institutionell mit der Russischen Orthodoxen Kirche verbunden sind. Als Referenz dient der NKRJ-Hauptkorpus sowie der Teilkorpus „Goldstandard“.\n\nDer Vortrag fragt: (1) In welchem Umfang werden Kirchenslavismen im Islamdiskurs verwendet und welche? (2) Wie korreliert dieses Muster mit Daten aus OrthRus? (3) Welchen lexikalischen Bestand teilen beide religiösen Varietäten jenseits konfessioneller Spezifika?\n\nKirchenslavismen sind in IslamRus breit belegt und korrelieren mit OrthRus; in Teilbereichen (etwa bei Lexemen mit Wurzel благо -) übersteigen sie sogar orthodoxe Werte. Keyword-Analysen gegenüber dem „Goldstandard“ zeigen zugleich terminologische Kontraste (z. B. дуа 224 ipm in IslamRus vs. 0,04 in OrthRus; диавол 0 vs. 76,84) und statistisch signifikante Gemeinsamkeiten beider religiösen Korpora gegenüber dem Referenzrussisch. Die Ergebnisse stützen die Hypothese eines überkonfessionellen religiösen Russisch, auf dessen Grundlage sich konfessionsspezifische Profile ausprägen; diese ist jedoch auf weiteren sprachlichen Ebenen zu prüfen.",
    "affiliations": [
     "Universität Regensburg, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-02-14:00-SR209-14:30",
-   "conftool_paper_id": "350",
-   "day": "2026-10-02",
-   "start": "14:00",
-   "end": "14:30",
-   "room": "SR 209",
-   "track": "LKW",
-   "panel_id": "2026-10-02|14:00|ct66",
-   "speakers": [
-    "Daria Khrushcheva"
-   ],
-   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
-   "type": "talk",
-   "abstract": "Im Zuge der soziokulturellen Liberalisierung der späten 1980er Jahre sowie der Entkriminalisierung homosexueller Beziehungen im Jahr 1993 rückte das Thema Queerness in Russland zunehmend in den gesellschaftlichen Fokus, was sich auch in kulturellen Ausdrucksformen und in der literarischen Auseinandersetzung mit queerer Identität widerspiegelte. Die jüngsten politischen Entwicklungen – insbesondere das sogenannte Verbot „homosexueller Propaganda“ von 2013 und dessen Verschärfung im Jahr 2022 – verdeutlichen jedoch eine gegenläufige Tendenz, in deren Folge die Beschäftigung mit queeren Themen in unterschiedlichen gesellschaftlichen Bereichen zunehmend erschwert oder vollständig unterbunden wird.\n\nTrotz der zunehmenden politischen Restriktionen entstanden zeitweise neue kulturelle Nischen, in denen alternative Themen und Erzählformen weiterhin verhandelt wurden. In diesem Zusammenhang nahm Mitte bis Ende der 2010er-Jahre bei vielen russischen Verlagen das Interesse am Genre Young Adult zu. Die neu entstandene Nachfrage nach spezifischer Literatur für Jugendliche und junge Erwachsene wurde teilweise durch soziale Netzwerke und die populäre Kultur der Fanfiction begünstigt. Einige Verlage wie beispielsweise Popcorn Books machten diese Altersgruppe zu ihrem zentralen Zielpublikum. Nicht nur heteronormative Liebesgeschichten oder Fantasyromane wurden zu Gegenständen neuer Publikationen, sondern auch queere Themen, die auf einen erkennbaren politischen und historischen Kontext ausgerichtet sind.\n\nWorin besteht die Besonderheit queerer Young-Adult -Romane in Bezug auf das russischsprachige Publikum? Worin liegen ihre Popularität und ihre Nachfrage? Welche genre- und stilistischen Besonderheiten sind bei der Analyse dieser Werke zu berücksichtigen? Der Vortrag versucht, diese Fragen am Beispiel zweier Romane zu beantworten: Drugoe detstvo von Sergej Chazov-Kassija (2017) und Leto v pionerskom galstuke von Elena Malisova und Katerina Sil’vanova (2021).",
-   "affiliations": [
-    "Ruhr-Universität Bochum, Deutschland"
    ]
   },
   {
@@ -7369,7 +7373,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailf16fe7a5\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailcf562a89\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7393,7 +7397,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail724633b8\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaila781340a\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }

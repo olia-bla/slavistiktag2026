@@ -1,26 +1,111 @@
 {
  "counts": {
-  "new": 1,
-  "changed": 0,
-  "removed": 0
+  "new": 0,
+  "changed": 3,
+  "removed": 2
  },
- "new": [
+ "new": [],
+ "changed": [
   {
-   "id": "ct-paper-486",
-   "title": "Vorstellung des Handbuchs \"Russische Philosophie\"",
+   "id": "2026-10-02-11:30-HS8-12:00",
+   "title": "Научная фантастика на уроках русского языка: развитие компетенций академического письма на основе подхода CLIL / Science-Fiction im HSU-Unterricht: Entwicklung akademischer Schreibkompetenzen auf Basis des CLIL-Ansatzes",
    "speakers": [
-    "Holger Kuße"
+    "Uliana Retzlaff"
    ],
    "day": "2026-10-02",
-   "start": "10:30",
-   "end": "11:00",
-   "room": "SR 124",
-   "status": null
+   "start": "11:30",
+   "end": "12:00",
+   "room": "HS 8",
+   "status": null,
+   "old": {
+    "id": "2026-10-02-11:30-HS8-12:00",
+    "title": "Научная фантастика на уроках русского языка: развитие компетенций академического письма на основе подхода CLIL / Science-Fiction im HSU-Unterricht: Entwicklung akademischer Schreibkompetenzen auf Basis des CLIL-Ansatzes",
+    "speakers": [
+     "Uliana Retzlaff"
+    ],
+    "day": "2026-10-02",
+    "start": "12:00",
+    "end": "12:30",
+    "room": "HS 8",
+    "status": null
+   }
+  },
+  {
+   "id": "2026-10-02-11:30-HS8-12:30",
+   "title": "Was und wie denken Russischlehrer:innen über ihren Unterricht. Ergebnisse einer Q-Studie zum Russischunterricht im 21. Jh. und daraus resultierende Implikationen für die Fort- und Weiterbildung",
+   "speakers": [
+    "Jule Böhmer"
+   ],
+   "day": "2026-10-02",
+   "start": "12:00",
+   "end": "12:30",
+   "room": "HS 8",
+   "status": null,
+   "old": {
+    "id": "2026-10-02-11:30-HS8-12:30",
+    "title": "Was und wie denken Russischlehrer:innen über ihren Unterricht. Ergebnisse einer Q-Studie zum Russischunterricht im 21. Jh. und daraus resultierende Implikationen für die Fort- und Weiterbildung",
+    "speakers": [
+     "Jule Böhmer"
+    ],
+    "day": "2026-10-02",
+    "start": "12:30",
+    "end": "13:00",
+    "room": "HS 8",
+    "status": null
+   }
+  },
+  {
+   "id": "2026-10-02-14:00-SR209-14:30",
+   "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
+   "speakers": [
+    "Daria Khrushcheva"
+   ],
+   "day": "2026-10-02",
+   "start": "12:30",
+   "end": "13:00",
+   "room": "SR 226",
+   "status": null,
+   "old": {
+    "id": "2026-10-02-14:00-SR209-14:30",
+    "title": "\"LGBTQ-Propaganda\" unter Jugendlichen? Queere Young-Adult-Romane in Russland",
+    "speakers": [
+     "Daria Khrushcheva"
+    ],
+    "day": "2026-10-02",
+    "start": "14:00",
+    "end": "14:30",
+    "room": "SR 209",
+    "status": null
+   }
   }
  ],
- "changed": [],
- "removed": [],
- "generated_at": "2026-10-01T06:01:40+00:00",
+ "removed": [
+  {
+   "id": "2026-10-02-11:30-HS8-11:30",
+   "title": "Lernen durch Gestalten: Ein Gamification-Projekt als Weg zur Professionalisierung zukünftiger Russischlehrkräfte",
+   "speakers": [
+    "Natalia Schwarzl"
+   ],
+   "day": "2026-10-02",
+   "start": "11:30",
+   "end": "12:00",
+   "room": "HS 8",
+   "status": "cancelled"
+  },
+  {
+   "id": "2026-10-02-11:30-SR113-12:30",
+   "title": "“In 2022 it became clear what language to learn”. Motivation of German speakers to learn Ukrainian (The language of presentation – Ukrainian)",
+   "speakers": [
+    "Nadiya Kiss"
+   ],
+   "day": "2026-10-02",
+   "start": "12:30",
+   "end": "13:00",
+   "room": "SR 113",
+   "status": "cancelled"
+  }
+ ],
+ "generated_at": "2026-10-01T13:22:52+00:00",
  "history": [
   {
    "counts": {
@@ -373,6 +458,30 @@
     }
    ],
    "generated_at": "2026-09-30T15:56:13+00:00"
+  },
+  {
+   "counts": {
+    "new": 1,
+    "changed": 0,
+    "removed": 0
+   },
+   "new": [
+    {
+     "id": "ct-paper-486",
+     "title": "Vorstellung des Handbuchs \"Russische Philosophie\"",
+     "speakers": [
+      "Holger Kuße"
+     ],
+     "day": "2026-10-02",
+     "start": "10:30",
+     "end": "11:00",
+     "room": "SR 124",
+     "status": null
+    }
+   ],
+   "changed": [],
+   "removed": [],
+   "generated_at": "2026-10-01T06:01:40+00:00"
   }
  ]
 }
