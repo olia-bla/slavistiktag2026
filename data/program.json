@@ -2,22 +2,21 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "f36937b26e05183b",
-  "generated_at": "2026-09-30T15:56:13+00:00",
+  "source_sha256": "c9525e3e634c8270",
+  "generated_at": "2026-10-01T06:01:40+00:00",
   "stats": {
-   "sessions": 303,
+   "sessions": 304,
    "cancelled": 7,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 301
+   "abstracts": 302
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
-   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
-   "2 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
+   "Sitzung 54: Paneltitel nicht als Vortrag uebernommen"
   ]
  },
  "blocks": [
@@ -4657,6 +4656,25 @@
    ]
   },
   {
+   "id": "ct-paper-486",
+   "conftool_paper_id": "486",
+   "day": "2026-10-02",
+   "start": "10:30",
+   "end": "11:00",
+   "room": "SR 124",
+   "track": "LKW",
+   "panel_id": "2026-10-02|09:00|ct47",
+   "speakers": [
+    "Holger Kuße"
+   ],
+   "title": "Vorstellung des Handbuchs \"Russische Philosophie\"",
+   "type": "talk",
+   "abstract": "Es wird das Handbuch \"Russische Philosophie\" vorgestellt.",
+   "affiliations": [
+    "TU Dresden, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-02-09:00-SR206-10:30",
    "conftool_paper_id": "473",
    "day": "2026-10-02",
@@ -7351,7 +7369,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaile2d1c8e0\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailf16fe7a5\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7375,7 +7393,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailf2aad8a9\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail724633b8\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
