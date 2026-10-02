@@ -2,22 +2,22 @@
  "meta": {
   "source": "conftool",
   "source_url": "https://www.conftool.com/slavistiktag2026/index.php",
-  "source_sha256": "3df23035988b06bd",
-  "generated_at": "2026-10-01T13:22:52+00:00",
+  "source_sha256": "0cd7e8a60cb86049",
+  "generated_at": "2026-10-02T09:15:35+02:00",
   "stats": {
-   "sessions": 302,
-   "cancelled": 9,
+   "sessions": 301,
+   "cancelled": 10,
    "breaks": 7,
    "panels": 102,
    "footer_events": 8,
-   "abstracts": 300
+   "abstracts": 299
   },
   "warnings": [
    "Tag 2026-09-30: keine Sitzungen gefunden",
    "Sitzung 121: keine Präsentationen",
    "Sitzung 122: keine Präsentationen",
    "Sitzung 54: Paneltitel nicht als Vortrag uebernommen",
-   "2 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
+   "1 nicht mehr akzeptierte Beitraege bleiben als abgesagt sichtbar"
   ]
  },
  "blocks": [
@@ -4249,6 +4249,25 @@
    ]
   },
   {
+   "id": "2026-10-02-09:00-SR113-10:30",
+   "conftool_paper_id": "314",
+   "day": "2026-10-02",
+   "start": "10:00",
+   "end": "10:30",
+   "room": "SR 113",
+   "track": "SW+DID",
+   "panel_id": "2026-10-02|09:00|ct49",
+   "speakers": [
+    "Tatiana Perevozchikova"
+   ],
+   "title": "The second accusative in Ukrainian: a micro-diachronic view on its frequency and productivity in cross-Slavic comparison",
+   "type": "talk",
+   "abstract": "In Slavic languages that have nominal declension, animacy is typically expressed in singular masculine nouns by ACC = GEN syncretism. While this pattern usually marks animate referents, West Slavic languages, especially Polish, also allow it with inanimate nouns. Ukrainian likewise displays ACC = GEN marking on inanimate masculine nouns (e.g. napysaty lyst-Ø / lyst-a ‘to write a letter’), known as the second accusative ( druchyi znachidnyi vidminok ). Although grammatical descriptions acknowledge this form (Ševelov 1963; Vyxovanec’ 1987), they do not provide details on its frequency or conditioning factors. Moreover, the second accusative has been subject to prescriptive debate since the early 20th century, with recent claims that its use has expanded rapidly following the end of Soviet language policy (Kolybaba 2020). These claims, however, have not been supported by quantitative evidence.\n\nThis talk presents a large-scale, corpus-based micro-diachronic study of the Ukrainian second accusative from a cross-Slavic perspective. Using data from the General Regionally Annotated Corpus of Ukrainian Language (GRAC-19), I examine changes in the productivity of the second accusative construction during the 20th and 21st centuries, measured by token and type frequency. The results show a gradual increase in token frequency from the late 20th century onward, but no parallel increase in type frequency. Unlike in Polish, the second accusative remains largely restricted to idiomatic expressions and a limited set of semantic classes, most notably body parts, documents, and instruments. In the discussion, I evaluate existing accounts such as the extended animacy, extended genitive and language contact hypotheses.",
+   "affiliations": [
+    "Universität Tübingen, Deutschland"
+   ]
+  },
+  {
    "id": "2026-10-02-09:00-SR113-10:00",
    "conftool_paper_id": "133",
    "day": "2026-10-02",
@@ -4265,7 +4284,9 @@
    "abstract": "This study presents a corpus‑based typological comparison of Russian and Ukrainian case systems under negation, integrating three complementary visualizations: (1) cosine‑similarity analysis of Ukrainian and Russian noun phrases in genitive and accusative cases, (2) parallel negative constructions across both languages, and (3) t‑SNE maps of Ukrainian and Russian nouns in genitive and accusative forms.\n\nTo model distributional behavior, we employed both FastText embeddings and contextualized embeddings, allowing us to capture stable lexical patterns as well as dynamic contextual variation. These representations were used to compute cosine similarity between genitive and accusative phrase pairs and to generate t‑SNE visualizations of case-based clustering.\n\nRussian exhibits a productive and grammatically entrenched genitive of negation, which systematically restructures argument marking. This structural regularity produces sharply separated genitive and accusative clusters in t‑SNE space and yields consistently high cosine similarity between Russian genitive and accusative variants (typically 0.93–0.99). Ukrainian, by contrast, retains accusative as the default object case under negation, with genitive restricted to lexicalized or partitive contexts. As a result, Ukrainian genitive and accusative forms show substantial overlap in t‑SNE space and display markedly lower and more variable cosine similarity (approximately 0.84–0.94), indicating greater semantic drift between the two forms.\n\nCross‑linguistic cosine similarity further highlights this asymmetry: Russian genitive forms diverge strongly from their Ukrainian counterparts, while accusative forms remain more closely aligned across the two languages. This pattern reflects a deeper typological contrast: Russian encodes negation structurally through case alternation, whereas Ukrainian relies on lexical and pragmatic factors, resulting in a less cohesive genitive domain.",
    "affiliations": [
     "Eberhard Karls Universität Tübingen, Deutschland"
-   ]
+   ],
+   "cancelled_at": "2026-10-02T07:15:35+00:00",
+   "status": "cancelled"
   },
   {
    "id": "2026-10-02-09:00-SR114-10:00",
@@ -4596,25 +4617,6 @@
    "affiliations": [
     "Universität Leipzig, Deutschland",
     "Universität Leipzig, Deutschland"
-   ]
-  },
-  {
-   "id": "2026-10-02-09:00-SR113-10:30",
-   "conftool_paper_id": "314",
-   "day": "2026-10-02",
-   "start": "10:30",
-   "end": "11:00",
-   "room": "SR 113",
-   "track": "SW+DID",
-   "panel_id": "2026-10-02|09:00|ct49",
-   "speakers": [
-    "Tatiana Perevozchikova"
-   ],
-   "title": "The second accusative in Ukrainian: a micro-diachronic view on its frequency and productivity in cross-Slavic comparison",
-   "type": "talk",
-   "abstract": "In Slavic languages that have nominal declension, animacy is typically expressed in singular masculine nouns by ACC = GEN syncretism. While this pattern usually marks animate referents, West Slavic languages, especially Polish, also allow it with inanimate nouns. Ukrainian likewise displays ACC = GEN marking on inanimate masculine nouns (e.g. napysaty lyst-Ø / lyst-a ‘to write a letter’), known as the second accusative ( druchyi znachidnyi vidminok ). Although grammatical descriptions acknowledge this form (Ševelov 1963; Vyxovanec’ 1987), they do not provide details on its frequency or conditioning factors. Moreover, the second accusative has been subject to prescriptive debate since the early 20th century, with recent claims that its use has expanded rapidly following the end of Soviet language policy (Kolybaba 2020). These claims, however, have not been supported by quantitative evidence.\n\nThis talk presents a large-scale, corpus-based micro-diachronic study of the Ukrainian second accusative from a cross-Slavic perspective. Using data from the General Regionally Annotated Corpus of Ukrainian Language (GRAC-19), I examine changes in the productivity of the second accusative construction during the 20th and 21st centuries, measured by token and type frequency. The results show a gradual increase in token frequency from the late 20th century onward, but no parallel increase in type frequency. Unlike in Polish, the second accusative remains largely restricted to idiomatic expressions and a limited set of semantic classes, most notably body parts, documents, and instruments. In the discussion, I evaluate existing accounts such as the extended animacy, extended genitive and language contact hypotheses.",
-   "affiliations": [
-    "Universität Tübingen, Deutschland"
    ]
   },
   {
@@ -7373,7 +7375,7 @@
    "end": "17:30",
    "title": "„Die Slavistik ist tot – es lebe die Slavistik!“ Szenarien der Entwicklung slavistischer Fächer an deutschsprachigen Universitäten",
    "room": "HS 2",
-   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmailcf562a89\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Chair: Dr. Annelie Bachmaier Chair: Ruprecht von Waldenfels Chair: Prof. Dr. Katrin Bente Karl Chair: Christian Zehnder Chair: Jun.-Prof. Dr. Christina Clasmeier (Universität Münster) Externe Gäste: Prof. Dr. Kornelia Freitag (derz. Prorektorin für Lehre und Studium, Ruhr-Universität Bochum) Dr. Ulrich Heublein (ehem. Deutsches Zentrum für Hochschul- und Wissenschaftsforschung Leipzig) Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail38121895\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   },
   {
    "day": "2026-10-03",
@@ -7397,7 +7399,7 @@
    "end": "14:00",
    "title": "Abschlussveranstaltung mit Imbiss",
    "room": "Foyer CZS 3",
-   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmaila781340a\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
+   "people": "Mobile Ansicht Mobile Ansicht Impressum · Kontaktadresse: Slavistiktag2026 {at} uni-jena de (function () { var el = document.getElementById(\"ctmail319b071c\"); if (!el) return; var addr = atob(el.getAttribute('data-m')); var a = document.createElement('a'); a.href = 'mailto:' + addr; var name = el.getAttribute('data-n'); if (name) a.innerHTML = name; else a.textContent = addr; el.replaceWith(a); })(); Datenschutzerklärung · Veranstaltung: Slavistiktag 2026 Conference Software: ConfTool Pro 2.8.114+TC © 2001–2026 by Dr. H. Weinreich, Hamburg, Germany"
   }
  ]
 }
