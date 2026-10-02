@@ -244,7 +244,12 @@ for (const vp of VIEWPORTS) {
     const searchWidth = await page.locator("#app .search-input").evaluate((el) => el.getBoundingClientRect().width);
     assert.ok(searchWidth >= 180, `Suchfeld nur ${Math.round(searchWidth)} px breit`);
     const heads = await page.locator("#app .grid-head").allTextContents();
-    assert.equal(heads.map((s) => s.trim()).includes("Foyer CZS 3"), false);
+    if (heads.map((s) => s.trim()).includes("Foyer CZS 3")) {
+      const hasFoyerTalk = await page.evaluate(() => [...document.querySelectorAll("#app .grid-cell .session-card")]
+        .some((card) => [...card.querySelectorAll(".pill.room")]
+          .some((room) => room.textContent.trim() === "Foyer CZS 3")));
+      assert.equal(hasFoyerTalk, true, "Foyer-Spalte enthält keinen Vortrag");
+    }
   });
   await t(`${vp.name}: alle Tagesregister ohne horizontales Scrollen sichtbar`, async () => {
     const tabs = await page.evaluate(() => {

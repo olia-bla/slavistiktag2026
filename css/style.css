@@ -684,6 +684,7 @@ select {
     break-inside: avoid; page-break-inside: avoid;
     border: 1px solid #999; box-shadow: none; background: #fff;
   }
+  .session-card.is-now, .event-card.is-now { box-shadow: none; }
   .card-title, .card-speakers, .card-panel, .podium .body { color: #000; }
   h1, h2, h3 { break-after: avoid; page-break-after: avoid; color: #000; }
   a { color: #000; text-decoration: none; }
