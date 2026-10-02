@@ -1,36 +1,11 @@
 {
  "counts": {
   "new": 0,
-  "changed": 1,
+  "changed": 0,
   "removed": 1
  },
  "new": [],
- "changed": [
-  {
-   "id": "2026-10-02-09:00-SR113-10:30",
-   "title": "The second accusative in Ukrainian: a micro-diachronic view on its frequency and productivity in cross-Slavic comparison",
-   "speakers": [
-    "Tatiana Perevozchikova"
-   ],
-   "day": "2026-10-02",
-   "start": "10:00",
-   "end": "10:30",
-   "room": "SR 113",
-   "status": null,
-   "old": {
-    "id": "2026-10-02-09:00-SR113-10:30",
-    "title": "The second accusative in Ukrainian: a micro-diachronic view on its frequency and productivity in cross-Slavic comparison",
-    "speakers": [
-     "Tatiana Perevozchikova"
-    ],
-    "day": "2026-10-02",
-    "start": "10:30",
-    "end": "11:00",
-    "room": "SR 113",
-    "status": null
-   }
-  }
- ],
+ "changed": [],
  "removed": [
   {
    "id": "2026-10-02-09:00-SR113-10:00",

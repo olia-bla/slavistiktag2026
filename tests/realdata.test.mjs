@@ -38,6 +38,14 @@ t("ConfTool-Titeländerung von Fabian Erlenmaier ist im Programm", () => {
   assert.equal(talk.start, "10:00");
   assert.equal(talk.room, "SR 125");
 });
+t("Absage belegt ihren Slot; der folgende Vortrag rückt nicht vor", () => {
+  const cancelled = program.sessions.find((s) => s.conftool_paper_id === "133");
+  const next = program.sessions.find((s) => s.conftool_paper_id === "314");
+  assert.equal(cancelled?.status, "cancelled");
+  assert.deepEqual([cancelled.start, cancelled.end], ["10:00", "10:30"]);
+  assert.deepEqual([next?.start, next?.end], ["10:30", "11:00"]);
+  assert.equal(next.panel_id, cancelled.panel_id);
+});
 t("Gemeinsamer Vortrag: Chingiz Poletaev steht mit richtiger Einrichtung zuerst", () => {
   const talk = program.sessions.find((s) => s.conftool_paper_id === "342");
   assert.deepEqual(talk?.speakers,

@@ -27,6 +27,39 @@ def program(sessions):
 
 
 class SyncTests(unittest.TestCase):
+    def test_cancelled_slot_does_not_pull_later_talks_forward(self):
+        def timed(ident, paper_id, start, end, room="SR 113"):
+            item = talk(ident, paper_id, f"Beitrag {paper_id}", f"Person {paper_id}", room=room)
+            item.update(start=start, end=end)
+            return item
+
+        old = program([
+            timed("missing", "100", "10:00", "10:30"),
+            timed("next", "101", "10:30", "11:00"),
+            timed("later", "102", "11:00", "11:30"),
+            timed("elsewhere", "103", "10:30", "11:00", room="SR 206"),
+        ])
+        fresh = program([
+            timed("next-new", "101", "10:00", "10:30"),
+            timed("later-new", "102", "10:30", "11:00"),
+            timed("elsewhere-new", "103", "10:00", "10:30", room="SR 206"),
+        ])
+        merged = sync.reconcile_programs(old, copy.deepcopy(fresh), [])
+        by_id = {s["id"]: s for s in merged["sessions"]}
+        self.assertEqual((by_id["missing"]["start"], by_id["missing"]["status"]),
+                         ("10:00", "cancelled"))
+        self.assertEqual((by_id["next"]["start"], by_id["next"]["end"]),
+                         ("10:30", "11:00"))
+        self.assertEqual((by_id["later"]["start"], by_id["later"]["end"]),
+                         ("11:00", "11:30"))
+        self.assertEqual(by_id["elsewhere"]["start"], "10:00")
+        self.assertEqual(sync.diff_programs(old, merged)["counts"],
+                         {"new": 0, "changed": 1, "removed": 1})
+
+        repeated = sync.reconcile_programs(merged, copy.deepcopy(fresh), [])
+        self.assertEqual(sync.diff_programs(merged, repeated)["counts"],
+                         {"new": 0, "changed": 0, "removed": 0})
+
     def test_app_first_author_keeps_affiliation_and_does_not_repeat_as_change(self):
         item = talk("paper-342", "342", "Gemeinsamer Vortrag", "Tatjana Kurbangulova")
         item["speakers"] = ["Tatjana Kurbangulova", "Olia Blacher", "Chingiz Poletaev"]

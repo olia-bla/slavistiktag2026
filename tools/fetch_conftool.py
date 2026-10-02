@@ -547,8 +547,9 @@ def apply_app_author_order(data: dict) -> None:
 
 
 def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
-    """Keep vanished talks as cancelled and preserve IDs across edits/moves."""
+    """Keep vanished talks and their slots; preserve IDs across other edits."""
     available = {s["id"]: s for s in _real_talks(old)}
+    matched_old: dict[str, dict] = {}
     current = [s for s in fresh["sessions"] if s.get("type") == "talk"]
     for s in current:
         candidates = list(available.values())
@@ -568,6 +569,7 @@ def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
                 break
         if match:
             s["id"] = match["id"]
+            matched_old[s["id"]] = match
             available.pop(match["id"])
         elif s.get("conftool_paper_id"):
             s["id"] = f"ct-paper-{s['conftool_paper_id']}"
@@ -575,6 +577,30 @@ def reconcile_programs(old: dict, fresh: dict, warnings: list) -> dict:
     used = {s["id"] for s in current}
     if len(used) != len(current):
         raise ValueError("Doppelte Vortrags-IDs nach ConfTool-Abgleich")
+
+    # ConfTool zieht nach einer Absage manchmal alle folgenden Vorträge im
+    # selben Panel nach vorne. In der App bleibt der abgesagte Slot stehen;
+    # die übrigen Vorträge behalten deshalb ihre bisherigen Uhrzeiten.
+    for s in current:
+        previous = matched_old.get(s["id"])
+        if not previous or not s.get("start") or not previous.get("start"):
+            continue
+        if (s.get("day"), s.get("room"), s.get("panel_id")) != (
+                previous.get("day"), previous.get("room"), previous.get("panel_id")):
+            continue
+        if s["start"] >= previous["start"]:
+            continue
+        cancelled_before = any(
+            missing.get("day") == previous["day"]
+            and missing.get("room") == previous["room"]
+            and missing.get("panel_id") == previous["panel_id"]
+            and missing.get("start")
+            and missing["start"] <= s["start"] < previous["start"]
+            for missing in available.values()
+        )
+        if cancelled_before:
+            s["start"], s["end"] = previous["start"], previous.get("end")
+
     old_panels = {p["id"]: p for p in old.get("panels", [])}
     new_panels = {p["id"]: p for p in fresh["panels"]}
     newly_cancelled = 0
